@@ -12,6 +12,11 @@ export class CycleArray<T> extends Array<T> {
         return this.at(this.index) as T;
     }
 
+    setFromValue(value: T) {
+        const index = this.indexOf(value);
+        this.#index = index >= 0 ? index : this.#index;
+    }
+
     increment(): T {
         this.#index = (this.index + 1) % this.length;
         return this.current;
