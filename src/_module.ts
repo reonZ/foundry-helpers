@@ -41,6 +41,11 @@ export class MODULE {
         return `modules/${this.id}/${tail}`;
     }
 
+    static imagePath(...path: string[]) {
+        const root = this.relativePath("images", ...path);
+        return `${root}.webp`;
+    }
+
     static templatePath(...path: string[]) {
         const root = this.relativePath("templates", ...path);
         return `${root}.hbs`;

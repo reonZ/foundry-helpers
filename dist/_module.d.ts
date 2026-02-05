@@ -8,6 +8,7 @@ export declare class MODULE {
     static get current(): Module;
     static path(...path: string[]): string;
     static relativePath(...path: string[]): string;
+    static imagePath(...path: string[]): string;
     static templatePath(...path: string[]): string;
     static error(...args: [...string[], string | Error]): void;
     get id(): string;

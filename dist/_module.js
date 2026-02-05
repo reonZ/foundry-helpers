@@ -29,6 +29,10 @@ export class MODULE {
         const tail = R.join(path, "/");
         return `modules/${this.id}/${tail}`;
     }
+    static imagePath(...path) {
+        const root = this.relativePath("images", ...path);
+        return `${root}.webp`;
+    }
     static templatePath(...path) {
         const root = this.relativePath("templates", ...path);
         return `${root}.hbs`;
