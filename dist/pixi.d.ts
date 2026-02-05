@@ -1,0 +1,12 @@
+import { Point } from "foundry-pf2e/foundry/common/_types.mjs";
+export declare function distanceToPoint(a: Point, b: Point): number;
+export declare function subtractPoint(a: Point, b: Point): Point;
+export declare function addPoints(a: Point, b: Point): Point;
+export declare function multiplyPointBy(point: Point, value: number): Point;
+export declare function dividePointBy(point: Point, value: number): Point;
+export declare function dividePoints(a: Point, b: Point): Point;
+export declare function addToPoint({ x, y }: Point, value: number): Point;
+export declare function calculateMidPoint(a: Point, b: Point): Point;
+export declare function drawRectangleMask(x: number, y: number, width: number, height: number, radius?: number): PIXI.Graphics;
+export declare function drawCircleMask(x: number, y: number, radius: number): PIXI.Graphics;
+export declare function drawPolygonMask(...path: [number, number][]): PIXI.Graphics;
