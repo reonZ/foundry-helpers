@@ -1,4 +1,3 @@
-import { HelperDelegate } from "handlebars";
 declare class Localize extends Function {
     subkeys: string[];
     constructor(...subkeys: string[]);
@@ -6,10 +5,9 @@ declare class Localize extends Function {
         path: string;
         data?: LocalizeData;
     };
+    i18n(): (...args: LocalizeArgs) => string;
     ifExist(...args: LocalizeArgs): string | undefined;
     sub(...subkeys: string[]): Localize;
-    root(...args: LocalizeArgs): string;
-    tooltip(...args: Parameters<HelperDelegate>): string;
     localizeOrFormat(path: string, data?: LocalizeData): string;
 }
 interface Localize {

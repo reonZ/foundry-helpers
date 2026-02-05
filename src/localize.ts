@@ -28,6 +28,37 @@ class Localize extends Function {
         return { path, data };
     }
 
+    i18n() {
+        const self = this;
+
+        function i18n(...args: LocalizeArgs): string {
+            return self(...args);
+        }
+
+        Object.defineProperties(i18n, {
+            tooltip: {
+                value: (...args: Parameters<HelperDelegate>): string => {
+                    const path = args.slice(0, -1);
+                    const tooltip = self(...path);
+                    return `data-tooltip="${tooltip}"`;
+                },
+                enumerable: false,
+                configurable: false,
+            },
+            root: {
+                value: (...args: Parameters<HelperDelegate>) => {
+                    const data = R.isObjectType(args.at(-1)) ? (args.pop() as LocalizeData) : undefined;
+                    const path = MODULE.path(...(args as string[]));
+                    return self.localizeOrFormat(path, data);
+                },
+                enumerable: false,
+                configurable: false,
+            },
+        });
+
+        return i18n;
+    }
+
     ifExist(...args: LocalizeArgs): string | undefined {
         const { data, path } = this.getLocalizeData(...args);
         if (game.i18n.has(path, true)) {
@@ -37,17 +68,6 @@ class Localize extends Function {
 
     sub(...subkeys: string[]): Localize {
         return new Localize(...this.subkeys, ...subkeys);
-    }
-
-    root(...args: LocalizeArgs): string {
-        const data = R.isObjectType(args.at(-1)) ? (args.pop() as LocalizeData) : undefined;
-        const path = MODULE.path(...(args as string[]));
-        return this.localizeOrFormat(path, data);
-    }
-
-    tooltip(...args: Parameters<HelperDelegate>) {
-        const tooltip = args.slice(0, -1);
-        return `data-tooltip="${tooltip}"`;
     }
 
     localizeOrFormat(path: string, data?: LocalizeData): string {
