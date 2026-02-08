@@ -11,6 +11,17 @@ export function htmlQuery(parent: MaybeHTML, selectors: string): HTMLElement | n
     return parent.querySelector<HTMLElement>(selectors);
 }
 
+export function htmlClosest<K extends keyof HTMLElementTagNameMap>(
+    child: MaybeHTML,
+    selectors: K,
+): HTMLElementTagNameMap[K] | null;
+export function htmlClosest(child: MaybeHTML, selectors: string): HTMLElement | null;
+export function htmlClosest<E extends HTMLElement = HTMLElement>(child: MaybeHTML, selectors: string): E | null;
+export function htmlClosest(child: MaybeHTML, selectors: string): HTMLElement | null {
+    if (!(child instanceof Element)) return null;
+    return child.closest<HTMLElement>(selectors);
+}
+
 export function addListener<K extends keyof HTMLElementTagNameMap, TEvent extends EventType = "click">(
     parent: MaybeHTML,
     selectors: K,
