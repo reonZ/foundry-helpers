@@ -12,6 +12,14 @@ export class CycleArray<T> extends Array<T> {
         return this.at(this.index) as T;
     }
 
+    get isLast() {
+        return this.index === this.length - 1;
+    }
+
+    get isFirst() {
+        return this.index === 0;
+    }
+
     setFromValue(value: T) {
         const index = this.indexOf(value);
         this.#index = index >= 0 ? index : this.#index;
