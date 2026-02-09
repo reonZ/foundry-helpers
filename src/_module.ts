@@ -5,6 +5,7 @@ export class MODULE {
     static #instance: MODULE;
     static #current: Module;
 
+    #api: Record<string, Function> = {};
     #id: string;
     #globalName: string;
 
@@ -12,7 +13,15 @@ export class MODULE {
         this.#id = id;
         this.#globalName = globalName || id.replace(/^pf2e-/, "").replace(/-(\w)/g, (_, c) => c.toUpperCase());
 
-        this.#initialize();
+        Hooks.once("init", () => {
+            const self = this;
+            Object.defineProperty(game, this.#globalName, {
+                value: self,
+                configurable: false,
+                enumerable: false,
+                writable: false,
+            });
+        });
     }
 
     static register(id: string, globalName?: string) {
@@ -27,8 +36,12 @@ export class MODULE {
         return this.#instance.#id;
     }
 
-    static get current() {
+    static get current(): Module {
         return (this.#current ??= game.modules.get(this.id) as Module);
+    }
+
+    static get name(): string {
+        return this.current.title;
     }
 
     static path(...path: string[]): string {
@@ -51,13 +64,38 @@ export class MODULE {
         return `${root}.hbs`;
     }
 
+    static Error(error: string) {
+        return new Error(`\n[${this.name}] ${error}`);
+    }
+
     static error(...args: [...string[], string | Error]) {
         if (args.at(-1) instanceof Error) {
             const error = args.pop() as Error;
             args.push(error.message);
         }
 
-        console.error(...args);
+        console.error(`[${this.name}]`, ...args);
+    }
+
+    static apiExpose(path: string, object: Record<string, Function>, context?: any) {
+        if (foundry.utils.hasProperty(this.#instance.api, path)) {
+            throw this.Error(`the api path was already defined: ${path}`);
+        }
+
+        const api: Record<string, Function> = {};
+
+        for (const [key, fn] of R.entries(object)) {
+            Object.defineProperty(api, key, {
+                value: context ? fn.bind(context) : fn,
+                configurable: false,
+                enumerable: false,
+                writable: false,
+            });
+        }
+    }
+
+    get api(): Record<string, Function> {
+        return this.#api;
     }
 
     get id(): string {
@@ -74,12 +112,5 @@ export class MODULE {
 
     localize(...args: LocalizeArgs): string {
         return localize(...args);
-    }
-
-    #initialize() {
-        Hooks.once("init", () => {
-            // @ts-expect-error
-            game[this.#globalName] = this;
-        });
     }
 }
