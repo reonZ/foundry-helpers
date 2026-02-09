@@ -1,3 +1,4 @@
+import { CheckRoll } from "foundry-pf2e";
 import { Rolled } from "foundry-pf2e/foundry/client/dice/roll.mjs";
 import Module from "foundry-pf2e/foundry/client/packages/module.mjs";
 
