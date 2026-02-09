@@ -6,4 +6,11 @@ declare global {
 
     type PartialExcept<T extends Record<string, any>, K extends keyof T> = Partial<Omit<T, K>> & Pick<T, K>;
     type RequiredExcept<T extends Record<string, any>, K extends keyof T> = Required<Omit<T, K>> & Pick<T, K>;
+
+    type Rectangle = {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+    };
 }
