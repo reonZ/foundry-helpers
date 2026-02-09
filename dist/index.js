@@ -5,6 +5,7 @@ export * from "./_system";
 export * from "./array";
 export * from "./handlebars";
 export * from "./html";
+export * from "./item";
 export * from "./localize";
 export * from "./notification";
 export * from "./pixi";
