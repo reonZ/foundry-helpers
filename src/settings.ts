@@ -60,3 +60,16 @@ type RegisterSettingOptions = Omit<SettingRegistration, "name" | "scope" | "onCh
     choices?: Record<string, string> | string[] | ReadonlyArray<string>;
     onChange?: (value: any, operation: object, userId: string) => void | Promise<void>;
 };
+
+export type RenderSettingsConfigOptions = {
+    categories: Record<string, RenderSettingsConfigCategory>;
+};
+
+type RenderSettingsConfigCategory = {
+    id: string;
+    entries: RenderSettingsConfigCategoryEntry[];
+};
+
+type RenderSettingsConfigCategoryEntry = {
+    label: string;
+} & ({ menu: true; key: string } | { menu: false; field: { name: string } });
