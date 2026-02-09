@@ -9,6 +9,36 @@ export function htmlClosest(child, selectors) {
         return null;
     return child.closest(selectors);
 }
+export function createHTMLElement(nodeName, { classes = [], dataset = {}, content, id, style } = {}) {
+    const element = document.createElement(nodeName);
+    if (element instanceof HTMLButtonElement) {
+        element.type = "button";
+    }
+    if (style) {
+        assignStyle(element, style);
+    }
+    if (id) {
+        element.id = id;
+    }
+    if (classes.length > 0) {
+        element.classList.add(...classes);
+    }
+    for (const [key, value] of Object.entries(dataset)) {
+        if (R.isNullish(value) || value === false)
+            continue;
+        element.dataset[key] = value === true ? "" : String(value);
+    }
+    if (R.isString(content)) {
+        element.innerHTML = content;
+    }
+    else if (content instanceof Element) {
+        element.append(content);
+    }
+    else if (content) {
+        element.append(...content);
+    }
+    return element;
+}
 export function addListener(parent, selectors, ...args) {
     if (!(parent instanceof Element || parent instanceof Document))
         return;
@@ -47,6 +77,9 @@ export function createFormData(html, expand = false) {
         data[element.name] = element.files?.[0];
     }
     return (expand ? foundry.utils.expandObject(data) : data);
+}
+export function assignStyle(el, style) {
+    Object.assign(el.style, style);
 }
 export function styleValue(value) {
     return `${value}px`;

@@ -22,6 +22,44 @@ export function htmlClosest(child: MaybeHTML, selectors: string): HTMLElement | 
     return child.closest<HTMLElement>(selectors);
 }
 
+export function createHTMLElement<K extends keyof HTMLElementTagNameMap>(
+    nodeName: K,
+    { classes = [], dataset = {}, content, id, style }: CreateHTMLElementOptions = {},
+): HTMLElementTagNameMap[K] {
+    const element = document.createElement(nodeName);
+
+    if (element instanceof HTMLButtonElement) {
+        element.type = "button";
+    }
+
+    if (style) {
+        assignStyle(element, style);
+    }
+
+    if (id) {
+        element.id = id;
+    }
+
+    if (classes.length > 0) {
+        element.classList.add(...classes);
+    }
+
+    for (const [key, value] of Object.entries(dataset)) {
+        if (R.isNullish(value) || value === false) continue;
+        element.dataset[key] = value === true ? "" : String(value);
+    }
+
+    if (R.isString(content)) {
+        element.innerHTML = content;
+    } else if (content instanceof Element) {
+        element.append(content);
+    } else if (content) {
+        element.append(...content);
+    }
+
+    return element;
+}
+
 export function addListener<K extends keyof HTMLElementTagNameMap, TEvent extends EventType = "click">(
     parent: MaybeHTML,
     selectors: K,
@@ -105,6 +143,10 @@ export function createFormData<T extends Record<string, unknown>>(html: HTMLElem
     return (expand ? (foundry.utils.expandObject(data) as Record<string, unknown>) : data) as T;
 }
 
+export function assignStyle(el: HTMLElement, style: Partial<CSSStyleDeclaration>) {
+    Object.assign(el.style, style);
+}
+
 export function styleValue(value: number): `${number}px` {
     return `${value}px`;
 }
@@ -112,6 +154,14 @@ export function styleValue(value: number): `${number}px` {
 export function setStyleProperty(html: Maybe<HTMLElement>, property: string, value: number) {
     html?.style.setProperty(property, styleValue(value));
 }
+
+export type CreateHTMLElementOptions = {
+    classes?: string[];
+    content?: string | HTMLCollection | (Element | string)[] | Element;
+    dataset?: Record<string, string | number | boolean | null | undefined>;
+    id?: string;
+    style?: Partial<CSSStyleDeclaration>;
+};
 
 type ListenerCallbackArgs<E extends HTMLElement, TEvent extends EventType> =
     | [TEvent, ListenerCallback<E, TEvent>, boolean]
