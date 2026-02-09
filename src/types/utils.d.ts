@@ -1,3 +1,5 @@
+import { ActorPF2e, TokenDocumentPF2e } from "foundry-pf2e";
+
 export {};
 
 declare global {
@@ -17,4 +19,6 @@ declare global {
         width: number;
         height: number;
     };
+
+    type TargetDocuments = { actor: ActorPF2e; token?: TokenDocumentPF2e | null };
 }
