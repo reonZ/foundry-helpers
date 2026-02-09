@@ -1,0 +1,203 @@
+import {
+    AbilityItemPF2e,
+    ActorPF2e,
+    CharacterPF2e,
+    ChatMessagePF2e,
+    CheckRoll,
+    Coins,
+    CreaturePF2e,
+    DegreeAdjustmentsRecord,
+    DegreeOfSuccessString,
+    FeatPF2e,
+    ItemPF2e,
+    MacroPF2e,
+    NPCPF2e,
+    PhysicalItemPF2e,
+    RollNoteSource,
+    SaveType,
+    TokenDocumentPF2e,
+} from "foundry-pf2e";
+import { Rolled, RollJSON } from "foundry-pf2e/foundry/client/dice/roll.mjs";
+import { DocumentUUID } from "foundry-pf2e/foundry/client/utils/_module.mjs";
+import { ActorUUID, ItemUUID, TokenDocumentUUID } from "foundry-pf2e/foundry/common/documents/_module.mjs";
+
+declare global {
+    namespace toolbelt {
+        interface Settings {
+            actionable: {
+                action: boolean;
+                apply: boolean;
+                item: boolean;
+                spell: boolean;
+                use: boolean;
+            };
+            anonymous: {
+                action: boolean;
+                spell: boolean;
+                traits: "disabled" | "all" | "blacklist";
+            };
+            betterTrade: {
+                invertTrade: boolean;
+            };
+            heroActions: {
+                enabled: boolean;
+            };
+            identify: {
+                enabled: boolean;
+                playerRequest: boolean;
+            };
+            targetHelper: {
+                checks: boolean;
+                enabled: boolean;
+                small: boolean;
+                targets: boolean;
+            };
+        }
+
+        interface Api {
+            actionable: {
+                getActionMacro: (action: AbilityItemPF2e | FeatPF2e) => Promise<Maybe<MacroPF2e>>;
+                getItemMacro: (item: ItemPF2e) => Promise<Maybe<MacroPF2e>>;
+            };
+            betterInventory: {
+                mergeItems: (actor: ActorPF2e, btn?: HTMLButtonElement | HTMLAnchorElement) => Promise<void>;
+                splitItem: (item: Maybe<ItemPF2e>) => Promise<void>;
+            };
+            betterMerchant: {
+                testItemsForMerchant: (merchant: ActorPF2e, items: ItemPF2e[]) => betterMerchant.TestItemData[];
+            };
+            heroActions: {
+                canTrade: () => boolean;
+                discardHeroActions: (actor: CharacterPF2e, uuids: string[] | string) => void;
+                drawHeroActions: (actor: CharacterPF2e) => Promise<void>;
+                getDeckTable: () => Promise<RollTable | undefined>;
+                getHeroActionDetails: (uuid: string) => Promise<heroActions.HeroActionDetails | undefined>;
+                getHeroActions: (actor: CharacterPF2e) => heroActions.HeroAction[];
+                getHeroActionsTemplateData: (actor: CharacterPF2e) => heroActions.HeroActionsTemplateData | undefined;
+                giveHeroActions: (actor: CharacterPF2e) => Promise<void>;
+                removeHeroActions: () => Promise<void>;
+                sendActionToChat: (actor: CharacterPF2e, uuid: string) => Promise<void>;
+                tradeHeroAction: (actor: CharacterPF2e) => Promise<void>;
+                useHeroAction: (actor: CharacterPF2e, uuid: string) => Promise<void>;
+                usesCountVariant: () => boolean;
+            };
+            identify: {
+                openTracker: (item?: ItemPF2e) => void;
+                requestIdentify: (item: Maybe<ItemPF2e>, skipNotify?: boolean) => void;
+            };
+            mergeDamage: {
+                injectDamageMessage: (
+                    targetMessage: ChatMessagePF2e,
+                    originMessage: ChatMessagePF2e,
+                    options?: { updateMessages?: boolean },
+                ) => Promise<{ rolls: RollJSON[] } | undefined>;
+                mergeDamageMessages: (
+                    targetMessage: ChatMessagePF2e,
+                    originMessage: ChatMessagePF2e,
+                    options?: { updateMessages?: boolean },
+                ) => Promise<ChatMessagePF2e | undefined>;
+            };
+            shareData: {
+                getMasterInMemory: (actor: CreaturePF2e) => CreaturePF2e | undefined;
+                getSlavesInMemory(actor: CreaturePF2e, idOnly: false): CreaturePF2e[];
+                getSlavesInMemory(actor: CreaturePF2e, idOnly?: true): Set<ActorUUID> | undefined;
+            };
+            targetHelper: {
+                getMessageTargets: (message: ChatMessagePF2e) => TokenDocumentUUID[];
+                setMessageFlagTargets: (
+                    updates: Record<string, any>,
+                    targets: TokenDocumentUUID[],
+                ) => Record<string, any>;
+            };
+        }
+
+        namespace betterMerchant {
+            type TestItemData = {
+                buyPrice: Coins;
+                item: PhysicalItemPF2e<CharacterPF2e | NPCPF2e>;
+            };
+        }
+
+        namespace heroActions {
+            type HeroAction = {
+                uuid: DocumentUUID;
+                name: string;
+            };
+
+            type HeroActionDetails = {
+                name: string;
+                description: string;
+            };
+
+            type HeroActionsTemplateData<T extends HeroAction[] = HeroAction[]> = {
+                actions: T;
+                usesCount: boolean;
+                mustDiscard: boolean;
+                mustDraw: boolean;
+                canUse: boolean;
+                canTrade: boolean | 0;
+                diff: number;
+            };
+        }
+
+        namespace targetHelper {
+            type TargetMessageType = "area" | "damage" | "spell" | "action" | "check";
+
+            type MessageTargetSave = {
+                die: number;
+                dosAdjustments?: DegreeAdjustmentsRecord | undefined;
+                modifiers: { label: string; modifier: number; slug: string }[];
+                notes: RollNoteSource[];
+                private: boolean;
+                rerolled?: "hero" | "mythic" | "new" | "lower" | "higher";
+                roll: string;
+                significantModifiers?: modifiersMatter.SignificantModifier[] | undefined;
+                statistic: SaveType;
+                success: DegreeOfSuccessString;
+                unadjustedOutcome?: DegreeOfSuccessString | null;
+                value: number;
+            };
+
+            type RollSaveHook = {
+                roll: Rolled<CheckRoll>;
+                message: ChatMessagePF2e;
+                rollMessage: ChatMessagePF2e;
+                target: TokenDocumentPF2e;
+                data: MessageTargetSave;
+            };
+
+            type RerollSaveHook = {
+                oldRoll: Rolled<CheckRoll>;
+                newRoll: Rolled<CheckRoll>;
+                keptRoll: Rolled<CheckRoll>;
+                message: ChatMessagePF2e;
+                target: TokenDocumentPF2e;
+                data: MessageTargetSave;
+            };
+
+            type MessageTargetApplied = Record<`${number}` | number, boolean>;
+
+            type MessageFlag = {
+                author?: ActorUUID;
+                applied?: Record<string, MessageTargetApplied>;
+                isRegen?: boolean;
+                item?: ItemUUID;
+                options?: string[];
+                private?: boolean;
+                saveVariants?: Record<string, MessageSaveFlag>;
+                splashIndex?: number;
+                splashTargets?: string[];
+                targets?: TokenDocumentUUID[];
+                traits?: string[];
+                type?: TargetMessageType;
+            };
+
+            type MessageSaveFlag = {
+                basic: boolean;
+                dc: number;
+                saves?: Record<string, MessageTargetSave>;
+                statistic: SaveType;
+            };
+        }
+    }
+}
