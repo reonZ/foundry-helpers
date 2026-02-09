@@ -11,4 +11,6 @@ export * from "./localize";
 export * from "./notification";
 export * from "./pixi";
 export * from "./settings";
+export * from "./spell";
+export * from "./spell-consumable";
 export * from "./user";
