@@ -5,6 +5,8 @@ export declare function htmlClosest<K extends keyof HTMLElementTagNameMap>(child
 export declare function htmlClosest(child: MaybeHTML, selectors: string): HTMLElement | null;
 export declare function htmlClosest<E extends HTMLElement = HTMLElement>(child: MaybeHTML, selectors: string): E | null;
 export declare function createHTMLElement<K extends keyof HTMLElementTagNameMap>(nodeName: K, { classes, dataset, content, id, style }?: CreateHTMLElementOptions): HTMLElementTagNameMap[K];
+export declare function createHTMLElementContent(options?: CreateHTMLElementOptions): HTMLElement;
+export declare function createButtonElement(options: CreateHTMLButtonElementOptions): HTMLButtonElement;
 export declare function addListener<K extends keyof HTMLElementTagNameMap, TEvent extends EventType = "click">(parent: MaybeHTML, selectors: K, ...args: ListenerCallbackArgs<HTMLElementTagNameMap[K], TEvent>): void;
 export declare function addListener<TEvent extends EventType = "click">(parent: MaybeHTML, selectors: string, ...args: ListenerCallbackArgs<HTMLElement, TEvent>): void;
 export declare function addListener<E extends HTMLElement, TEvent extends EventType = "click">(parent: MaybeHTML, selectors: string, ...args: ListenerCallbackArgs<E, TEvent>): void;
@@ -22,6 +24,10 @@ export type CreateHTMLElementOptions = {
     id?: string;
     style?: Partial<CSSStyleDeclaration>;
 };
+export type CreateHTMLButtonElementOptions = Omit<CreateHTMLElementOptions, "id" | "content"> & RequireAtLeastOne<{
+    icon?: string;
+    label?: string;
+}>;
 type ListenerCallbackArgs<E extends HTMLElement, TEvent extends EventType> = [TEvent, ListenerCallback<E, TEvent>, boolean] | [TEvent, ListenerCallback<E, TEvent>] | [ListenerCallback<E, TEvent>, boolean] | [ListenerCallback<E, TEvent>];
 type ListenerCallback<TElement extends HTMLElement, TEvent extends EventType> = (element: TElement, event: HTMLElementEventMap[TEvent]) => void;
 export {};

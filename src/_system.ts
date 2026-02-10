@@ -24,7 +24,9 @@ export class SYSTEM {
         };
     }
 
-    static relativePath(...path: string[]): string {
+    static relativePath<T extends string>(tail: T): `systems/${string}/${T}`;
+    static relativePath(...path: string[]): string;
+    static relativePath(...path: string[]) {
         const tail = R.join(path, "/");
         return `systems/${this.id}/${tail}`;
     }

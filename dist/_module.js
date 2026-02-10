@@ -34,6 +34,10 @@ export class MODULE {
     static get name() {
         return this.current.title;
     }
+    static get isDebug() {
+        // @ts-expect-error
+        return !!CONFIG.debug[this.id];
+    }
     static path(...path) {
         const tail = R.join(path, ".");
         return `${this.id}.${tail}`;
@@ -51,7 +55,8 @@ export class MODULE {
         return `${root}.hbs`;
     }
     static Error(error) {
-        return new Error(`\n[${this.name}] ${error}`);
+        const msg = error instanceof Error ? error.message : error;
+        return new Error(`\n[${this.name}] ${msg}`);
     }
     static error(...args) {
         if (args.at(-1) instanceof Error) {

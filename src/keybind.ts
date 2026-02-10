@@ -1,5 +1,14 @@
-import { KeybindingActionConfig as _KeybindingActionConfig } from "foundry-pf2e/foundry/client/_module.mjs";
+import {
+    KeybindingActionConfig as _KeybindingActionConfig,
+    KeyboardEventContext,
+    ModifierKey,
+} from "foundry-pf2e/foundry/client/_module.mjs";
 import { createHTMLElement, htmlQuery, localize, MODULE, R } from ".";
+
+export function isHoldingModifierKey(key: ModifierKey | ModifierKey[]): boolean {
+    const keys = R.isArray(key) ? key : [key];
+    return keys.some((key) => game.keyboard.isModifierActive(key));
+}
 
 export function registerModuleKeybinds(keybinds: ModuleKeybindsRegistration) {
     for (const [group, entries] of R.entries(keybinds)) {
@@ -15,6 +24,45 @@ export function registerModuleKeybinds(keybinds: ModuleKeybindsRegistration) {
     Hooks.on("renderControlsConfig", (_, html, options) => {
         onRenderControlsConfig(html, options, keybinds);
     });
+}
+
+export function createToggleKeybind(options: KeybindingActionConfig) {
+    const _actions = {
+        onDown: (context: KeyboardEventContext) => {},
+        onUp: (context: KeyboardEventContext) => {},
+    };
+
+    return {
+        configs: {
+            ...options,
+            onDown: (context: KeyboardEventContext) => {
+                _actions.onDown(context);
+            },
+            onUp: (context: KeyboardEventContext) => {
+                _actions.onUp(context);
+            },
+        } satisfies KeybindingActionConfig,
+        activate() {
+            _actions.onDown = (context: KeyboardEventContext) => {
+                options.onDown?.(context);
+            };
+
+            _actions.onUp = (context: KeyboardEventContext) => {
+                options.onUp?.(context);
+            };
+        },
+        disable() {
+            _actions.onDown = (context: KeyboardEventContext) => {};
+            _actions.onUp = (context: KeyboardEventContext) => {};
+        },
+        toggle(enabled: boolean) {
+            if (enabled) {
+                this.activate();
+            } else {
+                this.disable();
+            }
+        },
+    };
 }
 
 function onRenderControlsConfig(

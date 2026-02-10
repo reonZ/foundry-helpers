@@ -60,6 +60,24 @@ export function createHTMLElement<K extends keyof HTMLElementTagNameMap>(
     return element;
 }
 
+export function createHTMLElementContent(options?: CreateHTMLElementOptions): HTMLElement {
+    return createHTMLElement("div", options).firstChild as HTMLElement;
+}
+
+export function createButtonElement(options: CreateHTMLButtonElementOptions): HTMLButtonElement {
+    let content = "";
+
+    if (options.icon) {
+        content += `<i class="${options.icon}"> `;
+    }
+
+    if (options.label) {
+        content += options.label;
+    }
+
+    return createHTMLElement("button", { ...options, content });
+}
+
 export function addListener<K extends keyof HTMLElementTagNameMap, TEvent extends EventType = "click">(
     parent: MaybeHTML,
     selectors: K,
@@ -162,6 +180,9 @@ export type CreateHTMLElementOptions = {
     id?: string;
     style?: Partial<CSSStyleDeclaration>;
 };
+
+export type CreateHTMLButtonElementOptions = Omit<CreateHTMLElementOptions, "id" | "content"> &
+    RequireAtLeastOne<{ icon?: string; label?: string }>;
 
 type ListenerCallbackArgs<E extends HTMLElement, TEvent extends EventType> =
     | [TEvent, ListenerCallback<E, TEvent>, boolean]

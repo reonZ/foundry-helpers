@@ -1,2 +1,10 @@
-import { EnrichmentOptionsPF2e } from "foundry-pf2e";
+import { ActorType, EnrichmentOptionsPF2e, ItemType } from "foundry-pf2e";
+import { ContextMenuEntry as _ContextMenuEntry } from "foundry-pf2e/foundry/client/applications/ux/context-menu.mjs";
+export declare function renderCharacterSheets(): void;
+export declare function renderActorSheets(type?: ActorSheetType | ActorSheetType[]): void;
+export declare function renderItemSheets(type?: ItemSheetType | ItemSheetType[]): void;
 export declare function enrichHTML(content: string | null, options?: EnrichmentOptionsPF2e): Promise<string>;
+type ActorSheetType = "ActorSheetPF2e" | `${Capitalize<ActorType>}SheetPF2e`;
+type ItemSheetType = "ItemSheetPF2e" | "AbilitySheetPF2e" | `${Capitalize<Exclude<ItemType, "action">>}SheetPF2e`;
+export type ContextMenuEntry = _ContextMenuEntry;
+export {};

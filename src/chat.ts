@@ -1,5 +1,6 @@
 import { ClientDocument } from "foundry-pf2e/foundry/client/documents/abstract/_module.mjs";
-import { enrichHTML } from ".";
+import { enrichHTML, R, SYSTEM } from ".";
+import { ChatMessagePF2e } from "foundry-pf2e";
 
 export function createChatLink(
     docOrUuid: ClientDocument | string,
@@ -23,4 +24,13 @@ export function createChatLink(
     }
 
     return html ? enrichHTML(link) : link;
+}
+
+export function isActionMessage(message: ChatMessagePF2e): boolean {
+    const type = message.flags[SYSTEM.id].origin?.type;
+    return R.isIncludedIn(type, ["feat", "action"]);
+}
+
+export function isSpellMessage(message: ChatMessagePF2e): boolean {
+    return R.isString(message.flags[SYSTEM.id].casting?.id);
 }

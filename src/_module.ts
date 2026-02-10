@@ -1,11 +1,11 @@
 import { Module } from "foundry-pf2e/foundry/client/packages/_module.mjs";
 import { localize, LocalizeArgs, R } from ".";
 
-export class MODULE {
+export class MODULE<TApi extends Record<string, any> = Record<string, any>> {
     static #instance: MODULE;
     static #current: Module;
 
-    #api = {};
+    #api = {} as TApi;
     #debug = {};
     #id: string;
     #globalName: string;
@@ -45,6 +45,11 @@ export class MODULE {
         return this.current.title;
     }
 
+    static get isDebug(): boolean {
+        // @ts-expect-error
+        return !!CONFIG.debug[this.id];
+    }
+
     static path(...path: string[]): string {
         const tail = R.join(path, ".");
         return `${this.id}.${tail}`;
@@ -65,8 +70,9 @@ export class MODULE {
         return `${root}.hbs`;
     }
 
-    static Error(error: string) {
-        return new Error(`\n[${this.name}] ${error}`);
+    static Error(error: any) {
+        const msg = error instanceof Error ? error.message : error;
+        return new Error(`\n[${this.name}] ${msg}`);
     }
 
     static error(...args: [...string[], string | Error]) {
@@ -101,7 +107,7 @@ export class MODULE {
         this.#instance.debugExpose(path, toExpose);
     }
 
-    get api() {
+    get api(): TApi {
         return this.#api;
     }
 

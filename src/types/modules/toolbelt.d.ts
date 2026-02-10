@@ -21,11 +21,11 @@ import { Rolled, RollJSON } from "foundry-pf2e/foundry/client/dice/roll.mjs";
 import Module from "foundry-pf2e/foundry/client/packages/module.mjs";
 import { DocumentUUID } from "foundry-pf2e/foundry/client/utils/_module.mjs";
 import { ActorUUID, ItemUUID, TokenDocumentUUID } from "foundry-pf2e/foundry/common/documents/_module.mjs";
+import { MODULE } from "../..";
 
 declare global {
     namespace toolbelt {
-        interface GamePF2e extends Module {
-            api: Api;
+        interface GamePF2e extends MODULE<Api> {
             getToolSetting<K extends keyof Settings, S extends keyof Settings[K]>(tool: K, setting: S): Settings[K][S];
         }
 

@@ -22,11 +22,14 @@ declare global {
         height: number;
     };
 
+    type ClientDocument = foundry.documents.abstract.ClientDocument;
     type TargetDocuments = { actor: ActorPF2e; token?: TokenDocumentPF2e | null };
 
     type CollapseOf<T extends object> = {
         [Key in keyof T & string]: T[Key] extends object ? `${Key}` | `${Key}.${CollapseOf<T[Key]>}` : `${Key}`;
     }[keyof T & string];
+
+    type NonEmptyArray<T> = [T, ...T[]];
 
     type FromPrimitive<T> = T extends string
         ? StringConstructor
@@ -35,4 +38,6 @@ declare global {
           : T extends boolean
             ? BooleanConstructor
             : ConstructorOf<T>;
+
+    type Point = { x: number; y: number };
 }

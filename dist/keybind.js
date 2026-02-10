@@ -1,4 +1,8 @@
 import { createHTMLElement, htmlQuery, localize, MODULE, R } from ".";
+export function isHoldingModifierKey(key) {
+    const keys = R.isArray(key) ? key : [key];
+    return keys.some((key) => game.keyboard.isModifierActive(key));
+}
 export function registerModuleKeybinds(keybinds) {
     for (const [group, entries] of R.entries(keybinds)) {
         for (const keybind of entries) {
@@ -12,6 +16,43 @@ export function registerModuleKeybinds(keybinds) {
     Hooks.on("renderControlsConfig", (_, html, options) => {
         onRenderControlsConfig(html, options, keybinds);
     });
+}
+export function createToggleKeybind(options) {
+    const _actions = {
+        onDown: (context) => { },
+        onUp: (context) => { },
+    };
+    return {
+        configs: {
+            ...options,
+            onDown: (context) => {
+                _actions.onDown(context);
+            },
+            onUp: (context) => {
+                _actions.onUp(context);
+            },
+        },
+        activate() {
+            _actions.onDown = (context) => {
+                options.onDown?.(context);
+            };
+            _actions.onUp = (context) => {
+                options.onUp?.(context);
+            };
+        },
+        disable() {
+            _actions.onDown = (context) => { };
+            _actions.onUp = (context) => { };
+        },
+        toggle(enabled) {
+            if (enabled) {
+                this.activate();
+            }
+            else {
+                this.disable();
+            }
+        },
+    };
 }
 function onRenderControlsConfig(html, _options, keybinds) {
     const id = MODULE.id;

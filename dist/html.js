@@ -39,6 +39,19 @@ export function createHTMLElement(nodeName, { classes = [], dataset = {}, conten
     }
     return element;
 }
+export function createHTMLElementContent(options) {
+    return createHTMLElement("div", options).firstChild;
+}
+export function createButtonElement(options) {
+    let content = "";
+    if (options.icon) {
+        content += `<i class="${options.icon}"> `;
+    }
+    if (options.label) {
+        content += options.label;
+    }
+    return createHTMLElement("button", { ...options, content });
+}
 export function addListener(parent, selectors, ...args) {
     if (!(parent instanceof Element || parent instanceof Document))
         return;
