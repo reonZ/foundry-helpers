@@ -3,6 +3,7 @@ export class MODULE {
     static #instance;
     static #current;
     #api = {};
+    #debug = {};
     #id;
     #globalName;
     constructor(id, globalName) {
@@ -63,15 +64,19 @@ export class MODULE {
         if (foundry.utils.hasProperty(this.#instance.api, path)) {
             throw this.Error(`the api path was already defined: ${path}`);
         }
-        const api = {};
+        const exposed = {};
         for (const [key, fn] of R.entries(object)) {
-            Object.defineProperty(api, key, {
+            Object.defineProperty(exposed, key, {
                 value: context ? fn.bind(context) : fn,
                 configurable: false,
                 enumerable: false,
                 writable: false,
             });
         }
+        foundry.utils.setProperty(this.#instance.api, path, exposed);
+    }
+    static debugExpose(path, toExpose) {
+        this.#instance.debugExpose(path, toExpose);
     }
     get api() {
         return this.#api;
@@ -81,6 +86,13 @@ export class MODULE {
     }
     get active() {
         return MODULE.current.active;
+    }
+    // that way, it is only accessible from the browser console for debugging purpose
+    debugExpose(path, toExpose) {
+        if (foundry.utils.hasProperty(this.#debug, path)) {
+            throw this.constructor.Error(`the debug path was already defined: ${path}`);
+        }
+        foundry.utils.setProperty(this.#debug, path, toExpose);
     }
     getSetting(...path) {
         return this.active ? game.settings.get(this.id, R.join(path, ".")) : undefined;

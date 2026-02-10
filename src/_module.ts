@@ -5,7 +5,8 @@ export class MODULE {
     static #instance: MODULE;
     static #current: Module;
 
-    #api: Record<string, Function> = {};
+    #api = {};
+    #debug = {};
     #id: string;
     #globalName: string;
 
@@ -82,19 +83,25 @@ export class MODULE {
             throw this.Error(`the api path was already defined: ${path}`);
         }
 
-        const api: Record<string, Function> = {};
+        const exposed: Record<string, Function> = {};
 
         for (const [key, fn] of R.entries(object)) {
-            Object.defineProperty(api, key, {
+            Object.defineProperty(exposed, key, {
                 value: context ? fn.bind(context) : fn,
                 configurable: false,
                 enumerable: false,
                 writable: false,
             });
         }
+
+        foundry.utils.setProperty(this.#instance.api, path, exposed);
     }
 
-    get api(): Record<string, Function> {
+    static debugExpose(path: string, toExpose: any) {
+        this.#instance.debugExpose(path, toExpose);
+    }
+
+    get api() {
         return this.#api;
     }
 
@@ -104,6 +111,15 @@ export class MODULE {
 
     get active(): boolean {
         return MODULE.current.active;
+    }
+
+    // that way, it is only accessible from the browser console for debugging purpose
+    debugExpose(path: string, toExpose: any) {
+        if (foundry.utils.hasProperty(this.#debug, path)) {
+            throw (this.constructor as typeof MODULE).Error(`the debug path was already defined: ${path}`);
+        }
+
+        foundry.utils.setProperty(this.#debug, path, toExpose);
     }
 
     getSetting(...path: string[]) {

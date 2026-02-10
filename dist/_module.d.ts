@@ -14,9 +14,11 @@ export declare class MODULE {
     static Error(error: string): Error;
     static error(...args: [...string[], string | Error]): void;
     static apiExpose(path: string, object: Record<string, Function>, context?: any): void;
-    get api(): Record<string, Function>;
+    static debugExpose(path: string, toExpose: any): void;
+    get api(): {};
     get id(): string;
     get active(): boolean;
+    debugExpose(path: string, toExpose: any): void;
     getSetting(...path: string[]): unknown;
     localize(...args: LocalizeArgs): string;
 }
