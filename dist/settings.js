@@ -1,4 +1,7 @@
-import { MODULE, R, userIsGM } from ".";
+import { createHTMLElement, htmlClosest, htmlQuery, localize, MODULE, R, userIsGM } from ".";
+export function sharedLocalize(key) {
+    return game.i18n.localize(`LEVIKTIMES.${key}`);
+}
 export function settingPath(...path) {
     return MODULE.path("settings", ...path);
 }
@@ -34,4 +37,68 @@ export function registerSettingMenu(key, options) {
     options.hint ??= settingPath("menus", key, "hint");
     options.icon ??= "fas fa-cogs";
     game.settings.registerMenu(MODULE.id, key, options);
+}
+export function registerModuleSettings(settings) {
+    for (const [group, entries] of R.entries(settings)) {
+        for (const setting of entries) {
+            setting.key = group ? `${group}.${setting.key}` : setting.key;
+            registerSetting(setting.key, setting);
+        }
+    }
+    Hooks.on("renderSettingsConfig", (_, html, options) => onRenderSettingsConfig(html, options, settings));
+}
+function onRenderSettingsConfig(html, options, settings) {
+    const id = MODULE.id;
+    const category = options.categories[id];
+    if (!category)
+        return;
+    const tab = htmlQuery(html, `[data-application-part="main"] [data-group="categories"][data-tab="${id}"][data-category="${id}"]`);
+    if (!tab)
+        return;
+    const gmOnlyLabel = sharedLocalize("gmOnly");
+    const playerOnlyLabel = sharedLocalize("playerOnly");
+    const reloadLabel = sharedLocalize("reloadRequired");
+    const gmOnly = `<i class="fa-solid fa-crown" data-tooltip="${gmOnlyLabel}"></i>`;
+    const player = `<i class="fa-solid fa-user-secret" data-tooltip="${playerOnlyLabel}"></i>`;
+    const reload = `<i class="fa-solid fa-rotate-left" data-tooltip="${reloadLabel}"></i>`;
+    for (const entry of category.entries) {
+        if (entry.menu)
+            continue;
+        const name = entry.field.name;
+        const extras = [];
+        const setting = game.settings.settings.get(name);
+        if (!setting)
+            continue;
+        if (setting.gmOnly) {
+            extras.push(gmOnly);
+        }
+        if (setting.playerOnly) {
+            extras.push(player);
+        }
+        if (setting.requiresReload) {
+            extras.push(reload);
+        }
+        if (!extras.length)
+            continue;
+        const input = htmlQuery(tab, `[name="${name}"]`);
+        const group = htmlClosest(input, ".form-group");
+        const label = htmlQuery(group, "label");
+        const span = createHTMLElement("span", {
+            content: `  ${extras.join(", ")}`,
+        });
+        label?.append(span);
+    }
+    const settingKeys = R.keys(settings);
+    for (let i = 0; i < settingKeys.length; i++) {
+        const key = settingKeys[i];
+        if (!key)
+            continue;
+        const input = htmlQuery(tab, `[name^="${MODULE.id}.${key}"]`);
+        const group = htmlClosest(input, ".form-group");
+        const title = createHTMLElement("h4", {
+            content: localize("settings", key, "title"),
+        });
+        title.style.marginBlock = i === 0 ? "0" : "0.5em 0em";
+        group?.before(title);
+    }
 }

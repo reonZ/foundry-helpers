@@ -1,9 +1,14 @@
 import { SettingSubmenuConfig } from "foundry-pf2e/foundry/client/_module.mjs";
+export declare function sharedLocalize(key: CollapseOf<LEVIKTIMES>): string;
 export declare function settingPath(...path: string[]): string;
 export declare function getSetting<T = boolean>(key: string): T;
 export declare function setSetting<TSetting>(key: string, value: TSetting): Promise<TSetting>;
 export declare function registerSetting(key: string, options: RegisterSettingOptions): void;
 export declare function registerSettingMenu(key: string, options: RegisterSettingMenuOptions): void;
+export declare function registerModuleSettings(settings: ModuleSettingsRegistration): void;
+export type ModuleSettingsRegistration = Record<string, ReadonlyArray<RegisterSettingOptions & {
+    key: string;
+}>>;
 export type SettingRegistration = Parameters<typeof game.settings.register>[2];
 export type RegisterSettingMenuOptions = PartialExcept<SettingSubmenuConfig, "type" | "restricted">;
 type RegisterSettingOptions = Omit<SettingRegistration, "name" | "scope" | "onChange" | "choices"> & {
