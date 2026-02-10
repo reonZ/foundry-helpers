@@ -1,4 +1,4 @@
-import { KeybindingActionConfig } from "foundry-pf2e/foundry/client/_module.mjs";
+import { KeybindingActionConfig as _KeybindingActionConfig } from "foundry-pf2e/foundry/client/_module.mjs";
 import { createHTMLElement, htmlQuery, localize, MODULE, R } from ".";
 
 export function registerModuleKeybinds(keybinds: ModuleKeybindsRegistration) {
@@ -55,4 +55,5 @@ type RenderControlsConfigCategory = {
     id: string;
 };
 
+export type KeybindingActionConfig = _KeybindingActionConfig;
 export type ModuleKeybindsRegistration = Record<string, ReadonlyArray<KeybindingActionConfig>>;

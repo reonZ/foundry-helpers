@@ -11,7 +11,7 @@ export type ModuleSettingsRegistration = Record<string, ReadonlyArray<RegisterSe
 }>>;
 export type SettingRegistration = Parameters<typeof game.settings.register>[2];
 export type RegisterSettingMenuOptions = PartialExcept<SettingSubmenuConfig, "type" | "restricted">;
-type RegisterSettingOptions = Omit<SettingRegistration, "name" | "scope" | "onChange" | "choices"> & {
+export type RegisterSettingOptions = Omit<SettingRegistration, "name" | "scope" | "onChange" | "choices"> & {
     broadcast?: boolean;
     gmOnly?: boolean;
     name?: string;

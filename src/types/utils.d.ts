@@ -27,4 +27,12 @@ declare global {
     type CollapseOf<T extends object> = {
         [Key in keyof T & string]: T[Key] extends object ? `${Key}` | `${Key}.${CollapseOf<T[Key]>}` : `${Key}`;
     }[keyof T & string];
+
+    type FromPrimitive<T> = T extends string
+        ? StringConstructor
+        : T extends number
+          ? NumberConstructor
+          : T extends boolean
+            ? BooleanConstructor
+            : ConstructorOf<T>;
 }
