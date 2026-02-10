@@ -7,6 +7,7 @@ export * from "./application";
 export * from "./array";
 export * from "./chat";
 export * from "./damage";
+export * from "./flags";
 export * from "./handlebars";
 export * from "./html";
 export * from "./item";
