@@ -22,9 +22,13 @@ class Localize extends Function {
         return localize as Localize;
     }
 
+    path(...path: string[]): string {
+        return MODULE.path(...this.subkeys, ...path);
+    }
+
     getLocalizeData(...args: LocalizeArgs): { path: string; data?: LocalizeData } {
         const data = R.isObjectType(args.at(-1)) ? (args.pop() as LocalizeData) : undefined;
-        const path = MODULE.path(...this.subkeys, ...(args as string[]));
+        const path = this.path(...(args as string[]));
         return { path, data };
     }
 

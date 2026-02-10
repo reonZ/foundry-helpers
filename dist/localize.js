@@ -12,9 +12,12 @@ class Localize extends Function {
         Object.setPrototypeOf(localize, Object.getPrototypeOf(this));
         return localize;
     }
+    path(...path) {
+        return MODULE.path(...this.subkeys, ...path);
+    }
     getLocalizeData(...args) {
         const data = R.isObjectType(args.at(-1)) ? args.pop() : undefined;
-        const path = MODULE.path(...this.subkeys, ...args);
+        const path = this.path(...args);
         return { path, data };
     }
     i18n() {
