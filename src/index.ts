@@ -12,6 +12,7 @@ export * from "./damage";
 export * from "./handlebars";
 export * from "./html";
 export * from "./item";
+export * from "./keybind";
 export * from "./localize";
 export * from "./notification";
 export * from "./pixi";
