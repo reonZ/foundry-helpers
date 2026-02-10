@@ -3,6 +3,8 @@ import { ActorPF2e, TokenDocumentPF2e } from "foundry-pf2e";
 export {};
 
 declare global {
+    type Prettify<T> = { [K in keyof T]: T[K] } & {};
+
     type EventType = keyof HTMLElementEventMap;
     type MaybeHTML = Maybe<Document | Element | EventTarget>;
 
@@ -21,4 +23,8 @@ declare global {
     };
 
     type TargetDocuments = { actor: ActorPF2e; token?: TokenDocumentPF2e | null };
+
+    type CollapseOf<T extends object> = {
+        [Key in keyof T & string]: T[Key] extends object ? `${Key}` | `${Key}.${CollapseOf<T[Key]>}` : `${Key}`;
+    }[keyof T & string];
 }
