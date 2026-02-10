@@ -33,3 +33,11 @@ export class CycleArray extends Array {
         return Number(direction) > 0 ? this.increment() : this.decrement();
     }
 }
+export function includesAny(arr, entries) {
+    for (const entry of entries) {
+        if (arr.includes(entry)) {
+            return true;
+        }
+    }
+    return false;
+}

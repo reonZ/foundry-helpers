@@ -9,3 +9,4 @@ export declare class CycleArray<T> extends Array<T> {
     decrement(): T;
     cycle(direction: number | boolean): T;
 }
+export declare function includesAny(arr: any[], entries: any[]): boolean;
