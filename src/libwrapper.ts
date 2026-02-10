@@ -1,0 +1,222 @@
+import { ClientDocument } from "foundry-pf2e/foundry/client/documents/abstract/_module.mjs";
+import { MODULE, R } from ".";
+
+export function registerWrapper(
+    type: libWrapper.RegisterType,
+    path: string | string[],
+    callback: libWrapper.RegisterCallback,
+    context?: WrapperContext,
+): number[] {
+    const ids: number[] = [];
+    const paths = R.isArray(path) ? path : [path];
+
+    const wrapped = context
+        ? function (this: any, ...args: any[]) {
+              args.unshift(this);
+              return callback.apply(context, args);
+          }
+        : callback;
+
+    for (const key of paths) {
+        const id = libWrapper.register(MODULE.id, key, wrapped, type);
+        ids.push(id);
+    }
+
+    return ids;
+}
+
+export function unregisterWrapper(id: number | number[]) {
+    const ids = R.isArray(id) ? id : [id];
+
+    for (const id of ids) {
+        libWrapper.unregister(MODULE.id, id);
+    }
+}
+
+export function createSharedWrapper<
+    TDocument extends ClientDocument,
+    TWrapperCallback extends libWrapper.RegisterCallback,
+    TListener extends (...args: any[]) => any,
+>(
+    type: Exclude<libWrapper.RegisterType, "OVERRIDE">,
+    path: string,
+    sharedCallback: (
+        this: TDocument,
+        registered: TListener[],
+        wrapped: () => ReturnType<TWrapperCallback>,
+        args: Parameters<TWrapperCallback>,
+    ) => void,
+) {
+    let sharedId: number[] | null = null;
+    const _registered = new Collection<string, SharedRegistered>();
+
+    function wrapper(
+        this: TDocument,
+        wrapped: libWrapper.RegisterCallback,
+        ...wrapperArgs: Parameters<TWrapperCallback>
+    ) {
+        const registered: TListener[] = R.pipe(
+            _registered.contents,
+            R.sortBy(R.prop("priority")),
+            R.filter(({ active }) => active),
+            R.map(({ listener, context }): TListener => {
+                if (context) {
+                    return ((...args: any[]) => listener.call(context, this, ...args)) as TListener;
+                } else {
+                    return ((...args: any[]) => listener.call(this, ...args)) as TListener;
+                }
+            }),
+        );
+
+        return sharedCallback.call(this, registered, () => wrapped(...wrapperArgs), wrapperArgs);
+    }
+
+    const wrapperIsEnabled = () => {
+        return _registered.some((x) => x.active);
+    };
+
+    const activateWrapper = (id: string) => {
+        const registered = _registered.get(id);
+        if (!registered) return;
+
+        if (!sharedId) {
+            sharedId = registerWrapper(type, path, wrapper);
+        }
+
+        registered.active = true;
+    };
+
+    const disableWrapper = (id: string) => {
+        const registered = _registered.get(id);
+        if (!registered) return;
+
+        registered.active = false;
+
+        if (sharedId && !wrapperIsEnabled()) {
+            unregisterWrapper(sharedId);
+            sharedId = null;
+        }
+    };
+
+    function register(
+        listener: (document: TDocument, ...args: Parameters<TListener>) => ReturnType<TListener>,
+        options: { context: WrapperContext; priority?: number },
+    ): Wrapper;
+    function register(
+        listener: (this: TDocument, ...args: Parameters<TListener>) => ReturnType<TListener>,
+        options?: { context?: undefined; priority?: number },
+    ): Wrapper;
+    function register(
+        listener: libWrapper.RegisterCallback,
+        { context, priority = 0 }: { context?: WrapperContext; priority?: number } = {},
+    ): Wrapper {
+        const registerId = foundry.utils.randomID();
+
+        _registered.set(registerId, {
+            listener,
+            context,
+            priority,
+            active: false,
+        });
+
+        return {
+            get enabled() {
+                return !!_registered.get(registerId)?.active;
+            },
+            activate() {
+                activateWrapper(registerId);
+            },
+            disable() {
+                disableWrapper(registerId);
+            },
+            toggle(enabled?: boolean) {
+                enabled ??= !this.enabled;
+
+                if (enabled) {
+                    this.activate();
+                } else {
+                    this.disable();
+                }
+            },
+        };
+    }
+
+    return {
+        register,
+    };
+}
+
+export function createToggleableWrapper(
+    type: libWrapper.RegisterType,
+    path: string | string[],
+    callback: libWrapper.RegisterCallback,
+    options: WrapperOptions = {},
+): Wrapper {
+    let wrapperIds: number[] | null = null;
+
+    return {
+        get enabled(): boolean {
+            return !!wrapperIds;
+        },
+        activate() {
+            if (this.enabled) return;
+
+            wrapperIds = registerWrapper(type, path, callback, options.context);
+            options.onActivate?.();
+        },
+        disable() {
+            if (!wrapperIds) return;
+
+            unregisterWrapper(wrapperIds);
+            wrapperIds = null;
+            options.onDisable?.();
+        },
+        toggle(enabled?: boolean) {
+            enabled ??= !this.enabled;
+
+            if (enabled) {
+                this.activate();
+            } else {
+                this.disable();
+            }
+        },
+    };
+}
+
+export function createCreatureSheetWrapper(
+    type: libWrapper.RegisterType,
+    partialPath: string | string[],
+    callback: libWrapper.RegisterCallback,
+    options: WrapperOptions = {},
+): Wrapper {
+    const partials = R.isArray(partialPath) ? partialPath : [partialPath];
+    const paths = partials.flatMap((partial) => [
+        `CONFIG.Actor.sheetClasses.character['pf2e.CharacterSheetPF2e'].cls.prototype.${partial}`,
+        `CONFIG.Actor.sheetClasses.npc['pf2e.NPCSheetPF2e'].cls.prototype.${partial}`,
+        `CONFIG.Actor.sheetClasses.familiar['pf2e.FamiliarSheetPF2e'].cls.prototype.${partial}`,
+    ]);
+
+    return createToggleableWrapper(type, paths, callback, options);
+}
+
+type SharedRegistered = {
+    listener: libWrapper.RegisterCallback;
+    context?: WrapperContext;
+    priority: number;
+    active: boolean;
+};
+
+type Wrapper = {
+    get enabled(): boolean;
+    activate(): void;
+    disable(): void;
+    toggle(enabled?: boolean): void;
+};
+
+type WrapperOptions = {
+    context?: WrapperContext;
+    onDisable?: () => void;
+    onActivate?: () => void;
+};
+
+type WrapperContext = InstanceType<new (...args: any[]) => any>;
