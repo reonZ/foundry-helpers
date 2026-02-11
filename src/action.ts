@@ -1,4 +1,24 @@
 import { AbilityItemPF2e, ActionCost, ActorPF2e, EffectPF2e, EffectSource, FeatPF2e } from "foundry-pf2e";
+import { ImageFilePath, R, SYSTEM } from ".";
+
+/**
+ * https://github.com/foundryvtt/pf2e/blob/37b0dcab08141b3e9e4e0f44e51df9f4dfd52a71/src/util/misc.ts#L160C1-L171C3
+ */
+const actionImgMap = R.mapValues(
+    {
+        0: "icons/actions/FreeAction.webp",
+        free: "icons/actions/FreeAction.webp",
+        1: "icons/actions/OneAction.webp",
+        2: "icons/actions/TwoActions.webp",
+        3: "icons/actions/ThreeActions.webp",
+        "1 or 2": "icons/actions/OneTwoActions.webp",
+        "1 to 3": "icons/actions/OneThreeActions.webp",
+        "2 or 3": "icons/actions/TwoThreeActions.webp",
+        reaction: "icons/actions/Reaction.webp",
+        passive: "icons/actions/Passive.webp",
+    },
+    (tail) => SYSTEM.path(tail),
+) as Record<string, () => ImageFilePath>;
 
 /**
  * https://github.com/foundryvtt/pf2e/blob/89892b6fafec1456a0358de8c6d7b102e3fe2da2/src/util/misc.ts#L188C1-L199C3
@@ -15,6 +35,24 @@ const actionGlyphMap: Record<string, string> = {
     "2 rounds": "3,3",
     reaction: "R",
 };
+
+/**
+ * https://github.com/foundryvtt/pf2e/blob/6e5481af7bb1e1b9d28d35fb3ad324511c5170d1/src/module/sheet/helpers.ts#L304
+ */
+export function getActionIcon(action: ActionIconType, fallback: ImageFilePath): ImageFilePath;
+export function getActionIcon(action: ActionIconType, fallback: ImageFilePath | null): ImageFilePath | null;
+export function getActionIcon(action: ActionIconType): ImageFilePath;
+export function getActionIcon(
+    action: ActionIconType,
+    fallback: ImageFilePath | null = SYSTEM.relativePath("icons/actions/Empty.webp"),
+): ImageFilePath | null {
+    if (action === null) return actionImgMap.passive();
+    const value = typeof action !== "object" ? action : action.type === "action" ? action.value : action.type;
+    const sanitized = String(value ?? "")
+        .toLowerCase()
+        .trim();
+    return actionImgMap[sanitized]?.() ?? fallback;
+}
 
 /**
  * https://github.com/foundryvtt/pf2e/blob/89892b6fafec1456a0358de8c6d7b102e3fe2da2/src/util/misc.ts#L205
@@ -105,3 +143,5 @@ export async function applySelfEffect(item: AbilityItemPF2e<ActorPF2e> | FeatPF2
 export function isDefaultActionIcon(img: string, action: string | ActionCost | null) {
     return img === getActionIcon(action);
 }
+
+export type ActionIconType = string | number | ActionCost | null;

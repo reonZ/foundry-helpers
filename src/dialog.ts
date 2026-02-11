@@ -12,7 +12,7 @@ export async function waitDialog<T extends Record<string, any>>({
     yes,
 }: WaitDialogOptions): Promise<T | false | null> {
     if (data) {
-        data.i18n = localize.sub(i18n).i18n;
+        data.i18n = localize.i18n(i18n);
     }
 
     classes.push(MODULE.id);
@@ -52,7 +52,7 @@ export async function waitDialog<T extends Record<string, any>>({
         },
     };
 
-    return foundry.applications.api.DialogV2.wait(dialogOptions);
+    return foundry.applications.api.DialogV2.wait(dialogOptions) as Promise<T | false | null>;
 }
 
 function createFormData(html: HTMLFormElement | null, expand: boolean = false): Record<string, unknown> | null {

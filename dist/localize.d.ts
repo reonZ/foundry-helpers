@@ -6,7 +6,7 @@ declare class Localize extends Function {
         path: string;
         data?: LocalizeData;
     };
-    i18n(): (...args: LocalizeArgs) => string;
+    i18n(...subkeys: string[]): (...args: LocalizeArgs) => string;
     ifExist(...args: LocalizeArgs): string | undefined;
     sub(...subkeys: string[]): Localize;
     localizeOrFormat(path: string, data?: LocalizeData): string;

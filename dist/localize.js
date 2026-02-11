@@ -20,16 +20,16 @@ class Localize extends Function {
         const path = this.path(...args);
         return { path, data };
     }
-    i18n() {
+    i18n(...subkeys) {
         const self = this;
         function i18n(...args) {
-            return self(...args);
+            return self(...subkeys, ...args);
         }
         Object.defineProperties(i18n, {
             tooltip: {
                 value: (...args) => {
                     const path = args.slice(0, -1);
-                    const tooltip = self(...path);
+                    const tooltip = i18n(...subkeys, ...path);
                     return `data-tooltip="${tooltip}"`;
                 },
                 enumerable: false,
@@ -38,7 +38,7 @@ class Localize extends Function {
             root: {
                 value: (...args) => {
                     const data = R.isObjectType(args.at(-1)) ? args.pop() : undefined;
-                    const path = MODULE.path(...args);
+                    const path = MODULE.path(...subkeys, ...args);
                     return self.localizeOrFormat(path, data);
                 },
                 enumerable: false,

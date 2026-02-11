@@ -1,3 +1,19 @@
+import { R, SYSTEM } from ".";
+/**
+ * https://github.com/foundryvtt/pf2e/blob/37b0dcab08141b3e9e4e0f44e51df9f4dfd52a71/src/util/misc.ts#L160C1-L171C3
+ */
+const actionImgMap = R.mapValues({
+    0: "icons/actions/FreeAction.webp",
+    free: "icons/actions/FreeAction.webp",
+    1: "icons/actions/OneAction.webp",
+    2: "icons/actions/TwoActions.webp",
+    3: "icons/actions/ThreeActions.webp",
+    "1 or 2": "icons/actions/OneTwoActions.webp",
+    "1 to 3": "icons/actions/OneThreeActions.webp",
+    "2 or 3": "icons/actions/TwoThreeActions.webp",
+    reaction: "icons/actions/Reaction.webp",
+    passive: "icons/actions/Passive.webp",
+}, (tail) => SYSTEM.path(tail));
 /**
  * https://github.com/foundryvtt/pf2e/blob/89892b6fafec1456a0358de8c6d7b102e3fe2da2/src/util/misc.ts#L188C1-L199C3
  */
@@ -13,6 +29,15 @@ const actionGlyphMap = {
     "2 rounds": "3,3",
     reaction: "R",
 };
+export function getActionIcon(action, fallback = SYSTEM.relativePath("icons/actions/Empty.webp")) {
+    if (action === null)
+        return actionImgMap.passive();
+    const value = typeof action !== "object" ? action : action.type === "action" ? action.value : action.type;
+    const sanitized = String(value ?? "")
+        .toLowerCase()
+        .trim();
+    return actionImgMap[sanitized]?.() ?? fallback;
+}
 /**
  * https://github.com/foundryvtt/pf2e/blob/89892b6fafec1456a0358de8c6d7b102e3fe2da2/src/util/misc.ts#L205
  */

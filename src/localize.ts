@@ -32,18 +32,18 @@ class Localize extends Function {
         return { path, data };
     }
 
-    i18n() {
+    i18n(...subkeys: string[]) {
         const self = this;
 
         function i18n(...args: LocalizeArgs): string {
-            return self(...args);
+            return self(...subkeys, ...args);
         }
 
         Object.defineProperties(i18n, {
             tooltip: {
                 value: (...args: Parameters<HelperDelegate>): string => {
                     const path = args.slice(0, -1);
-                    const tooltip = self(...path);
+                    const tooltip = i18n(...subkeys, ...path);
                     return `data-tooltip="${tooltip}"`;
                 },
                 enumerable: false,
@@ -52,7 +52,7 @@ class Localize extends Function {
             root: {
                 value: (...args: Parameters<HelperDelegate>) => {
                     const data = R.isObjectType(args.at(-1)) ? (args.pop() as LocalizeData) : undefined;
-                    const path = MODULE.path(...(args as string[]));
+                    const path = MODULE.path(...subkeys, ...(args as string[]));
                     return self.localizeOrFormat(path, data);
                 },
                 enumerable: false,

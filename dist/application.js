@@ -1,3 +1,4 @@
+import { isInstanceOf, R } from ".";
 function renderApplications(type) {
     const types = Array.isArray(type) ? type : [type];
     const apps = [...R.values(ui.windows), ...foundry.applications.instances.values()].filter((app) => types.some((x) => isInstanceOf(app, x)));

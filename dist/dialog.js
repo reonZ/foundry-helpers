@@ -1,7 +1,7 @@
 import { htmlQuery, localize, MODULE, R, render } from ".";
 export async function waitDialog({ classes = [], content, data, expand, i18n, no, onRender, title, yes, }) {
     if (data) {
-        data.i18n = localize.sub(i18n).i18n;
+        data.i18n = localize.i18n(i18n);
     }
     classes.push(MODULE.id);
     const yesCallback = yes?.callback ?? (async (event, btn, dialog) => createFormData(dialog.form, expand));

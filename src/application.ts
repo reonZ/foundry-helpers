@@ -1,5 +1,6 @@
 import { ActorType, EnrichmentOptionsPF2e, ItemType } from "foundry-pf2e";
 import { ContextMenuEntry as _ContextMenuEntry } from "foundry-pf2e/foundry/client/applications/ux/context-menu.mjs";
+import { isInstanceOf, R } from ".";
 
 function renderApplications(type: string | string[]) {
     const types = Array.isArray(type) ? type : [type];
