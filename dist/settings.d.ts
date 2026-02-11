@@ -11,14 +11,19 @@ export type ModuleSettingsRegistration = Record<string, ReadonlyArray<RegisterSe
 }>>;
 export type SettingRegistration = Parameters<typeof game.settings.register>[2];
 export type RegisterSettingMenuOptions = PartialExcept<SettingSubmenuConfig, "type" | "restricted">;
-export type RegisterSettingOptions = Omit<SettingRegistration, "name" | "scope" | "onChange" | "choices"> & {
+export type RegisterSettingOptions = Omit<SettingRegistration, "name" | "scope" | "onChange" | "choices" | "range"> & {
     broadcast?: boolean;
+    choices?: Record<string, string> | string[] | ReadonlyArray<string>;
     gmOnly?: boolean;
     name?: string;
-    playerOnly?: boolean;
-    scope: "world" | "user";
-    choices?: Record<string, string> | string[] | ReadonlyArray<string>;
     onChange?: (value: any, operation: object, userId: string) => void | Promise<void>;
+    playerOnly?: boolean;
+    range?: {
+        min?: number;
+        max?: number;
+        step?: number;
+    };
+    scope: "world" | "user";
 };
 export type RenderSettingsConfigOptions = {
     categories: Record<string, RenderSettingsConfigCategory>;

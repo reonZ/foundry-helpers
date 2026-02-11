@@ -19,6 +19,7 @@ export declare function usePhysicalItem(event: Event, item: EquipmentPF2e<ActorP
 export declare function consumeItem(event: Event, item: ConsumablePF2e<ActorPF2e>): Promise<void>;
 export declare function isSupressedFeat<TActor extends ActorPF2e | null>(item: ItemPF2e<TActor>): boolean;
 export declare function isCastConsumable(item: ConsumablePF2e): boolean;
+export declare function isSF2eItem<T extends PhysicalItemPF2e>(item: T): boolean;
 type ActorItemInstances<TType extends ItemType, TActor extends ActorPF2e> = ItemInstances<TActor>[TType extends "weapon" | "shield" ? TType | "weapon" | "equipment" : TType];
 export type ItemSheetData<TItem extends Item> = _ItemSheetData<TItem>;
 export type ItemUUID = _ItemUUID;

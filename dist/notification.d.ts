@@ -1,7 +1,7 @@
 import { Notification } from "foundry-pf2e/foundry/client/applications/ui/notifications.mjs";
 import { LocalizeArgs, LocalizeData } from ".";
 declare class Notifications extends Function {
-    subkeys: string[];
+    #private;
     constructor(...subkeys: string[]);
     success(...args: NotificationArgs): Notification;
     info(...args: NotificationArgs): Notification;

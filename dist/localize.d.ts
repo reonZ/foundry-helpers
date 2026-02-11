@@ -1,5 +1,5 @@
 declare class Localize extends Function {
-    subkeys: string[];
+    #private;
     constructor(...subkeys: string[]);
     path(...path: string[]): string;
     getLocalizeData(...args: LocalizeArgs): {

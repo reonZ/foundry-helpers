@@ -4,7 +4,6 @@ export async function waitDialog({ classes = [], content, data, expand, i18n, no
         data.i18n = localize.i18n(i18n);
     }
     classes.push(MODULE.id);
-    const yesCallback = yes?.callback ?? (async (event, btn, dialog) => createFormData(dialog.form, expand));
     const dialogOptions = {
         buttons: [
             {
@@ -12,7 +11,7 @@ export async function waitDialog({ classes = [], content, data, expand, i18n, no
                 icon: yes?.icon ?? "fa-solid fa-check",
                 label: yes?.label ?? localize(i18n, "yes"),
                 default: !no?.default,
-                callback: yesCallback,
+                callback: yes?.callback ?? (async (_event, _btn, dialog) => createFormData(dialog.form, expand)),
             },
             {
                 action: "no",
@@ -24,9 +23,6 @@ export async function waitDialog({ classes = [], content, data, expand, i18n, no
         ],
         classes,
         content: await generateDialogContent(content, data),
-        window: {
-            title: generateDialogTitle(i18n, title, data),
-        },
         render: (event, dialog) => {
             requestAnimationFrame(() => {
                 htmlQuery(dialog.element, `input[type="text"]`)?.focus();
@@ -34,6 +30,9 @@ export async function waitDialog({ classes = [], content, data, expand, i18n, no
             if (onRender) {
                 onRender(event, dialog);
             }
+        },
+        window: {
+            title: generateDialogTitle(i18n, title, data),
         },
     };
     return foundry.applications.api.DialogV2.wait(dialogOptions);

@@ -2,14 +2,14 @@ import { Notification } from "foundry-pf2e/foundry/client/applications/ui/notifi
 import { localize, LocalizeArgs, LocalizeData, R } from ".";
 
 class Notifications extends Function {
-    declare subkeys: string[];
+    #subkeys: string[];
 
     constructor(...subkeys: string[]) {
         super();
 
-        this.subkeys = subkeys;
+        this.#subkeys = subkeys;
 
-        function notify(type: NotificationType, ...args: NotificationArgs): Notification {
+        function notify(this: Notifications, type: NotificationType, ...args: NotificationArgs): Notification {
             const permanent = R.isBoolean(args.at(-1)) ? (args.pop() as boolean) : false;
             const str = localize(...subkeys, ...(args as LocalizeArgs));
             return ui.notifications.notify(str, type, { permanent });
@@ -18,7 +18,7 @@ class Notifications extends Function {
         Object.assign(notify, this);
         Object.setPrototypeOf(notify, Object.getPrototypeOf(this));
 
-        return notify as any;
+        return notify.bind(this) as Notifications;
     }
 
     success(...args: NotificationArgs): Notification {
@@ -38,7 +38,7 @@ class Notifications extends Function {
     }
 
     sub(...subkeys: string[]): Notifications {
-        return new Notifications(...this.subkeys, ...subkeys);
+        return new Notifications(...this.#subkeys, ...subkeys);
     }
 }
 interface Notifications {

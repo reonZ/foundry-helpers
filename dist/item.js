@@ -1,4 +1,4 @@
-import { createHTMLElementContent, getDamageRollClass, htmlQuery, R, setHasElement, SYSTEM } from ".";
+import { createHTMLElementContent, getDamageRollClass, htmlQuery, includesAny, R, setHasElement, SYSTEM } from ".";
 /**
  * https://github.com/foundryvtt/pf2e/blob/95e941aecaf1fa6082825b206b0ac02345d10538/src/module/item/physical/values.ts#L1
  */
@@ -147,4 +147,7 @@ export function isSupressedFeat(item) {
 }
 export function isCastConsumable(item) {
     return R.isIncludedIn(item.category, ["wand", "scroll"]) && !!item.system.spell;
+}
+export function isSF2eItem(item) {
+    return includesAny(item._source.system.traits.value, ["tech", "analog"]);
 }

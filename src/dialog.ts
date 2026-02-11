@@ -10,23 +10,21 @@ export async function waitDialog<T extends Record<string, any>>({
     onRender,
     title,
     yes,
-}: WaitDialogOptions): Promise<T | false | null> {
+}: CustomWaitDialogOptions): Promise<T | false | null> {
     if (data) {
         data.i18n = localize.i18n(i18n);
     }
 
     classes.push(MODULE.id);
 
-    const yesCallback = yes?.callback ?? (async (event, btn, dialog) => createFormData(dialog.form, expand));
-
-    const dialogOptions: ModuleDialogOptions = {
+    const dialogOptions: WaitDialogOptions = {
         buttons: [
             {
                 action: "yes",
                 icon: yes?.icon ?? "fa-solid fa-check",
                 label: yes?.label ?? localize(i18n, "yes"),
                 default: !no?.default,
-                callback: yesCallback,
+                callback: yes?.callback ?? (async (_event, _btn, dialog) => createFormData(dialog.form, expand)),
             },
             {
                 action: "no",
@@ -38,9 +36,6 @@ export async function waitDialog<T extends Record<string, any>>({
         ],
         classes,
         content: await generateDialogContent(content, data),
-        window: {
-            title: generateDialogTitle(i18n, title, data),
-        },
         render: (event, dialog) => {
             requestAnimationFrame(() => {
                 htmlQuery(dialog.element, `input[type="text"]`)?.focus();
@@ -49,6 +44,9 @@ export async function waitDialog<T extends Record<string, any>>({
             if (onRender) {
                 onRender(event, dialog);
             }
+        },
+        window: {
+            title: generateDialogTitle(i18n, title, data),
         },
     };
 
@@ -95,7 +93,7 @@ type BaseDialogOptions = {
     title?: string | Record<string, any>;
 };
 
-export type WaitDialogOptions = BaseDialogOptions & {
+export type CustomWaitDialogOptions = BaseDialogOptions & {
     content: string;
     expand?: boolean;
     i18n: string;
@@ -103,17 +101,17 @@ export type WaitDialogOptions = BaseDialogOptions & {
         label?: string;
         icon?: string;
         default?: true;
-        callback?: foundry.applications.api.DialogV2ButtonCallback;
+        callback?: fa.api.DialogV2ButtonCallback;
     };
     onRender?: fa.api.DialogV2RenderCallback;
     yes?: {
         label?: string;
         icon?: string;
-        callback?: foundry.applications.api.DialogV2ButtonCallback;
+        callback?: fa.api.DialogV2ButtonCallback;
     };
 };
 
-type ModuleDialogOptions = {
+type WaitDialogOptions = {
     rejectClose?: boolean;
     close?: fa.api.DialogV2CloseCallback;
     render?: fa.api.DialogV2RenderCallback;

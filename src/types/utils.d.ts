@@ -15,6 +15,11 @@ declare global {
     type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
         { [K in Keys]-?: Required<Pick<T, K>> & Partial<Record<Exclude<Keys, K>, undefined>> }[Keys];
 
+    type Point = {
+        x: number;
+        y: number;
+    };
+
     type Rectangle = {
         x: number;
         y: number;
@@ -38,6 +43,4 @@ declare global {
           : T extends boolean
             ? BooleanConstructor
             : ConstructorOf<T>;
-
-    type Point = { x: number; y: number };
 }

@@ -2,28 +2,26 @@ import { HelperDelegate } from "handlebars";
 import { MODULE, R } from ".";
 
 class Localize extends Function {
-    declare subkeys: string[];
+    #subkeys: string[];
 
     constructor(...subkeys: string[]) {
         super();
 
-        this.subkeys = subkeys;
+        this.#subkeys = subkeys;
 
-        const self = this;
-
-        function localize(...args: LocalizeArgs): string {
-            const { data, path } = self.getLocalizeData(...args);
-            return self.localizeOrFormat(path, data);
+        function localize(this: Localize, ...args: LocalizeArgs): string {
+            const { data, path } = this.getLocalizeData(...args);
+            return this.localizeOrFormat(path, data);
         }
 
         Object.assign(localize, this);
         Object.setPrototypeOf(localize, Object.getPrototypeOf(this));
 
-        return localize as Localize;
+        return localize.bind(this) as Localize;
     }
 
     path(...path: string[]): string {
-        return MODULE.path(...this.subkeys, ...path);
+        return MODULE.path(...this.#subkeys, ...path);
     }
 
     getLocalizeData(...args: LocalizeArgs): { path: string; data?: LocalizeData } {
@@ -71,7 +69,7 @@ class Localize extends Function {
     }
 
     sub(...subkeys: string[]): Localize {
-        return new Localize(...this.subkeys, ...subkeys);
+        return new Localize(...this.#subkeys, ...subkeys);
     }
 
     localizeOrFormat(path: string, data?: LocalizeData): string {

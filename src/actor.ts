@@ -9,4 +9,8 @@ export function oppositeAlliance(alliance: ActorAlliance) {
     return alliance === "party" ? "opposition" : alliance === "opposition" ? "party" : null;
 }
 
+export function isAllyActor(actor: ActorPF2e) {
+    return actor.alliance === "party" || actor.testUserPermission(game.user, "OBSERVER");
+}
+
 export type ActorSheetOptions = _ActorSheetOptions;

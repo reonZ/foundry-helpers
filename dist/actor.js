@@ -4,3 +4,6 @@ export function belongToPartyAlliance(actor) {
 export function oppositeAlliance(alliance) {
     return alliance === "party" ? "opposition" : alliance === "opposition" ? "party" : null;
 }
+export function isAllyActor(actor) {
+    return actor.alliance === "party" || actor.testUserPermission(game.user, "OBSERVER");
+}

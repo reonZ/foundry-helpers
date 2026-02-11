@@ -10,7 +10,7 @@ import {
 } from "foundry-pf2e";
 import { ItemSheetData as _ItemSheetData } from "foundry-pf2e/foundry/client/appv1/sheets/item-sheet.mjs";
 import { ItemUUID as _ItemUUID } from "foundry-pf2e/foundry/common/documents/_module.mjs";
-import { createHTMLElementContent, getDamageRollClass, htmlQuery, R, setHasElement, SYSTEM } from ".";
+import { createHTMLElementContent, getDamageRollClass, htmlQuery, includesAny, R, setHasElement, SYSTEM } from ".";
 import { CompendiumIndexData as _CompendiumIndexData } from "foundry-pf2e/foundry/client/documents/collections/_module.mjs";
 
 /**
@@ -211,6 +211,10 @@ export function isSupressedFeat<TActor extends ActorPF2e | null>(item: ItemPF2e<
 
 export function isCastConsumable(item: ConsumablePF2e): boolean {
     return R.isIncludedIn(item.category, ["wand", "scroll"]) && !!item.system.spell;
+}
+
+export function isSF2eItem<T extends PhysicalItemPF2e>(item: T): boolean {
+    return includesAny(item._source.system.traits.value, ["tech", "analog"]);
 }
 
 type AttachableType = keyof typeof ATTACHABLE_TYPES;
