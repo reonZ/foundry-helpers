@@ -1,8 +1,9 @@
 import { Module } from "foundry-pf2e/foundry/client/packages/_module.mjs";
-import { getSetting, localize, LocalizeArgs, R } from ".";
+import { getSetting, Localize, localize, R } from ".";
 
 const _MODULE = {
     id: "",
+    localize: undefined as Localize | undefined,
     groupLog: false,
     globalName: "",
     current: undefined as Module | undefined,
@@ -130,10 +131,9 @@ const MODULE = {
                     enumerable: false,
                 },
                 localize: {
-                    value: function (...args: LocalizeArgs): string {
-                        return localize(...args);
+                    get() {
+                        return (_MODULE.localize ??= localize.sub(_MODULE.id));
                     },
-                    writable: false,
                     configurable: false,
                     enumerable: false,
                 },

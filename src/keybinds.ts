@@ -1,5 +1,5 @@
 import { KeybindingActionConfig, KeyboardEventContext, ModifierKey } from "foundry-pf2e/foundry/client/_module.mjs";
-import { createHTMLElement, htmlQuery, localize, localizeIfExist, MODULE, R } from ".";
+import { createHTMLElement, htmlQuery, localize, MODULE, R } from ".";
 
 function isHoldingModifierKey(key: ModifierKey | ModifierKey[]): boolean {
     const keys = R.isArray(key) ? key : [key];
@@ -46,7 +46,7 @@ function onRenderControlsConfig(html: HTMLFormElement, options: RenderControlsCo
 
         const group = htmlQuery(tab, `.form-group[data-action-id^="${MODULE.id}.${key}"]`);
         const title = createHTMLElement("h4", {
-            content: localizeIfExist("keybindings", key, "title") ?? localize("settings", key, "title"),
+            content: localize.ifExist("keybindings", key, "title") ?? localize("settings", key, "title"),
         });
 
         title.style.marginBlock = i === 0 ? "0" : "0.5em 0em";

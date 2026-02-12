@@ -1,4 +1,4 @@
-import { createHTMLElement, htmlClosest, htmlQuery, localize, MODULE, R, sharedLocalize, userIsGM } from ".";
+import { createHTMLElement, htmlClosest, htmlQuery, localize, MODULE, R, userIsGM } from ".";
 function settingPath(...path) {
     return MODULE.path("settings", ...path);
 }
@@ -52,9 +52,9 @@ function onRenderSettingsConfig(html, options, settings) {
     const tab = htmlQuery(html, `[data-application-part="main"] [data-group="categories"][data-tab="${id}"][data-category="${id}"]`);
     if (!tab)
         return;
-    const gmOnlyLabel = sharedLocalize("gmOnly");
-    const playerOnlyLabel = sharedLocalize("playerOnly");
-    const reloadLabel = sharedLocalize("reloadRequired");
+    const gmOnlyLabel = localize.shared("gmOnly");
+    const playerOnlyLabel = localize.shared("playerOnly");
+    const reloadLabel = localize.shared("reloadRequired");
     const gmOnly = `<i class="fa-solid fa-crown" data-tooltip="${gmOnlyLabel}"></i>`;
     const player = `<i class="fa-solid fa-user-secret" data-tooltip="${playerOnlyLabel}"></i>`;
     const reload = `<i class="fa-solid fa-rotate-left" data-tooltip="${reloadLabel}"></i>`;

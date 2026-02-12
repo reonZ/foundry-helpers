@@ -1,4 +1,4 @@
-import { createFormData, htmlQuery, localize, localizeIfExist, MODULE, R, render, templateLocalize } from ".";
+import { createFormData, htmlQuery, localize, MODULE, R, render } from ".";
 
 async function waitDialog<T extends Record<string, any>>({
     classes = [],
@@ -12,7 +12,7 @@ async function waitDialog<T extends Record<string, any>>({
     yes,
 }: CustomWaitDialogOptions): Promise<T | false | null> {
     if (data) {
-        data.i18n = templateLocalize(i18n);
+        data.i18n = localize.sub(i18n);
     }
 
     classes.push(MODULE.id);
@@ -29,7 +29,7 @@ async function waitDialog<T extends Record<string, any>>({
             {
                 action: "no",
                 icon: no?.icon ?? "fa-solid fa-xmark",
-                label: no?.label ?? localizeIfExist(i18n, "no") ?? "Cancel",
+                label: no?.label ?? localize.ifExist(i18n, "no") ?? "Cancel",
                 default: !!no?.default,
                 callback: no?.callback ?? (() => false),
             },
@@ -59,17 +59,17 @@ async function confirmDialog(
 ): Promise<boolean | null> {
     const dialogOptions: ConfirmDialogOption = {
         classes,
-        content: content ?? localizeIfExist(i18n, "content", data) ?? (await generateDialogContent(i18n, data)),
+        content: content ?? localize.ifExist(i18n, "content", data) ?? (await generateDialogContent(i18n, data)),
         no: {
             default: !yes?.default,
-            label: no ?? localizeIfExist(i18n, "no") ?? "No",
+            label: no ?? localize.ifExist(i18n, "no") ?? "No",
         },
         window: {
             title: generateDialogTitle(i18n, title, data),
         },
         yes: {
             default: !!yes?.default,
-            label: yes?.label ?? localizeIfExist(i18n, "yes") ?? "Yes",
+            label: yes?.label ?? localize.ifExist(i18n, "yes") ?? "Yes",
         },
     };
 

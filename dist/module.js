@@ -1,6 +1,7 @@
 import { getSetting, localize, R } from ".";
 const _MODULE = {
     id: "",
+    localize: undefined,
     groupLog: false,
     globalName: "",
     current: undefined,
@@ -119,10 +120,9 @@ const MODULE = {
                     enumerable: false,
                 },
                 localize: {
-                    value: function (...args) {
-                        return localize(...args);
+                    get() {
+                        return (_MODULE.localize ??= localize.sub(_MODULE.id));
                     },
-                    writable: false,
                     configurable: false,
                     enumerable: false,
                 },

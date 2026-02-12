@@ -1,4 +1,4 @@
-import { assignStyle, isValidTargetDocuments, MODULE, R, sharedLocalize, userIsGM } from ".";
+import { assignStyle, isValidTargetDocuments, localize, MODULE, R, userIsGM } from ".";
 const EMITING_STYLE = {
     alignItems: "center",
     background: "linear-gradient(90deg, #00000000 0%, #0000001a 20%, #00000066 50%, #0000001a 80%, #00000000 100%)",
@@ -27,7 +27,7 @@ function socketEmit(packet) {
 let _emitingElement;
 function displayEmiting() {
     const emitingElement = (_emitingElement ??= (() => {
-        const label = sharedLocalize("emiting.label");
+        const label = localize.shared("emiting.label");
         const el = document.createElement("div");
         el.innerHTML = `${label}<i class="fa-solid fa-wifi"></i>`;
         assignStyle(el, EMITING_STYLE);
@@ -48,7 +48,7 @@ function createEmitable(prefix, callback) {
     };
     const emit = (options) => {
         if (!game.users.activeGM) {
-            ui.notifications.error(sharedLocalize("emiting.noGm"));
+            ui.notifications.error(localize.shared("emiting.noGm"));
             return;
         }
         displayEmiting();

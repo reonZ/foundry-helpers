@@ -1,5 +1,5 @@
 import { ActorPF2e, TokenDocumentPF2e } from "foundry-pf2e";
-import { assignStyle, isValidTargetDocuments, MODULE, R, sharedLocalize, userIsGM } from ".";
+import { assignStyle, isValidTargetDocuments, localize, MODULE, R, userIsGM } from ".";
 
 const EMITING_STYLE: Partial<CSSStyleDeclaration> = {
     alignItems: "center",
@@ -33,7 +33,7 @@ function socketEmit<T extends object = object>(packet: T) {
 let _emitingElement: HTMLElement;
 function displayEmiting() {
     const emitingElement = (_emitingElement ??= (() => {
-        const label = sharedLocalize("emiting.label");
+        const label = localize.shared("emiting.label");
         const el = document.createElement("div");
 
         el.innerHTML = `${label}<i class="fa-solid fa-wifi"></i>`;
@@ -64,7 +64,7 @@ function createEmitable<T extends Record<string, any>>(
 
     const emit = (options: T) => {
         if (!game.users.activeGM) {
-            ui.notifications.error(sharedLocalize("emiting.noGm"));
+            ui.notifications.error(localize.shared("emiting.noGm"));
             return;
         }
 

@@ -1,4 +1,4 @@
-import { createHTMLElement, htmlQuery, localize, localizeIfExist, MODULE, R } from ".";
+import { createHTMLElement, htmlQuery, localize, MODULE, R } from ".";
 function isHoldingModifierKey(key) {
     const keys = R.isArray(key) ? key : [key];
     return keys.some((key) => game.keyboard.isModifierActive(key));
@@ -36,7 +36,7 @@ function onRenderControlsConfig(html, options, keybinds) {
             continue;
         const group = htmlQuery(tab, `.form-group[data-action-id^="${MODULE.id}.${key}"]`);
         const title = createHTMLElement("h4", {
-            content: localizeIfExist("keybindings", key, "title") ?? localize("settings", key, "title"),
+            content: localize.ifExist("keybindings", key, "title") ?? localize("settings", key, "title"),
         });
         title.style.marginBlock = i === 0 ? "0" : "0.5em 0em";
         group?.before(title);
