@@ -4,6 +4,11 @@ export function htmlQuery(parent, selectors) {
         return null;
     return parent.querySelector(selectors);
 }
+export function htmlQueryAll(parent, selectors) {
+    if (!(parent instanceof Element || parent instanceof Document))
+        return [];
+    return Array.from(parent.querySelectorAll(selectors));
+}
 export function htmlClosest(child, selectors) {
     if (!(child instanceof Element))
         return null;

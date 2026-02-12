@@ -11,6 +11,17 @@ export function htmlQuery(parent: MaybeHTML, selectors: string): HTMLElement | n
     return parent.querySelector<HTMLElement>(selectors);
 }
 
+export function htmlQueryAll<K extends keyof HTMLElementTagNameMap>(
+    parent: MaybeHTML,
+    selectors: K,
+): HTMLElementTagNameMap[K][];
+export function htmlQueryAll<E extends HTMLElement = HTMLElement>(parent: MaybeHTML, selectors: string): E[];
+export function htmlQueryAll(parent: MaybeHTML, selectors: string): HTMLElement[];
+export function htmlQueryAll(parent: MaybeHTML, selectors: string): HTMLElement[] {
+    if (!(parent instanceof Element || parent instanceof Document)) return [];
+    return Array.from(parent.querySelectorAll<HTMLElement>(selectors));
+}
+
 export function htmlClosest<K extends keyof HTMLElementTagNameMap>(
     child: MaybeHTML,
     selectors: K,

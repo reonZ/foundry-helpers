@@ -1,6 +1,9 @@
 export declare function htmlQuery<K extends keyof HTMLElementTagNameMap>(parent: MaybeHTML, selectors: K): HTMLElementTagNameMap[K] | null;
 export declare function htmlQuery<E extends HTMLElement = HTMLElement>(parent: MaybeHTML, selectors: string): E | null;
 export declare function htmlQuery(parent: MaybeHTML, selectors: string): HTMLElement | null;
+export declare function htmlQueryAll<K extends keyof HTMLElementTagNameMap>(parent: MaybeHTML, selectors: K): HTMLElementTagNameMap[K][];
+export declare function htmlQueryAll<E extends HTMLElement = HTMLElement>(parent: MaybeHTML, selectors: string): E[];
+export declare function htmlQueryAll(parent: MaybeHTML, selectors: string): HTMLElement[];
 export declare function htmlClosest<K extends keyof HTMLElementTagNameMap>(child: MaybeHTML, selectors: K): HTMLElementTagNameMap[K] | null;
 export declare function htmlClosest(child: MaybeHTML, selectors: string): HTMLElement | null;
 export declare function htmlClosest<E extends HTMLElement = HTMLElement>(child: MaybeHTML, selectors: string): E | null;
