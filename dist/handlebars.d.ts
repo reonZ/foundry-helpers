@@ -5,7 +5,7 @@ type RenderData = {
     i18n: (...args: LocalizeArgs) => string;
     isSF2e: boolean;
 };
-export type HandlebarsRenderData = Omit<RenderData, "i18n" | "isSF2e" | "systemId" | "systemPartial"> & {
+export type HandlebarsRenderData = Omit<RenderData, "i18n" | "isSF2e"> & {
     i18n?: string;
 };
 export type HandlebarsRenderArgs = [...string[], HandlebarsRenderData];
