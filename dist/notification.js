@@ -1,9 +1,8 @@
 import { localize, R } from ".";
 class Notifications extends Function {
-    #subkeys;
     constructor(...subkeys) {
         super();
-        this.#subkeys = subkeys;
+        this.subkeys = subkeys;
         function notify(type, ...args) {
             const permanent = R.isBoolean(args.at(-1)) ? args.pop() : false;
             const str = localize(...subkeys, ...args);
@@ -11,7 +10,7 @@ class Notifications extends Function {
         }
         Object.assign(notify, this);
         Object.setPrototypeOf(notify, Object.getPrototypeOf(this));
-        return notify.bind(this);
+        return notify;
     }
     success(...args) {
         return this("success", ...args);
@@ -26,7 +25,7 @@ class Notifications extends Function {
         return this("error", ...args);
     }
     sub(...subkeys) {
-        return new Notifications(...this.#subkeys, ...subkeys);
+        return new Notifications(...this.subkeys, ...subkeys);
     }
 }
 export const notify = new Notifications();

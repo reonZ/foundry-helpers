@@ -49,164 +49,161 @@ export function displayEmiting() {
     }, 600);
 }
 
-export function createEmitable<T extends Record<string, any>>(
-    prefix: string,
-    callback: (options: T, userId: string) => void | Promise<void>,
-): Emitable<T> {
-    let _enabled = false;
+export class Emitable<T extends Record<string, any>> {
+    #callback: (options: T, userId: string) => void | Promise<void>;
+    #enabled: boolean = false;
+    #onSocket: (packet: EmitablePacket<T>, userId: string) => Promise<void>;
+    #prefix: string;
 
-    const onSocket = async (packet: EmitablePacket<T>, userId: string) => {
-        if (packet.__type__ !== prefix || !game.user.isActiveGM) return;
+    constructor(
+        prefix: string,
+        callback: (options: T, userId: string) => void | Promise<void>,
+        context?: InstanceType<new (...args: any[]) => any>,
+    ) {
+        this.#callback = context ? callback.bind(context) : callback;
+        this.#prefix = prefix;
 
-        const callOptions = await convertToCallOptions(packet);
-        callback(callOptions, userId);
-    };
+        this.#onSocket = async (packet: EmitablePacket<T>, userId: string) => {
+            if (packet.__type__ !== prefix || !game.user.isActiveGM) return;
 
-    const emit = (options: T) => {
+            const callOptions = await this.convertToCallOptions(packet);
+            callback(callOptions, userId);
+        };
+    }
+
+    get enabled(): boolean {
+        return this.#enabled;
+    }
+
+    async call(options: T): Promise<void> {
+        if (!R.isPlainObject(options)) return;
+
+        if (game.user.isActiveGM) {
+            return this.#callback(options, game.userId);
+        } else {
+            this.emit(options);
+        }
+    }
+
+    emit(options: T) {
         if (!game.users.activeGM) {
-            ui.notifications.error(sharedLocalize("emiting.noGm"));
+            const msg = sharedLocalize("emiting.noGm");
+            ui.notifications.error(msg);
             return;
         }
 
         displayEmiting();
 
-        const packet = convertToEmitOptions(options);
-        packet.__type__ = prefix;
+        const packet = this.convertToEmitOptions(options);
+        packet.__type__ = this.#prefix;
 
         socketEmit(packet);
-    };
+    }
 
-    return {
-        get enabled(): boolean {
-            return _enabled;
-        },
-        async call(options: T): Promise<void> {
-            if (!R.isPlainObject(options)) return;
+    activate() {
+        if (this.enabled || !userIsGM()) return;
+        this.#enabled = true;
+        socketOn(this.#onSocket);
+    }
 
-            if (game.user.isActiveGM) {
-                return callback(options, game.userId);
-            } else {
-                emit(options);
-            }
-        },
-        emit,
-        activate() {
-            if (this.enabled || !userIsGM()) return;
-            _enabled = true;
-            socketOn(onSocket);
-        },
-        disable() {
-            if (!this.enabled) return;
-            _enabled = false;
-            socketOff(onSocket);
-        },
-        toggle(enabled?: boolean) {
-            enabled ??= !this.enabled;
+    disable() {
+        if (!this.enabled) return;
+        this.#enabled = false;
+        socketOff(this.#onSocket);
+    }
 
-            if (enabled) {
-                this.activate();
-            } else {
-                this.disable();
-            }
-        },
-    };
-}
-
-function convertToEmitOptions<T extends EmitableOptions>(options: T): EmitablePacket<T> {
-    const __converter__: EmitableConverters = {};
-
-    const convertedOptions = R.mapValues(options as EmitableOptions, (value, key): unknown => {
-        if (value instanceof foundry.abstract.Document) {
-            __converter__[key] = "document";
-            return value.uuid;
-        }
-
-        if (value instanceof foundry.canvas.placeables.Token) {
-            __converter__[key] = "token";
-            return value.document.uuid;
-        }
-
-        if (isValidTargetDocuments(value)) {
-            __converter__[key] = "target";
-
-            return {
-                actor: value.actor.uuid,
-                token: value.token?.uuid,
-            };
-        }
-
-        return value;
-    }) as EmitablePacket<T>;
-
-    convertedOptions.__converter__ = __converter__;
-    convertedOptions.__source__ = R.isArray(options) ? "array" : "object";
-
-    return convertedOptions;
-}
-
-async function convertToCallOptions<T extends EmitableOptions>(options: EmitablePacket<T>): Promise<T> {
-    const __converter__ = options.__converter__;
-    const __source__ = options.__source__;
-
-    // @ts-expect-error
-    delete options.__converter__;
-    // @ts-expect-error
-    delete options.__source__;
-    // @ts-expect-error
-    delete options.__type__;
-
-    await Promise.all(R.entries(options).map(async () => {}));
-
-    const converted = (__source__ === "array" ? [] : {}) as T;
-
-    await Promise.all(
-        R.entries(options).map(async ([key, value]) => {
-            converted[key as keyof typeof converted] = await convertToCallOption(value, __converter__[key]);
-        }),
-    );
-
-    return converted;
-}
-
-async function convertToCallOption(value: any, __converter__: EmitableConverter): Promise<any> {
-    switch (__converter__) {
-        case "document": {
-            return fromUuid(value);
-        }
-        case "target": {
-            return convertTargetFromPacket(value);
-        }
-        case "token": {
-            const tokenDocument = await fromUuid<TokenDocumentPF2e>(value);
-            return tokenDocument?.object;
-        }
-        default: {
-            return value;
+    toggle(enabled: boolean = !this.enabled) {
+        if (enabled) {
+            this.activate();
+        } else {
+            this.disable();
         }
     }
+
+    convertToEmitOptions<T extends EmitableOptions>(options: T): EmitablePacket<T> {
+        const __converter__: EmitableConverters = {};
+
+        const convertedOptions = R.mapValues(options as EmitableOptions, (value, key): unknown => {
+            if (value instanceof foundry.abstract.Document) {
+                __converter__[key] = "document";
+                return value.uuid;
+            }
+
+            if (value instanceof foundry.canvas.placeables.Token) {
+                __converter__[key] = "token";
+                return value.document.uuid;
+            }
+
+            if (isValidTargetDocuments(value)) {
+                __converter__[key] = "target";
+
+                return {
+                    actor: value.actor.uuid,
+                    token: value.token?.uuid,
+                };
+            }
+
+            return value;
+        }) as EmitablePacket<T>;
+
+        convertedOptions.__converter__ = __converter__;
+        convertedOptions.__source__ = R.isArray(options) ? "array" : "object";
+
+        return convertedOptions;
+    }
+
+    async convertToCallOptions<T extends EmitableOptions>(options: EmitablePacket<T>): Promise<T> {
+        const __converter__ = options.__converter__;
+        const __source__ = options.__source__;
+
+        // @ts-expect-error
+        delete options.__converter__;
+        // @ts-expect-error
+        delete options.__source__;
+        // @ts-expect-error
+        delete options.__type__;
+
+        await Promise.all(R.entries(options).map(async () => {}));
+
+        const converted = (__source__ === "array" ? [] : {}) as T;
+
+        await Promise.all(
+            R.entries(options).map(async ([key, value]) => {
+                converted[key as keyof typeof converted] = await this.convertToCallOption(value, __converter__[key]);
+            }),
+        );
+
+        return converted;
+    }
+
+    async convertToCallOption(value: any, __converter__: EmitableConverter): Promise<any> {
+        switch (__converter__) {
+            case "document": {
+                return fromUuid(value);
+            }
+            case "target": {
+                return this.convertTargetFromPacket(value);
+            }
+            case "token": {
+                const tokenDocument = await fromUuid<TokenDocumentPF2e>(value);
+                return tokenDocument?.object;
+            }
+            default: {
+                return value;
+            }
+        }
+    }
+
+    async convertTargetFromPacket(target: { actor: string; token?: string }): Promise<TargetDocuments | undefined> {
+        const actor = await fromUuid<ActorPF2e>(target.actor);
+        if (!(actor instanceof Actor)) return;
+
+        return {
+            actor,
+            token: (target.token && (await fromUuid<TokenDocumentPF2e>(target.token))) || undefined,
+        };
+    }
 }
-
-async function convertTargetFromPacket(target: {
-    actor: string;
-    token?: string;
-}): Promise<TargetDocuments | undefined> {
-    const actor = await fromUuid<ActorPF2e>(target.actor);
-    if (!(actor instanceof Actor)) return;
-
-    return {
-        actor,
-        token: (target.token && (await fromUuid<TokenDocumentPF2e>(target.token))) || undefined,
-    };
-}
-
-type Emitable<T> = {
-    get enabled(): boolean;
-    call: (options: T) => Promise<void>;
-    emit: (options: T) => void;
-    activate(): void;
-    disable(): void;
-    toggle(enabled?: boolean): void;
-};
 
 type EmitablePacket<T extends EmitableOptions> = EmitablePacketOptions<T> & {
     __type__: string;

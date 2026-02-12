@@ -26,43 +26,52 @@ export function registerModuleKeybinds(keybinds: ModuleKeybindsRegistration) {
     });
 }
 
-export function createToggleKeybind(options: KeybindingActionConfig) {
-    const _actions = {
-        onDown: (context: KeyboardEventContext) => {},
-        onUp: (context: KeyboardEventContext) => {},
-    };
+export class ToggleableKeybind {
+    #actions: { onDown: KeybindAction; onUp: KeybindAction };
+    #options: _KeybindingActionConfig;
 
-    return {
-        configs: {
-            ...options,
+    constructor(options: KeybindingActionConfig) {
+        this.#actions = {
+            onDown: () => {},
+            onUp: () => {},
+        };
+        this.#options = options;
+    }
+
+    get configs(): KeybindingActionConfig {
+        return {
+            ...this.#options,
             onDown: (context: KeyboardEventContext) => {
-                _actions.onDown(context);
+                this.#actions.onDown(context);
             },
             onUp: (context: KeyboardEventContext) => {
-                _actions.onUp(context);
+                this.#actions.onUp(context);
             },
-        } satisfies KeybindingActionConfig,
-        activate() {
-            _actions.onDown = (context: KeyboardEventContext) => {
-                options.onDown?.(context);
-            };
+        };
+    }
 
-            _actions.onUp = (context: KeyboardEventContext) => {
-                options.onUp?.(context);
-            };
-        },
-        disable() {
-            _actions.onDown = (context: KeyboardEventContext) => {};
-            _actions.onUp = (context: KeyboardEventContext) => {};
-        },
-        toggle(enabled: boolean) {
-            if (enabled) {
-                this.activate();
-            } else {
-                this.disable();
-            }
-        },
-    };
+    activate() {
+        this.#actions.onDown = (context: KeyboardEventContext) => {
+            this.#options.onDown?.(context);
+        };
+
+        this.#actions.onUp = (context: KeyboardEventContext) => {
+            this.#options.onUp?.(context);
+        };
+    }
+
+    disable() {
+        this.#actions.onDown = () => {};
+        this.#actions.onUp = () => {};
+    }
+
+    toggle(enabled: boolean) {
+        if (enabled) {
+            this.activate();
+        } else {
+            this.disable();
+        }
+    }
 }
 
 function onRenderControlsConfig(
@@ -102,6 +111,8 @@ type RenderControlsConfigCategory = {
     label: string;
     id: string;
 };
+
+type KeybindAction = (context: KeyboardEventContext) => void;
 
 export type KeybindingActionConfig = _KeybindingActionConfig;
 export type ModuleKeybindsRegistration = Record<string, ReadonlyArray<KeybindingActionConfig>>;

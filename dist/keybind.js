@@ -17,42 +17,47 @@ export function registerModuleKeybinds(keybinds) {
         onRenderControlsConfig(html, options, keybinds);
     });
 }
-export function createToggleKeybind(options) {
-    const _actions = {
-        onDown: (context) => { },
-        onUp: (context) => { },
-    };
-    return {
-        configs: {
-            ...options,
+export class ToggleableKeybind {
+    #actions;
+    #options;
+    constructor(options) {
+        this.#actions = {
+            onDown: () => { },
+            onUp: () => { },
+        };
+        this.#options = options;
+    }
+    get configs() {
+        return {
+            ...this.#options,
             onDown: (context) => {
-                _actions.onDown(context);
+                this.#actions.onDown(context);
             },
             onUp: (context) => {
-                _actions.onUp(context);
+                this.#actions.onUp(context);
             },
-        },
-        activate() {
-            _actions.onDown = (context) => {
-                options.onDown?.(context);
-            };
-            _actions.onUp = (context) => {
-                options.onUp?.(context);
-            };
-        },
-        disable() {
-            _actions.onDown = (context) => { };
-            _actions.onUp = (context) => { };
-        },
-        toggle(enabled) {
-            if (enabled) {
-                this.activate();
-            }
-            else {
-                this.disable();
-            }
-        },
-    };
+        };
+    }
+    activate() {
+        this.#actions.onDown = (context) => {
+            this.#options.onDown?.(context);
+        };
+        this.#actions.onUp = (context) => {
+            this.#options.onUp?.(context);
+        };
+    }
+    disable() {
+        this.#actions.onDown = () => { };
+        this.#actions.onUp = () => { };
+    }
+    toggle(enabled) {
+        if (enabled) {
+            this.activate();
+        }
+        else {
+            this.disable();
+        }
+    }
 }
 function onRenderControlsConfig(html, _options, keybinds) {
     const id = MODULE.id;

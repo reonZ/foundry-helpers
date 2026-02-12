@@ -1,19 +1,19 @@
 import { MODULE, R } from ".";
 class Localize extends Function {
-    #subkeys;
     constructor(...subkeys) {
         super();
-        this.#subkeys = subkeys;
+        this.subkeys = subkeys;
+        const self = this;
         function localize(...args) {
-            const { data, path } = this.getLocalizeData(...args);
-            return this.localizeOrFormat(path, data);
+            const { data, path } = self.getLocalizeData(...args);
+            return self.localizeOrFormat(path, data);
         }
         Object.assign(localize, this);
         Object.setPrototypeOf(localize, Object.getPrototypeOf(this));
-        return localize.bind(this);
+        return localize;
     }
     path(...path) {
-        return MODULE.path(...this.#subkeys, ...path);
+        return MODULE.path(...this.subkeys, ...path);
     }
     getLocalizeData(...args) {
         const data = R.isObjectType(args.at(-1)) ? args.pop() : undefined;
@@ -54,7 +54,7 @@ class Localize extends Function {
         }
     }
     sub(...subkeys) {
-        return new Localize(...this.#subkeys, ...subkeys);
+        return new Localize(...this.subkeys, ...subkeys);
     }
     localizeOrFormat(path, data) {
         return typeof data === "object" ? game.i18n.format(path, data) : game.i18n.localize(path);

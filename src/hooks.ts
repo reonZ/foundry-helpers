@@ -9,50 +9,55 @@ export function registerUpstreamHook(event: string, listener: RegisterHookCallba
     return id;
 }
 
-export function createToggleableHook(
-    hook: string | string[],
-    listener: RegisterHookCallback,
-    options: HookOptions = {},
-): ToogleableHook {
-    const _ids: { id: number; path: string }[] = [];
-    const _hook = Array.isArray(hook) ? hook : [hook];
+export class ToggleableHook {
+    #hooks: string[];
+    #ids: { id: number; path: string }[] = [];
+    #listener: RegisterHookCallback;
+    #options: HookOptions;
 
-    return {
-        get enabled(): boolean {
-            return _ids.length > 0;
-        },
-        activate() {
-            if (this.enabled) return;
+    constructor(hook: string | string[], listener: RegisterHookCallback, options: HookOptions = {}) {
+        this.#hooks = Array.isArray(hook) ? hook : [hook];
+        this.#listener = listener;
+        this.#options = options;
+    }
 
-            for (const path of _hook) {
-                const id = options.upstream ? registerUpstreamHook(path, listener) : Hooks.on(path, listener);
+    get enabled(): boolean {
+        return this.#ids.length > 0;
+    }
 
-                _ids.push({ id, path });
-            }
+    activate() {
+        if (this.enabled) return;
 
-            options.onActivate?.();
-        },
-        disable() {
-            if (!this.enabled) return;
+        for (const path of this.#hooks) {
+            const id = this.#options.upstream
+                ? registerUpstreamHook(path, this.#listener)
+                : Hooks.on(path, this.#listener);
 
-            for (const { path, id } of _ids) {
-                Hooks.off(path, id);
-            }
+            this.#ids.push({ id, path });
+        }
 
-            _ids.length = 0;
+        this.#options.onActivate?.();
+    }
 
-            options.onDisable?.();
-        },
-        toggle(enabled?: boolean) {
-            enabled ??= !this.enabled;
+    disable() {
+        if (!this.enabled) return;
 
-            if (enabled) {
-                this.activate();
-            } else {
-                this.disable();
-            }
-        },
-    };
+        for (const { path, id } of this.#ids) {
+            Hooks.off(path, id);
+        }
+
+        this.#ids.length = 0;
+
+        this.#options.onDisable?.();
+    }
+
+    toggle(enabled: boolean = !this.enabled) {
+        if (enabled) {
+            this.activate();
+        } else {
+            this.disable();
+        }
+    }
 }
 
 export function executeWhenReady(fn: () => void) {
@@ -62,13 +67,6 @@ export function executeWhenReady(fn: () => void) {
         Hooks.once("ready", fn);
     }
 }
-
-export type ToogleableHook = {
-    get enabled(): boolean;
-    activate(): void;
-    disable(): void;
-    toggle(enabled?: boolean): void;
-};
 
 export type RegisterHookCallback = (...args: any[]) => any;
 

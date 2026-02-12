@@ -11,3 +11,17 @@ export function userIsGM(user: UserPF2e = getCurrentUser()): boolean {
 export function isPrimaryUpdater(actor: ActorPF2e): boolean {
     return actor.primaryUpdater === game.user;
 }
+
+export function primaryPlayerOwner(actor: ActorPF2e): UserPF2e | null {
+    // even though we want a player, assigned users take priority
+    const assigned = game.users.getDesignatedUser((user) => user.active && user.character === (actor as Actor));
+
+    return (
+        assigned ??
+        game.users.getDesignatedUser((user) => user.active && !user.isGM && actor.testUserPermission(user, "OWNER"))
+    );
+}
+
+export function isPrimaryOwner(actor: ActorPF2e, user = game.user): boolean {
+    return user.isGM || primaryPlayerOwner(actor) === user;
+}
