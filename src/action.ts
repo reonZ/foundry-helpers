@@ -39,10 +39,10 @@ const actionGlyphMap: Record<string, string> = {
 /**
  * https://github.com/foundryvtt/pf2e/blob/6e5481af7bb1e1b9d28d35fb3ad324511c5170d1/src/module/sheet/helpers.ts#L304
  */
-export function getActionIcon(action: ActionIconType, fallback: ImageFilePath): ImageFilePath;
-export function getActionIcon(action: ActionIconType, fallback: ImageFilePath | null): ImageFilePath | null;
-export function getActionIcon(action: ActionIconType): ImageFilePath;
-export function getActionIcon(
+function getActionIcon(action: ActionIconType, fallback: ImageFilePath): ImageFilePath;
+function getActionIcon(action: ActionIconType, fallback: ImageFilePath | null): ImageFilePath | null;
+function getActionIcon(action: ActionIconType): ImageFilePath;
+function getActionIcon(
     action: ActionIconType,
     fallback: ImageFilePath | null = SYSTEM.relativePath("icons/actions/Empty.webp"),
 ): ImageFilePath | null {
@@ -57,7 +57,7 @@ export function getActionIcon(
 /**
  * https://github.com/foundryvtt/pf2e/blob/89892b6fafec1456a0358de8c6d7b102e3fe2da2/src/util/misc.ts#L205
  */
-export function getActionGlyph(action: string | number | null | ActionCost): string {
+function getActionGlyph(action: string | number | null | ActionCost): string {
     if (!action && action !== 0) return "";
 
     const value = typeof action !== "object" ? action : action.type === "action" ? action.value : action.type;
@@ -68,7 +68,7 @@ export function getActionGlyph(action: string | number | null | ActionCost): str
     return actionGlyphMap[sanitized]?.replace("-", "–") ?? "";
 }
 
-export async function useAction(event: Event, item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>) {
+async function useAction(event: Event, item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>) {
     const macro = game.toolbelt?.getToolSetting("actionable", "action")
         ? await game.toolbelt?.api.actionable.getActionMacro(item)
         : undefined;
@@ -106,7 +106,7 @@ export async function useAction(event: Event, item: AbilityItemPF2e<ActorPF2e> |
     });
 }
 
-export async function applySelfEffect(item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>) {
+async function applySelfEffect(item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>) {
     const effect = item.system.selfEffect && (await fromUuid<EffectPF2e>(item.system.selfEffect.uuid));
     if (!effect) return;
 
@@ -140,8 +140,11 @@ export async function applySelfEffect(item: AbilityItemPF2e<ActorPF2e> | FeatPF2
     await actor.createEmbeddedDocuments("Item", [effectSource]);
 }
 
-export function isDefaultActionIcon(img: string, action: string | ActionCost | null) {
+function isDefaultActionIcon(img: string, action: string | ActionCost | null) {
     return img === getActionIcon(action);
 }
 
-export type ActionIconType = string | number | ActionCost | null;
+type ActionIconType = string | number | ActionCost | null;
+
+export { applySelfEffect, getActionGlyph, getActionIcon, isDefaultActionIcon, useAction };
+export type { ActionIconType };

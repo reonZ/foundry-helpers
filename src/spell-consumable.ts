@@ -1,8 +1,5 @@
 import { ConsumableSource, ItemPF2e, SpellConsumableItemType, SpellPF2e } from "foundry-pf2e";
-import { ErrorPF2e, objectHasKey, setHasElement } from "./pf2e";
-import { ImageFilePath } from "foundry-pf2e/foundry/common/constants.mjs";
-import { MAGIC_TRADITIONS } from "./spell";
-import { R } from ".";
+import { ErrorPF2e, ImageFilePath, MAGIC_TRADITIONS, objectHasKey, R, setHasElement } from ".";
 
 const CANTRIP_DECK_UUID = "Compendium.pf2e.equipment-srd.Item.tLa4bewBhyqzi6Ow";
 
@@ -10,7 +7,7 @@ const CANTRIP_DECK_UUID = "Compendium.pf2e.equipment-srd.Item.tLa4bewBhyqzi6Ow";
  * slightly modified version of
  * https://github.com/reonZ/pf2e/blob/6e5481af7bb1e1b9d28d35fb3ad324511c5170d1/src/module/item/consumable/spell-consumables.ts#L21
  */
-export async function createConsumableFromSpell(
+async function createConsumableFromSpell(
     spell: SpellPF2e,
     {
         type,
@@ -89,3 +86,5 @@ export async function createConsumableFromSpell(
 
     return consumableSource;
 }
+
+export { createConsumableFromSpell };

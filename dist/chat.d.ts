@@ -1,5 +1,5 @@
-import { ClientDocument } from "foundry-pf2e/foundry/client/documents/abstract/_module.mjs";
 import { ChatMessagePF2e } from "foundry-pf2e";
+import { ClientDocument } from ".";
 export declare function createChatLink(docOrUuid: ClientDocument | string, options?: {
     label?: string;
     html: true;

@@ -19,7 +19,7 @@ function getDcRarity(item: PhysicalItemPF2e): Rarity {
  * https://github.com/foundryvtt/pf2e/blob/578620c2a35a76d904938fb3d4984ad0e14be241/src/module/item/identification.ts#L63
  * with option fallback
  */
-export function getItemIdentificationDCs(
+function getItemIdentificationDCs(
     item: PhysicalItemPF2e,
     { pwol = false, notMatchingTraditionModifier }: IdentifyItemOptions = {
         pwol: game.pf2e.settings.variants.pwol.enabled,
@@ -73,7 +73,7 @@ function getIdentifyMagicDCs(
  * modified version of
  * https://github.com/foundryvtt/pf2e/blob/578620c2a35a76d904938fb3d4984ad0e14be241/src/module/actor/sheet/popups/identify-popup.ts#L7
  */
-export class IdentifyItemPopup extends foundry.appv1.api.FormApplication<PhysicalItemPF2e> {
+class IdentifyItemPopup extends foundry.appv1.api.FormApplication<PhysicalItemPF2e> {
     static override get defaultOptions(): foundry.appv1.api.FormApplicationOptions {
         return {
             ...super.defaultOptions,
@@ -147,3 +147,5 @@ interface IdentifyPopupData extends foundry.appv1.api.FormApplicationData {
 interface IdentifyItemOptions extends DCOptions {
     notMatchingTraditionModifier: number;
 }
+
+export { getItemIdentificationDCs, IdentifyItemPopup };

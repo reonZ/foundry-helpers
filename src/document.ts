@@ -1,23 +1,25 @@
 import { ActorPF2e, MacroPF2e, UserPF2e } from "foundry-pf2e";
+import { ClientDocument } from "foundry-pf2e/foundry/client/documents/abstract/_module.mjs";
+import { DocumentUUID } from "foundry-pf2e/foundry/client/utils/_module.mjs";
 import { MODULE, R, Token } from ".";
 
-export function getInMemory<T>(obj: ClientDocument | Token, ...path: string[]): T | undefined {
+function getInMemory<T>(obj: ClientDocument | Token, ...path: string[]): T | undefined {
     return foundry.utils.getProperty(obj, `modules.${MODULE.id}.${path.join(".")}`) as T | undefined;
 }
 
-export function setInMemory<T>(obj: ClientDocument | Token, ...args: [...string[], T]): boolean {
+function setInMemory<T>(obj: ClientDocument | Token, ...args: [...string[], T]): boolean {
     const value = args.pop();
     return foundry.utils.setProperty(obj, `modules.${MODULE.id}.${args.join(".")}`, value);
 }
 
-export function deleteInMemory(obj: ClientDocument | Token, ...path: string[]) {
+function deleteInMemory(obj: ClientDocument | Token, ...path: string[]) {
     return foundry.utils.deleteProperty(obj, `modules.${MODULE.id}.${path.join(".")}`);
 }
 
 /**
  * https://github.com/foundryvtt/pf2e/blob/89892b6fafec1456a0358de8c6d7b102e3fe2da2/src/module/actor/item-transfer.ts#L117
  */
-export function getPreferredName(document: ActorPF2e | UserPF2e) {
+function getPreferredName(document: ActorPF2e | UserPF2e) {
     if ("items" in document) {
         // Use a special moniker for party actors
         if (document.isOfType("party")) return game.i18n.localize("PF2E.loot.PartyStash");
@@ -37,15 +39,18 @@ export function getPreferredName(document: ActorPF2e | UserPF2e) {
     return document.name;
 }
 
-export function isScriptMacro(doc: any): doc is MacroPF2e {
+function isScriptMacro(doc: any): doc is MacroPF2e {
     return doc instanceof Macro && doc.type === "script";
 }
 
 // It also auto converts Token into TokenDocument directly in the provided obj
-export function isValidTargetDocuments(target: unknown): target is TargetDocuments {
+function isValidTargetDocuments(target: unknown): target is TargetDocuments {
     if (!R.isPlainObject(target)) return false;
     if (!(target.actor instanceof Actor)) return false;
 
     target.token = target.token instanceof foundry.canvas.placeables.Token ? target.token.document : target.token;
     return !target.token || target.token instanceof TokenDocument;
 }
+
+export { deleteInMemory, getInMemory, getPreferredName, isScriptMacro, isValidTargetDocuments, setInMemory };
+export type { ClientDocument, DocumentUUID };

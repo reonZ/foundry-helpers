@@ -18,7 +18,7 @@ const ATTACHABLE_TYPES = {
     equipment: ["weapon", "armor", "shield"],
     weapon: ["shield"],
 };
-export function itemIsOfType(item, ...types) {
+function itemIsOfType(item, ...types) {
     return (typeof item.name === "string" &&
         types.some((t) => (t === "physical" ? setHasElement(PHYSICAL_ITEM_TYPES, item.type) : item.type === t)));
 }
@@ -47,7 +47,7 @@ function* actorItems(actor, type) {
         }
     }
 }
-export function findItemWithSourceId(actor, uuid, type) {
+function findItemWithSourceId(actor, uuid, type) {
     for (const item of actorItems(actor, type)) {
         if (isSupressedFeat(item))
             continue;
@@ -58,11 +58,11 @@ export function findItemWithSourceId(actor, uuid, type) {
     }
     return null;
 }
-export function getItemSourceId(item) {
+function getItemSourceId(item) {
     const isCompendiumItem = item._id && item.pack && !item.isEmbedded;
     return isCompendiumItem ? item.uuid : (item._stats.compendiumSource ?? item._stats.duplicateSource ?? item.uuid);
 }
-export async function usePhysicalItem(event, item) {
+async function usePhysicalItem(event, item) {
     const isConsumable = item.isOfType("consumable");
     if (isConsumable && isCastConsumable(item)) {
         return item.consume();
@@ -90,7 +90,7 @@ export async function usePhysicalItem(event, item) {
  * https://github.com/foundryvtt/pf2e/blob/eecf53f37490cbd228d8c74b290748b0188768b4/src/module/item/consumable/document.ts#L156
  * though stripped of scrolls & wands
  */
-export async function consumeItem(event, item) {
+async function consumeItem(event, item) {
     const actor = item.actor;
     const speaker = ChatMessage.getSpeaker({ actor });
     const flags = {
@@ -142,12 +142,13 @@ export async function consumeItem(event, item) {
         });
     }
 }
-export function isSupressedFeat(item) {
+function isSupressedFeat(item) {
     return item.isOfType("feat") && item.suppressed;
 }
-export function isCastConsumable(item) {
+function isCastConsumable(item) {
     return R.isIncludedIn(item.category, ["wand", "scroll"]) && !!item.system.spell;
 }
-export function isSF2eItem(item) {
+function isSF2eItem(item) {
     return includesAny(item._source.system.traits.value, ["tech", "analog"]);
 }
+export { consumeItem, findItemWithSourceId, getItemSourceId, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, usePhysicalItem, };

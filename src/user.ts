@@ -1,18 +1,18 @@
 import { ActorPF2e, UserPF2e } from "foundry-pf2e";
 
-export function getCurrentUser(): UserPF2e {
+function getCurrentUser(): UserPF2e {
     return game.user ?? game.data.users.find((x) => x._id === game.userId);
 }
 
-export function userIsGM(user: UserPF2e = getCurrentUser()): boolean {
+function userIsGM(user: UserPF2e = getCurrentUser()): boolean {
     return user && user.role >= CONST.USER_ROLES.ASSISTANT;
 }
 
-export function isPrimaryUpdater(actor: ActorPF2e): boolean {
+function isPrimaryUpdater(actor: ActorPF2e): boolean {
     return actor.primaryUpdater === game.user;
 }
 
-export function primaryPlayerOwner(actor: ActorPF2e): UserPF2e | null {
+function primaryPlayerOwner(actor: ActorPF2e): UserPF2e | null {
     // even though we want a player, assigned users take priority
     const assigned = game.users.getDesignatedUser((user) => user.active && user.character === (actor as Actor));
 
@@ -22,6 +22,8 @@ export function primaryPlayerOwner(actor: ActorPF2e): UserPF2e | null {
     );
 }
 
-export function isPrimaryOwner(actor: ActorPF2e, user = game.user): boolean {
+function isPrimaryOwner(actor: ActorPF2e, user = game.user): boolean {
     return user.isGM || primaryPlayerOwner(actor) === user;
 }
+
+export { getCurrentUser, userIsGM, isPrimaryUpdater, primaryPlayerOwner, isPrimaryOwner };

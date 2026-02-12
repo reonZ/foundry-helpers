@@ -1,7 +1,8 @@
 import { ClientDocument } from "foundry-pf2e/foundry/client/documents/abstract/_module.mjs";
-import { MODULE, R } from ".";
+import { R } from ".";
+import { MODULE } from "./module";
 
-export function registerWrapper(
+function registerWrapper(
     type: libWrapper.RegisterType,
     path: string | string[],
     callback: libWrapper.RegisterCallback,
@@ -25,7 +26,7 @@ export function registerWrapper(
     return ids;
 }
 
-export function unregisterWrapper(id: number | number[]) {
+function unregisterWrapper(id: number | number[]) {
     const ids = R.isArray(id) ? id : [id];
 
     for (const id of ids) {
@@ -33,211 +34,185 @@ export function unregisterWrapper(id: number | number[]) {
     }
 }
 
-export class ToggleableWrapper {
-    #callback: libWrapper.RegisterCallback;
-    #ids: number[] | null = null;
-    #options: WrapperOptions;
-    #path: string | string[];
-    #type: libWrapper.RegisterType;
-
-    constructor(
-        type: libWrapper.RegisterType,
-        path: string | string[],
-        callback: libWrapper.RegisterCallback,
-        options: WrapperOptions = {},
-    ) {
-        this.#callback = callback;
-        this.#options = options;
-        this.#path = path;
-        this.#type = type;
-    }
-
-    get enabled(): boolean {
-        return !!this.#ids?.length;
-    }
-
-    activate() {
-        if (this.enabled) return;
-
-        this.#ids = registerWrapper(this.#type, this.#path, this.#callback, this.#options.context);
-        this.#options.onActivate?.();
-    }
-
-    disable() {
-        if (!this.#ids?.length) return;
-
-        unregisterWrapper(this.#ids);
-        this.#ids = null;
-        this.#options.onDisable?.();
-    }
-
-    toggle(enabled: boolean = !this.enabled) {
-        if (enabled) {
-            this.activate();
-        } else {
-            this.disable();
-        }
-    }
-}
-
-export class ToggleableCreatureSheetWrapper extends ToggleableWrapper {
-    constructor(
-        type: libWrapper.RegisterType,
-        partialPath: string | string[],
-        callback: libWrapper.RegisterCallback,
-        options: WrapperOptions = {},
-    ) {
-        const partials = R.isArray(partialPath) ? partialPath : [partialPath];
-        const paths = partials.flatMap((partial) => [
-            `CONFIG.Actor.sheetClasses.character['pf2e.CharacterSheetPF2e'].cls.prototype.${partial}`,
-            `CONFIG.Actor.sheetClasses.npc['pf2e.NPCSheetPF2e'].cls.prototype.${partial}`,
-            `CONFIG.Actor.sheetClasses.familiar['pf2e.FamiliarSheetPF2e'].cls.prototype.${partial}`,
-        ]);
-
-        super(type, paths, callback, options);
-    }
-}
-
-export class SharedWrappersContainer<
+function createSharedWrapper<
     TDocument extends ClientDocument,
     TWrapperCallback extends libWrapper.RegisterCallback,
     TListener extends (...args: any[]) => any,
-> {
-    #path: string;
-    #registered: ToggleableSharedWrapper<TDocument, TWrapperCallback, TListener>[] = [];
-    #sharedIds: number[] | null = null;
-    #type: SharedType;
-    #sharedWrapper: (
+>(
+    type: Exclude<libWrapper.RegisterType, "OVERRIDE">,
+    path: string,
+    sharedCallback: (
+        this: TDocument,
+        registered: TListener[],
+        wrapped: () => ReturnType<TWrapperCallback>,
+        args: Parameters<TWrapperCallback>,
+    ) => void,
+) {
+    let sharedId: number[] | null = null;
+    const _registered = new Collection<string, SharedRegistered>();
+
+    function wrapper(
         this: TDocument,
         wrapped: libWrapper.RegisterCallback,
         ...wrapperArgs: Parameters<TWrapperCallback>
-    ) => void;
-
-    constructor(
-        type: SharedType,
-        path: string,
-        sharedCallback: SharedCallback<TDocument, TWrapperCallback, TListener>,
     ) {
-        this.#path = path;
-        this.#type = type;
+        const registered: TListener[] = R.pipe(
+            _registered.contents,
+            R.sortBy(R.prop("priority")),
+            R.filter(({ active }) => active),
+            R.map(({ listener, context }): TListener => {
+                if (context) {
+                    return ((...args: any[]) => listener.call(context, this, ...args)) as TListener;
+                } else {
+                    return ((...args: any[]) => listener.call(this, ...args)) as TListener;
+                }
+            }),
+        );
 
-        const thisRegistered = this.#registered;
+        return sharedCallback.call(this, registered, () => wrapped(...wrapperArgs), wrapperArgs);
+    }
 
-        function sharedWrapper(
-            this: TDocument,
-            wrapped: libWrapper.RegisterCallback,
-            ...wrapperArgs: Parameters<TWrapperCallback>
-        ) {
-            const registered: TListener[] = R.pipe(
-                thisRegistered,
-                R.sortBy(R.prop("priority")),
-                R.filter(({ active }) => active),
-                R.map(({ listener, context }): TListener => {
-                    if (context) {
-                        return ((...args: any[]) => listener.call(context, this, ...args)) as TListener;
-                    } else {
-                        return ((...args: any[]) => listener.call(this, ...args)) as TListener;
-                    }
-                }),
-            );
+    const wrapperIsEnabled = () => {
+        return _registered.some((x) => x.active);
+    };
 
-            return sharedCallback.call(this, registered, () => wrapped(...wrapperArgs), wrapperArgs);
+    const activateWrapper = (id: string) => {
+        const registered = _registered.get(id);
+        if (!registered) return;
+
+        if (!sharedId) {
+            sharedId = registerWrapper(type, path, wrapper);
         }
 
-        this.#sharedWrapper = sharedWrapper;
-    }
+        registered.active = true;
+    };
 
-    activate() {
-        if (this.#sharedIds) return;
-        this.#sharedIds = registerWrapper(this.#type, this.#path, this.#sharedWrapper);
-    }
+    const disableWrapper = (id: string) => {
+        const registered = _registered.get(id);
+        if (!registered) return;
 
-    disable() {
-        if (this.#sharedIds && !this.#registered.some((wrapper) => wrapper.active)) {
-            unregisterWrapper(this.#sharedIds);
-            this.#sharedIds = null;
+        registered.active = false;
+
+        if (sharedId && !wrapperIsEnabled()) {
+            unregisterWrapper(sharedId);
+            sharedId = null;
         }
-    }
+    };
 
-    register(
+    function register(
         listener: (document: TDocument, ...args: Parameters<TListener>) => ReturnType<TListener>,
         options: { context: WrapperContext; priority?: number },
-    ): ToggleableSharedWrapper<TDocument, TWrapperCallback, TListener>;
-    register(
+    ): ToggleWrapper;
+    function register(
         listener: (this: TDocument, ...args: Parameters<TListener>) => ReturnType<TListener>,
         options?: { context?: undefined; priority?: number },
-    ): ToggleableSharedWrapper<TDocument, TWrapperCallback, TListener>;
-    register(
+    ): ToggleWrapper;
+    function register(
         listener: libWrapper.RegisterCallback,
         { context, priority = 0 }: { context?: WrapperContext; priority?: number } = {},
-    ): ToggleableSharedWrapper<TDocument, TWrapperCallback, TListener> {
-        const wrapper = new ToggleableSharedWrapper(this, listener, context, priority);
-        this.#registered.push(wrapper);
-        return wrapper;
+    ): ToggleWrapper {
+        const registerId = foundry.utils.randomID();
+
+        _registered.set(registerId, {
+            listener,
+            context,
+            priority,
+            active: false,
+        });
+
+        return {
+            get enabled() {
+                return !!_registered.get(registerId)?.active;
+            },
+            activate() {
+                activateWrapper(registerId);
+            },
+            disable() {
+                disableWrapper(registerId);
+            },
+            toggle(enabled?: boolean) {
+                enabled ??= !this.enabled;
+
+                if (enabled) {
+                    this.activate();
+                } else {
+                    this.disable();
+                }
+            },
+        };
     }
+
+    return {
+        register,
+    };
 }
 
-class ToggleableSharedWrapper<
-    TDocument extends ClientDocument,
-    TWrapperCallback extends libWrapper.RegisterCallback,
-    TListener extends (...args: any[]) => any,
-> {
-    #active: boolean = false;
-    #context: any;
-    #listener: libWrapper.RegisterCallback;
-    #parent: SharedWrappersContainer<TDocument, TWrapperCallback, TListener>;
-    #priority: number;
+function createToggleWrapper(
+    type: libWrapper.RegisterType,
+    path: string | string[],
+    callback: libWrapper.RegisterCallback,
+    options: WrapperOptions = {},
+): ToggleWrapper {
+    let wrapperIds: number[] | null = null;
 
-    constructor(
-        parent: SharedWrappersContainer<TDocument, TWrapperCallback, TListener>,
-        listener: libWrapper.RegisterCallback,
-        context: WrapperContext | undefined,
-        priority: number,
-    ) {
-        this.#context = context;
-        this.#listener = listener;
-        this.#parent = parent;
-        this.#priority = priority;
-    }
+    return {
+        get enabled(): boolean {
+            return !!wrapperIds;
+        },
+        activate() {
+            if (this.enabled) return;
 
-    get parent(): SharedWrappersContainer<TDocument, TWrapperCallback, TListener> {
-        return this.#parent;
-    }
+            wrapperIds = registerWrapper(type, path, callback, options.context);
+            options.onActivate?.();
+        },
+        disable() {
+            if (!wrapperIds) return;
 
-    get active(): boolean {
-        return this.#active;
-    }
+            unregisterWrapper(wrapperIds);
+            wrapperIds = null;
+            options.onDisable?.();
+        },
+        toggle(enabled?: boolean) {
+            enabled ??= !this.enabled;
 
-    get context() {
-        return this.#context;
-    }
-
-    get listener() {
-        return this.#listener;
-    }
-
-    get priority() {
-        return this.#priority;
-    }
-
-    activate() {
-        this.parent.activate();
-        this.#active = true;
-    }
-
-    disable() {
-        this.#active = false;
-        this.parent.disable();
-    }
-
-    toggle(enabled: boolean = !this.active) {
-        if (enabled) {
-            this.activate();
-        } else {
-            this.disable();
-        }
-    }
+            if (enabled) {
+                this.activate();
+            } else {
+                this.disable();
+            }
+        },
+    };
 }
+
+function createCreatureSheetWrapper(
+    type: libWrapper.RegisterType,
+    partialPath: string | string[],
+    callback: libWrapper.RegisterCallback,
+    options: WrapperOptions = {},
+): ToggleWrapper {
+    const partials = R.isArray(partialPath) ? partialPath : [partialPath];
+    const paths = partials.flatMap((partial) => [
+        `CONFIG.Actor.sheetClasses.character['pf2e.CharacterSheetPF2e'].cls.prototype.${partial}`,
+        `CONFIG.Actor.sheetClasses.npc['pf2e.NPCSheetPF2e'].cls.prototype.${partial}`,
+        `CONFIG.Actor.sheetClasses.familiar['pf2e.FamiliarSheetPF2e'].cls.prototype.${partial}`,
+    ]);
+
+    return createToggleWrapper(type, paths, callback, options);
+}
+
+type SharedRegistered = {
+    listener: libWrapper.RegisterCallback;
+    context?: WrapperContext;
+    priority: number;
+    active: boolean;
+};
+
+type ToggleWrapper = {
+    get enabled(): boolean;
+    activate(): void;
+    disable(): void;
+    toggle(enabled?: boolean): void;
+};
 
 type WrapperOptions = {
     context?: WrapperContext;
@@ -245,18 +220,7 @@ type WrapperOptions = {
     onActivate?: () => void;
 };
 
-type SharedType = Exclude<libWrapper.RegisterType, "OVERRIDE">;
-type SharedCallback<
-    TDocument extends ClientDocument = ClientDocument,
-    TWrapperCallback extends libWrapper.RegisterCallback = libWrapper.RegisterCallback,
-    TListener extends (...args: any[]) => any = (...args: any[]) => any,
-> = (
-    this: TDocument,
-    registered: TListener[],
-    wrapped: () => ReturnType<TWrapperCallback>,
-    args: Parameters<TWrapperCallback>,
-) => void;
-
 type WrapperContext = InstanceType<new (...args: any[]) => any>;
 
-export type { ToggleableSharedWrapper };
+export { createCreatureSheetWrapper, createSharedWrapper, createToggleWrapper, registerWrapper, unregisterWrapper };
+export type { ToggleWrapper };

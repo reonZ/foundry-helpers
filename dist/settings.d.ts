@@ -1,17 +1,16 @@
 import { SettingSubmenuConfig } from "foundry-pf2e/foundry/client/_module.mjs";
-export declare function sharedLocalize(key: CollapseOf<LEVIKTIMES>): string;
-export declare function settingPath(...path: string[]): string;
-export declare function getSetting<T = boolean>(key: string): T;
-export declare function setSetting<TSetting>(key: string, value: TSetting): Promise<TSetting>;
-export declare function registerSetting(key: string, options: RegisterSettingOptions): void;
-export declare function registerSettingMenu(key: string, options: RegisterSettingMenuOptions): void;
-export declare function registerModuleSettings(settings: ModuleSettingsRegistration): void;
-export type ModuleSettingsRegistration = Record<string, ReadonlyArray<RegisterSettingOptions & {
+declare function settingPath(...path: string[]): string;
+declare function getSetting<T = boolean>(key: string): T;
+declare function setSetting<TSetting>(key: string, value: TSetting): Promise<TSetting>;
+declare function registerSetting(key: string, options: RegisterSettingOptions): void;
+declare function registerSettingMenu(key: string, options: RegisterSettingMenuOptions): void;
+declare function registerModuleSettings(settings: ModuleSettingsRegistration): void;
+type ModuleSettingsRegistration = Record<string, ReadonlyArray<RegisterSettingOptions & {
     key: string;
 }>>;
-export type SettingRegistration = Parameters<typeof game.settings.register>[2];
-export type RegisterSettingMenuOptions = PartialExcept<SettingSubmenuConfig, "type" | "restricted">;
-export type RegisterSettingOptions = Omit<SettingRegistration, "name" | "scope" | "onChange" | "choices" | "range"> & {
+type SettingRegistration = Parameters<typeof game.settings.register>[2];
+type RegisterSettingMenuOptions = PartialExcept<SettingSubmenuConfig, "type" | "restricted">;
+type RegisterSettingOptions = Omit<SettingRegistration, "name" | "scope" | "onChange" | "choices" | "range"> & {
     broadcast?: boolean;
     choices?: Record<string, string> | string[] | ReadonlyArray<string>;
     gmOnly?: boolean;
@@ -25,7 +24,7 @@ export type RegisterSettingOptions = Omit<SettingRegistration, "name" | "scope" 
     };
     scope: "world" | "user";
 };
-export type RenderSettingsConfigOptions = {
+type RenderSettingsConfigOptions = {
     categories: Record<string, RenderSettingsConfigCategory>;
 };
 type RenderSettingsConfigCategory = {
@@ -43,4 +42,5 @@ type RenderSettingsConfigCategoryEntry = {
         name: string;
     };
 });
-export {};
+export { getSetting, registerModuleSettings, registerSetting, registerSettingMenu, setSetting, settingPath };
+export type { ModuleSettingsRegistration, RegisterSettingMenuOptions, RegisterSettingOptions, RenderSettingsConfigOptions, SettingRegistration, SettingSubmenuConfig, };

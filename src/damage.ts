@@ -15,17 +15,17 @@ const _cached: {
     damageInstance?: typeof DamageInstance;
 } = {};
 
-export function getDamageRollClass(): typeof DamageRoll {
+function getDamageRollClass(): typeof DamageRoll {
     return (_cached.damageRoll ??= CONFIG.Dice.rolls.find((Roll) => Roll.name === "DamageRoll") as typeof DamageRoll);
 }
 
-export function getDamageInstanceClass(): typeof DamageInstance {
+function getDamageInstanceClass(): typeof DamageInstance {
     return (_cached.damageInstance ??= CONFIG.Dice.rolls.find(
         (Roll) => Roll.name === "DamageInstance",
     ) as typeof DamageInstance);
 }
 
-export async function rollDamageFromFormula(
+async function rollDamageFromFormula(
     formula: string,
     {
         actionName,
@@ -152,3 +152,5 @@ type RollDamageToolbeltFlag = Pick<
     toolbelt.targetHelper.MessageFlag,
     "author" | "saveVariants" | "options" | "private" | "traits" | "item" | "targets"
 >;
+
+export { getDamageInstanceClass, getDamageRollClass, rollDamageFromFormula };

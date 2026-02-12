@@ -1,12 +1,12 @@
 import { getTargetToken, R } from ".";
 const _cached = {};
-export function getDamageRollClass() {
+function getDamageRollClass() {
     return (_cached.damageRoll ??= CONFIG.Dice.rolls.find((Roll) => Roll.name === "DamageRoll"));
 }
-export function getDamageInstanceClass() {
+function getDamageInstanceClass() {
     return (_cached.damageInstance ??= CONFIG.Dice.rolls.find((Roll) => Roll.name === "DamageInstance"));
 }
-export async function rollDamageFromFormula(formula, { actionName, extraRollOptions = [], item, notes = [], origin, skipDialog = false, target, toolbelt, }) {
+async function rollDamageFromFormula(formula, { actionName, extraRollOptions = [], item, notes = [], origin, skipDialog = false, target, toolbelt, }) {
     const { actor, token } = origin ?? {};
     const traits = R.filter(item?.system.traits.value ?? [], (trait) => trait in CONFIG.PF2E.actionTraits);
     const options = R.pipe([traits, actor?.getRollOptions(), item?.getRollOptions("item"), extraRollOptions], R.flat(), R.filter(R.isTruthy));
@@ -77,3 +77,4 @@ export async function rollDamageFromFormula(formula, { actionName, extraRollOpti
         flags,
     });
 }
+export { getDamageInstanceClass, getDamageRollClass, rollDamageFromFormula };

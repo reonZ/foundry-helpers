@@ -1,12 +1,12 @@
 import { DateTime } from "luxon";
 
-export function waitTimeout(time: number = 1): Promise<void> {
+function waitTimeout(time: number = 1): Promise<void> {
     return new Promise((resolve) => {
         setTimeout(resolve, time);
     });
 }
 
-export function advanceTime(interval: TimeInterval, direction: "+" | "-") {
+function advanceTime(interval: TimeInterval, direction: "+" | "-") {
     const sign = direction === "+" ? 1 : -1;
     const increment = Number(interval) * sign;
 
@@ -15,13 +15,13 @@ export function advanceTime(interval: TimeInterval, direction: "+" | "-") {
     }
 }
 
-export function getShortTime(time: DateTime) {
+function getShortTime(time: DateTime) {
     return game.pf2e.worldClock.timeConvention === 24
         ? time.toFormat("HH:mm")
         : time.toLocaleString(DateTime.TIME_SIMPLE);
 }
 
-export function getShortDateTime() {
+function getShortDateTime() {
     const worldClock = game.pf2e.worldClock;
     const worldTime = worldClock.worldTime;
     const time = getShortTime(worldTime);
@@ -40,3 +40,5 @@ export function getShortDateTime() {
 }
 
 type TimeInterval = "dawn" | "noon" | "dusk" | "midnight" | `${number}` | number;
+
+export { advanceTime, getShortDateTime, getShortTime, waitTimeout };

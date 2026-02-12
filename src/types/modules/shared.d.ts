@@ -1,3 +1,5 @@
+import { LocalizeArgs } from "../../localize";
+
 export {};
 
 declare global {
@@ -9,5 +11,14 @@ declare global {
             label: "Sending";
             noGm: "A GM must be online in order to enact this request.";
         };
+    }
+
+    namespace MyModule {
+        interface GamePF2e<TApi extends Record<string, any>> {
+            active: boolean;
+            api: TApi;
+            getSetting(setting: string): unknown;
+            localize(...args: LocalizeArgs): string;
+        }
     }
 }

@@ -29,7 +29,7 @@ const actionGlyphMap = {
     "2 rounds": "3,3",
     reaction: "R",
 };
-export function getActionIcon(action, fallback = SYSTEM.relativePath("icons/actions/Empty.webp")) {
+function getActionIcon(action, fallback = SYSTEM.relativePath("icons/actions/Empty.webp")) {
     if (action === null)
         return actionImgMap.passive();
     const value = typeof action !== "object" ? action : action.type === "action" ? action.value : action.type;
@@ -41,7 +41,7 @@ export function getActionIcon(action, fallback = SYSTEM.relativePath("icons/acti
 /**
  * https://github.com/foundryvtt/pf2e/blob/89892b6fafec1456a0358de8c6d7b102e3fe2da2/src/util/misc.ts#L205
  */
-export function getActionGlyph(action) {
+function getActionGlyph(action) {
     if (!action && action !== 0)
         return "";
     const value = typeof action !== "object" ? action : action.type === "action" ? action.value : action.type;
@@ -50,7 +50,7 @@ export function getActionGlyph(action) {
         .trim();
     return actionGlyphMap[sanitized]?.replace("-", "–") ?? "";
 }
-export async function useAction(event, item) {
+async function useAction(event, item) {
     const macro = game.toolbelt?.getToolSetting("actionable", "action")
         ? await game.toolbelt?.api.actionable.getActionMacro(item)
         : undefined;
@@ -81,7 +81,7 @@ export async function useAction(event, item) {
         },
     });
 }
-export async function applySelfEffect(item) {
+async function applySelfEffect(item) {
     const effect = item.system.selfEffect && (await fromUuid(item.system.selfEffect.uuid));
     if (!effect)
         return;
@@ -110,6 +110,7 @@ export async function applySelfEffect(item) {
     });
     await actor.createEmbeddedDocuments("Item", [effectSource]);
 }
-export function isDefaultActionIcon(img, action) {
+function isDefaultActionIcon(img, action) {
     return img === getActionIcon(action);
 }
+export { applySelfEffect, getActionGlyph, getActionIcon, isDefaultActionIcon, useAction };

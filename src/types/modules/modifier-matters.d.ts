@@ -1,5 +1,7 @@
 import { ChatMessagePF2e } from "foundry-pf2e";
 
+export {};
+
 declare global {
     namespace modifiersMatter {
         type SIGNIFICANCE = "ESSENTIAL" | "HELPFUL" | "NONE" | "HARMFUL" | "DETRIMENTAL";
@@ -15,7 +17,7 @@ declare global {
     var pf2eMm: Maybe<{
         checkIfChatMessageShouldHaveHighlights(msg: ChatMessagePF2e): boolean;
         getSignificantModifiersOfMessage(
-            msg: Pick<ChatMessagePF2e, "flags" | "rolls" | "content" | "flavor">,
+            msg: Pick<ChatMessagePF2e, "flags" | "rolls" | "content" | "flavor">
         ): modifiersMatter.SignificantModifier[];
     }>;
 }

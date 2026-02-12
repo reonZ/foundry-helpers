@@ -4,7 +4,6 @@ import {
     CharacterPF2e,
     ChatMessagePF2e,
     CheckRoll,
-    Coins,
     CreaturePF2e,
     DegreeAdjustmentsRecord,
     DegreeOfSuccessString,
@@ -13,19 +12,21 @@ import {
     MacroPF2e,
     NPCPF2e,
     PhysicalItemPF2e,
+    RawCoins,
     RollNoteSource,
     SaveType,
     TokenDocumentPF2e,
 } from "foundry-pf2e";
-import { Rolled, RollJSON } from "foundry-pf2e/foundry/client/dice/roll.mjs";
-import Module from "foundry-pf2e/foundry/client/packages/module.mjs";
-import { DocumentUUID } from "foundry-pf2e/foundry/client/utils/_module.mjs";
-import { ActorUUID, ItemUUID, TokenDocumentUUID } from "foundry-pf2e/foundry/common/documents/_module.mjs";
-import { MODULE } from "../..";
+
+import { ActorUUID } from "../../actor";
+import { TokenDocumentUUID } from "../../token";
+import { DocumentUUID } from "../../document";
+import { Rolled, RollJSON } from "../../_types";
+import { ItemUUID } from "../../item";
 
 declare global {
     namespace toolbelt {
-        interface GamePF2e extends MODULE<Api> {
+        interface GamePF2e extends MyModule.GamePF2e<Api> {
             getToolSetting<K extends keyof Settings, S extends keyof Settings[K]>(tool: K, setting: S): Settings[K][S];
         }
 
@@ -119,7 +120,7 @@ declare global {
 
         namespace betterMerchant {
             type TestItemData = {
-                buyPrice: Coins;
+                buyPrice: RawCoins;
                 item: PhysicalItemPF2e<CharacterPF2e | NPCPF2e>;
             };
         }

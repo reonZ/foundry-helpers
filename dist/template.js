@@ -1,4 +1,4 @@
-export function getTemplateTokens(measuredTemplate, { collisionOrigin, collisionType = "move" } = {}) {
+function getTemplateTokens(measuredTemplate, { collisionOrigin, collisionType = "move" } = {}) {
     const grid = canvas.interface.grid;
     const dimensions = canvas.dimensions;
     const template = measuredTemplate instanceof MeasuredTemplateDocument ? measuredTemplate.object : measuredTemplate;
@@ -48,3 +48,4 @@ export function getTemplateTokens(measuredTemplate, { collisionOrigin, collision
     }
     return containedTokens;
 }
+export { getTemplateTokens };

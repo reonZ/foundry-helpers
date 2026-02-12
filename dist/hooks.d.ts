@@ -1,16 +1,17 @@
-export declare function registerUpstreamHook(event: string, listener: RegisterHookCallback, once?: boolean): number;
-export declare class ToggleableHook {
-    #private;
-    constructor(hook: string | string[], listener: RegisterHookCallback, options?: HookOptions);
+declare function registerUpstreamHook(event: string, listener: RegisterHookCallback, once?: boolean): number;
+declare function createToggleHook(hook: string | string[], listener: RegisterHookCallback, options?: HookOptions): ToggleHook;
+declare function executeWhenReady(fn: () => void): void;
+type ToggleHook = {
     get enabled(): boolean;
     activate(): void;
     disable(): void;
     toggle(enabled?: boolean): void;
-}
-export declare function executeWhenReady(fn: () => void): void;
-export type RegisterHookCallback = (...args: any[]) => any;
-export type HookOptions = {
+};
+type RegisterHookCallback = (...args: any[]) => any;
+type HookOptions = {
     onDisable?: () => void;
     onActivate?: () => void;
     upstream?: boolean;
 };
+export { createToggleHook, executeWhenReady, registerUpstreamHook };
+export type { HookOptions, ToggleHook };

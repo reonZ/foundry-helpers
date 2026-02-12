@@ -1,12 +1,12 @@
-export declare function waitDialog<T extends Record<string, any>>({ classes, content, data, expand, i18n, no, onRender, title, yes, }: CustomWaitDialogOptions): Promise<T | false | null>;
-export declare function confirmDialog(i18n: string, { classes, content, data, no, title, yes }?: CustomConfirmDialogOptions): Promise<boolean | null>;
-export declare function generateDialogContent(content: string, data?: Record<string, any>): Promise<string>;
+declare function waitDialog<T extends Record<string, any>>({ classes, content, data, expand, i18n, no, onRender, title, yes, }: CustomWaitDialogOptions): Promise<T | false | null>;
+declare function confirmDialog(i18n: string, { classes, content, data, no, title, yes }?: CustomConfirmDialogOptions): Promise<boolean | null>;
+declare function generateDialogContent(content: string, data?: Record<string, any>): Promise<string>;
 type BaseDialogOptions = {
     classes?: string[];
     data?: Record<string, any>;
     title?: string | Record<string, any>;
 };
-export type CustomWaitDialogOptions = BaseDialogOptions & {
+type CustomWaitDialogOptions = BaseDialogOptions & {
     content: string;
     expand?: boolean;
     i18n: string;
@@ -31,4 +31,5 @@ type CustomConfirmDialogOptions = BaseDialogOptions & {
         default?: true;
     };
 };
-export {};
+export { confirmDialog, generateDialogContent, waitDialog };
+export type { CustomWaitDialogOptions };

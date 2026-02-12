@@ -1,12 +1,10 @@
-import { ErrorPF2e, objectHasKey, setHasElement } from "./pf2e";
-import { MAGIC_TRADITIONS } from "./spell";
-import { R } from ".";
+import { ErrorPF2e, MAGIC_TRADITIONS, objectHasKey, R, setHasElement } from ".";
 const CANTRIP_DECK_UUID = "Compendium.pf2e.equipment-srd.Item.tLa4bewBhyqzi6Ow";
 /**
  * slightly modified version of
  * https://github.com/reonZ/pf2e/blob/6e5481af7bb1e1b9d28d35fb3ad324511c5170d1/src/module/item/consumable/spell-consumables.ts#L21
  */
-export async function createConsumableFromSpell(spell, { type, heightenedLevel: rank = spell.baseRank, mystified = false, itemImg, itemName, temp, }) {
+async function createConsumableFromSpell(spell, { type, heightenedLevel: rank = spell.baseRank, mystified = false, itemImg, itemName, temp, }) {
     const data = objectHasKey(CONFIG.PF2E.spellcastingItems, type) ? CONFIG.PF2E.spellcastingItems[type] : null;
     const uuids = data?.compendiumUuids ?? [];
     const uuid = uuids?.[rank] ?? (type === "cantripDeck5" ? CANTRIP_DECK_UUID : null);
@@ -52,3 +50,4 @@ export async function createConsumableFromSpell(spell, { type, heightenedLevel: 
     }
     return consumableSource;
 }
+export { createConsumableFromSpell };

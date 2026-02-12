@@ -1,5 +1,3 @@
-import { Point } from "foundry-pf2e/foundry/common/_types.mjs";
-
 export function distanceToPoint(a: Point, b: Point): number {
     return Math.hypot(b.x - a.x, b.y - a.y);
 }

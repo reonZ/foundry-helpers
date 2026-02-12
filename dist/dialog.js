@@ -1,7 +1,7 @@
-import { createFormData, htmlQuery, localize, MODULE, R, render } from ".";
-export async function waitDialog({ classes = [], content, data, expand, i18n, no, onRender, title, yes, }) {
+import { createFormData, htmlQuery, localize, localizeIfExist, MODULE, R, render, templateLocalize } from ".";
+async function waitDialog({ classes = [], content, data, expand, i18n, no, onRender, title, yes, }) {
     if (data) {
-        data.i18n = localize.i18n(i18n);
+        data.i18n = templateLocalize(i18n);
     }
     classes.push(MODULE.id);
     const dialogOptions = {
@@ -16,7 +16,7 @@ export async function waitDialog({ classes = [], content, data, expand, i18n, no
             {
                 action: "no",
                 icon: no?.icon ?? "fa-solid fa-xmark",
-                label: no?.label ?? localize.ifExist(i18n, "no") ?? "Cancel",
+                label: no?.label ?? localizeIfExist(i18n, "no") ?? "Cancel",
                 default: !!no?.default,
                 callback: no?.callback ?? (() => false),
             },
@@ -37,20 +37,20 @@ export async function waitDialog({ classes = [], content, data, expand, i18n, no
     };
     return foundry.applications.api.DialogV2.wait(dialogOptions);
 }
-export async function confirmDialog(i18n, { classes = [], content, data = {}, no, title, yes } = {}) {
+async function confirmDialog(i18n, { classes = [], content, data = {}, no, title, yes } = {}) {
     const dialogOptions = {
         classes,
-        content: content ?? localize.ifExist(i18n, "content", data) ?? (await generateDialogContent(i18n, data)),
+        content: content ?? localizeIfExist(i18n, "content", data) ?? (await generateDialogContent(i18n, data)),
         no: {
             default: !yes?.default,
-            label: no ?? localize.ifExist(i18n, "no") ?? "No",
+            label: no ?? localizeIfExist(i18n, "no") ?? "No",
         },
         window: {
             title: generateDialogTitle(i18n, title, data),
         },
         yes: {
             default: !!yes?.default,
-            label: yes?.label ?? localize.ifExist(i18n, "yes") ?? "Yes",
+            label: yes?.label ?? localizeIfExist(i18n, "yes") ?? "Yes",
         },
     };
     return foundry.applications.api.DialogV2.confirm(dialogOptions);
@@ -58,7 +58,7 @@ export async function confirmDialog(i18n, { classes = [], content, data = {}, no
 function generateDialogTitle(i18n, title, data) {
     return R.isString(title) ? title : localize(i18n, "title", R.isObjectType(title) ? title : (data ?? {}));
 }
-export async function generateDialogContent(content, data) {
+async function generateDialogContent(content, data) {
     if (R.isObjectType(data)) {
         return render(content, data);
     }
@@ -66,3 +66,4 @@ export async function generateDialogContent(content, data) {
         return content.startsWith("<") ? content : `<div>${content}</div>`;
     }
 }
+export { confirmDialog, generateDialogContent, waitDialog };

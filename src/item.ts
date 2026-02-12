@@ -8,10 +8,10 @@ import {
     ItemType,
     PhysicalItemPF2e,
 } from "foundry-pf2e";
-import { ItemSheetData as _ItemSheetData } from "foundry-pf2e/foundry/client/appv1/sheets/item-sheet.mjs";
-import { ItemUUID as _ItemUUID } from "foundry-pf2e/foundry/common/documents/_module.mjs";
+import { ItemSheetData } from "foundry-pf2e/foundry/client/appv1/sheets/item-sheet.mjs";
+import { CompendiumIndexData } from "foundry-pf2e/foundry/client/documents/collections/_module.mjs";
+import { ItemUUID } from "foundry-pf2e/foundry/common/documents/_module.mjs";
 import { createHTMLElementContent, getDamageRollClass, htmlQuery, includesAny, R, setHasElement, SYSTEM } from ".";
-import { CompendiumIndexData as _CompendiumIndexData } from "foundry-pf2e/foundry/client/documents/collections/_module.mjs";
 
 /**
  * https://github.com/foundryvtt/pf2e/blob/95e941aecaf1fa6082825b206b0ac02345d10538/src/module/item/physical/values.ts#L1
@@ -37,11 +37,11 @@ const ATTACHABLE_TYPES = {
 /**
  * https://github.com/foundryvtt/pf2e/blob/95e941aecaf1fa6082825b206b0ac02345d10538/src/module/item/helpers.ts#L13
  */
-export function itemIsOfType<TParent extends ActorPF2e | null, TType extends ItemType>(
+function itemIsOfType<TParent extends ActorPF2e | null, TType extends ItemType>(
     item: ItemOrSource,
     ...types: TType[]
 ): item is ItemInstances<TParent>[TType] | ItemInstances<TParent>[TType]["_source"];
-export function itemIsOfType<TParent extends ActorPF2e | null, TType extends "physical" | ItemType>(
+function itemIsOfType<TParent extends ActorPF2e | null, TType extends "physical" | ItemType>(
     item: ItemOrSource,
     ...types: TType[]
 ): item is TType extends "physical"
@@ -49,11 +49,11 @@ export function itemIsOfType<TParent extends ActorPF2e | null, TType extends "ph
     : TType extends ItemType
       ? ItemInstances<TParent>[TType] | ItemInstances<TParent>[TType]["_source"]
       : never;
-export function itemIsOfType<TParent extends ActorPF2e | null>(
+function itemIsOfType<TParent extends ActorPF2e | null>(
     item: ItemOrSource,
     type: "physical",
 ): item is PhysicalItemPF2e<TParent> | PhysicalItemPF2e["_source"];
-export function itemIsOfType(item: ItemOrSource, ...types: string[]): boolean {
+function itemIsOfType(item: ItemOrSource, ...types: string[]): boolean {
     return (
         typeof item.name === "string" &&
         types.some((t) => (t === "physical" ? setHasElement(PHYSICAL_ITEM_TYPES, item.type) : item.type === t))
@@ -92,7 +92,7 @@ function* actorItems<TType extends ItemType, TActor extends ActorPF2e>(
     }
 }
 
-export function findItemWithSourceId<TType extends ItemType, TActor extends ActorPF2e>(
+function findItemWithSourceId<TType extends ItemType, TActor extends ActorPF2e>(
     actor: TActor,
     uuid: string,
     type?: TType,
@@ -109,12 +109,12 @@ export function findItemWithSourceId<TType extends ItemType, TActor extends Acto
     return null;
 }
 
-export function getItemSourceId(item: ItemPF2e): ItemUUID {
+function getItemSourceId(item: ItemPF2e): ItemUUID {
     const isCompendiumItem = item._id && item.pack && !item.isEmbedded;
     return isCompendiumItem ? item.uuid : (item._stats.compendiumSource ?? item._stats.duplicateSource ?? item.uuid);
 }
 
-export async function usePhysicalItem(event: Event, item: EquipmentPF2e<ActorPF2e> | ConsumablePF2e<ActorPF2e>) {
+async function usePhysicalItem(event: Event, item: EquipmentPF2e<ActorPF2e> | ConsumablePF2e<ActorPF2e>) {
     const isConsumable = item.isOfType("consumable");
 
     if (isConsumable && isCastConsumable(item)) {
@@ -148,7 +148,7 @@ export async function usePhysicalItem(event: Event, item: EquipmentPF2e<ActorPF2
  * https://github.com/foundryvtt/pf2e/blob/eecf53f37490cbd228d8c74b290748b0188768b4/src/module/item/consumable/document.ts#L156
  * though stripped of scrolls & wands
  */
-export async function consumeItem(event: Event, item: ConsumablePF2e<ActorPF2e>) {
+async function consumeItem(event: Event, item: ConsumablePF2e<ActorPF2e>) {
     const actor = item.actor;
     const speaker = ChatMessage.getSpeaker({ actor });
     const flags = {
@@ -205,15 +205,15 @@ export async function consumeItem(event: Event, item: ConsumablePF2e<ActorPF2e>)
     }
 }
 
-export function isSupressedFeat<TActor extends ActorPF2e | null>(item: ItemPF2e<TActor>): boolean {
+function isSupressedFeat<TActor extends ActorPF2e | null>(item: ItemPF2e<TActor>): boolean {
     return item.isOfType("feat") && item.suppressed;
 }
 
-export function isCastConsumable(item: ConsumablePF2e): boolean {
+function isCastConsumable(item: ConsumablePF2e): boolean {
     return R.isIncludedIn(item.category, ["wand", "scroll"]) && !!item.system.spell;
 }
 
-export function isSF2eItem<T extends PhysicalItemPF2e>(item: T): boolean {
+function isSF2eItem<T extends PhysicalItemPF2e>(item: T): boolean {
     return includesAny(item._source.system.traits.value, ["tech", "analog"]);
 }
 
@@ -226,7 +226,16 @@ type ActorItemInstances<TType extends ItemType, TActor extends ActorPF2e> = Item
     ? TType | "weapon" | "equipment"
     : TType];
 
-export type ItemSheetData<TItem extends Item> = _ItemSheetData<TItem>;
-export type ItemUUID = _ItemUUID;
-export type ItemOrSource = PreCreate<ItemSourcePF2e> | CompendiumIndexData | ItemPF2e;
-export type CompendiumIndexData = _CompendiumIndexData;
+type ItemOrSource = PreCreate<ItemSourcePF2e> | CompendiumIndexData | ItemPF2e;
+
+export {
+    consumeItem,
+    findItemWithSourceId,
+    getItemSourceId,
+    isCastConsumable,
+    isSF2eItem,
+    isSupressedFeat,
+    itemIsOfType,
+    usePhysicalItem,
+};
+export type { CompendiumIndexData, ItemOrSource, ItemSheetData, ItemUUID };

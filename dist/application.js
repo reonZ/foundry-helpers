@@ -6,15 +6,16 @@ function renderApplications(type) {
         app.render();
     }
 }
-export function renderCharacterSheets() {
+function renderCharacterSheets() {
     renderApplications("CharacterSheetPF2e");
 }
-export function renderActorSheets(type = ["ActorSheetPF2e"]) {
+function renderActorSheets(type = ["ActorSheetPF2e"]) {
     renderApplications(type);
 }
-export function renderItemSheets(type = ["ItemSheetPF2e"]) {
+function renderItemSheets(type = ["ItemSheetPF2e"]) {
     renderApplications(type);
 }
-export function enrichHTML(content, options) {
+function enrichHTML(content, options) {
     return foundry.applications.ux.TextEditor.implementation.enrichHTML(content, options);
 }
+export { enrichHTML, renderActorSheets, renderCharacterSheets, renderItemSheets };

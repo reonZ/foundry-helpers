@@ -1,20 +1,20 @@
 import { R } from ".";
-export function htmlQuery(parent, selectors) {
+function htmlQuery(parent, selectors) {
     if (!(parent instanceof Element))
         return null;
     return parent.querySelector(selectors);
 }
-export function htmlQueryAll(parent, selectors) {
+function htmlQueryAll(parent, selectors) {
     if (!(parent instanceof Element || parent instanceof Document))
         return [];
     return Array.from(parent.querySelectorAll(selectors));
 }
-export function htmlClosest(child, selectors) {
+function htmlClosest(child, selectors) {
     if (!(child instanceof Element))
         return null;
     return child.closest(selectors);
 }
-export function createHTMLElement(nodeName, { classes = [], dataset = {}, content, id, style } = {}) {
+function createHTMLElement(nodeName, { classes = [], dataset = {}, content, id, style } = {}) {
     const element = document.createElement(nodeName);
     if (element instanceof HTMLButtonElement) {
         element.type = "button";
@@ -44,10 +44,10 @@ export function createHTMLElement(nodeName, { classes = [], dataset = {}, conten
     }
     return element;
 }
-export function createHTMLElementContent(options) {
+function createHTMLElementContent(options) {
     return createHTMLElement("div", options).firstChild;
 }
-export function createButtonElement(options) {
+function createButtonElement(options) {
     let content = "";
     if (options.icon) {
         content += `<i class="${options.icon}"> `;
@@ -57,7 +57,7 @@ export function createButtonElement(options) {
     }
     return createHTMLElement("button", { ...options, content });
 }
-export function addListener(parent, selectors, ...args) {
+function addListener(parent, selectors, ...args) {
     if (!(parent instanceof Element || parent instanceof Document))
         return;
     const element = parent.querySelector(selectors);
@@ -68,7 +68,7 @@ export function addListener(parent, selectors, ...args) {
     const useCapture = typeof args[1] === "boolean" ? args[1] : args[2];
     element.addEventListener(event, (e) => listener(element, e), useCapture);
 }
-export function addListenerAll(parent, selectors, ...args) {
+function addListenerAll(parent, selectors, ...args) {
     if (!(parent instanceof Element || parent instanceof Document))
         return;
     const elements = parent.querySelectorAll(selectors);
@@ -81,7 +81,7 @@ export function addListenerAll(parent, selectors, ...args) {
         element.addEventListener(event, (e) => listener(element, e), useCapture);
     }
 }
-export function createFormData(html, expand = false) {
+function createFormData(html, expand = false) {
     const form = html instanceof HTMLFormElement ? html : htmlQuery(html, "form");
     if (!form)
         return null;
@@ -96,12 +96,13 @@ export function createFormData(html, expand = false) {
     }
     return (expand ? foundry.utils.expandObject(data) : data);
 }
-export function assignStyle(el, style) {
+function assignStyle(el, style) {
     Object.assign(el.style, style);
 }
-export function styleValue(value) {
+function styleValue(value) {
     return `${value}px`;
 }
-export function setStyleProperty(html, property, value) {
+function setStyleProperty(html, property, value) {
     html?.style.setProperty(property, styleValue(value));
 }
+export { addListener, addListenerAll, assignStyle, createButtonElement, createFormData, createHTMLElement, createHTMLElementContent, htmlClosest, htmlQuery, htmlQueryAll, setStyleProperty, styleValue, };

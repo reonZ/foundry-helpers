@@ -1,4 +1,3 @@
-import { Point } from "foundry-pf2e/foundry/common/_types.mjs";
 export declare function distanceToPoint(a: Point, b: Point): number;
 export declare function subtractPoint(a: Point, b: Point): Point;
 export declare function addPoints(a: Point, b: Point): Point;

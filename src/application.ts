@@ -1,5 +1,6 @@
-import { ActorType, EnrichmentOptionsPF2e, ItemType } from "foundry-pf2e";
-import { ContextMenuEntry as _ContextMenuEntry } from "foundry-pf2e/foundry/client/applications/ux/context-menu.mjs";
+import { ActorType, ItemType } from "foundry-pf2e";
+import { ContextMenuEntry } from "foundry-pf2e/foundry/client/applications/ux/context-menu.mjs";
+import { EnrichmentOptions } from "foundry-pf2e/foundry/client/applications/ux/text-editor.mjs";
 import { isInstanceOf, R } from ".";
 
 function renderApplications(type: string | string[]) {
@@ -13,24 +14,24 @@ function renderApplications(type: string | string[]) {
     }
 }
 
-export function renderCharacterSheets() {
+function renderCharacterSheets() {
     renderApplications("CharacterSheetPF2e");
 }
 
-export function renderActorSheets(type: ActorSheetType | ActorSheetType[] = ["ActorSheetPF2e"]) {
+function renderActorSheets(type: ActorSheetType | ActorSheetType[] = ["ActorSheetPF2e"]) {
     renderApplications(type);
 }
 
-export function renderItemSheets(type: ItemSheetType | ItemSheetType[] = ["ItemSheetPF2e"]) {
+function renderItemSheets(type: ItemSheetType | ItemSheetType[] = ["ItemSheetPF2e"]) {
     renderApplications(type);
 }
 
-export function enrichHTML(content: string | null, options?: EnrichmentOptionsPF2e): Promise<string> {
+function enrichHTML(content: string | null, options?: EnrichmentOptions): Promise<string> {
     return foundry.applications.ux.TextEditor.implementation.enrichHTML(content, options);
 }
 
 type ActorSheetType = "ActorSheetPF2e" | `${Capitalize<ActorType>}SheetPF2e`;
-
 type ItemSheetType = "ItemSheetPF2e" | "AbilitySheetPF2e" | `${Capitalize<Exclude<ItemType, "action">>}SheetPF2e`;
 
-export type ContextMenuEntry = _ContextMenuEntry;
+export { enrichHTML, renderActorSheets, renderCharacterSheets, renderItemSheets };
+export type { ContextMenuEntry, EnrichmentOptions };

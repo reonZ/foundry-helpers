@@ -1,6 +1,6 @@
-import { createFormData, htmlQuery, localize, MODULE, R, render } from ".";
+import { createFormData, htmlQuery, localize, localizeIfExist, MODULE, R, render, templateLocalize } from ".";
 
-export async function waitDialog<T extends Record<string, any>>({
+async function waitDialog<T extends Record<string, any>>({
     classes = [],
     content,
     data,
@@ -12,7 +12,7 @@ export async function waitDialog<T extends Record<string, any>>({
     yes,
 }: CustomWaitDialogOptions): Promise<T | false | null> {
     if (data) {
-        data.i18n = localize.i18n(i18n);
+        data.i18n = templateLocalize(i18n);
     }
 
     classes.push(MODULE.id);
@@ -29,7 +29,7 @@ export async function waitDialog<T extends Record<string, any>>({
             {
                 action: "no",
                 icon: no?.icon ?? "fa-solid fa-xmark",
-                label: no?.label ?? localize.ifExist(i18n, "no") ?? "Cancel",
+                label: no?.label ?? localizeIfExist(i18n, "no") ?? "Cancel",
                 default: !!no?.default,
                 callback: no?.callback ?? (() => false),
             },
@@ -53,23 +53,23 @@ export async function waitDialog<T extends Record<string, any>>({
     return foundry.applications.api.DialogV2.wait(dialogOptions) as Promise<T | false | null>;
 }
 
-export async function confirmDialog(
+async function confirmDialog(
     i18n: string,
     { classes = [], content, data = {}, no, title, yes }: CustomConfirmDialogOptions = {},
 ): Promise<boolean | null> {
     const dialogOptions: ConfirmDialogOption = {
         classes,
-        content: content ?? localize.ifExist(i18n, "content", data) ?? (await generateDialogContent(i18n, data)),
+        content: content ?? localizeIfExist(i18n, "content", data) ?? (await generateDialogContent(i18n, data)),
         no: {
             default: !yes?.default,
-            label: no ?? localize.ifExist(i18n, "no") ?? "No",
+            label: no ?? localizeIfExist(i18n, "no") ?? "No",
         },
         window: {
             title: generateDialogTitle(i18n, title, data),
         },
         yes: {
             default: !!yes?.default,
-            label: yes?.label ?? localize.ifExist(i18n, "yes") ?? "Yes",
+            label: yes?.label ?? localizeIfExist(i18n, "yes") ?? "Yes",
         },
     };
 
@@ -84,7 +84,7 @@ function generateDialogTitle(
     return R.isString(title) ? title : localize(i18n, "title", R.isObjectType(title) ? title : (data ?? {}));
 }
 
-export async function generateDialogContent(content: string, data?: Record<string, any>): Promise<string> {
+async function generateDialogContent(content: string, data?: Record<string, any>): Promise<string> {
     if (R.isObjectType(data)) {
         return render(content, data);
     } else {
@@ -98,7 +98,7 @@ type BaseDialogOptions = {
     title?: string | Record<string, any>;
 };
 
-export type CustomWaitDialogOptions = BaseDialogOptions & {
+type CustomWaitDialogOptions = BaseDialogOptions & {
     content: string;
     expand?: boolean;
     i18n: string;
@@ -132,3 +132,6 @@ type ConfirmDialogOption = DeepPartial<fa.api.DialogV2Configuration & fa.api.Dia
     yes?: Partial<fa.api.DialogV2Button>;
     no?: Partial<fa.api.DialogV2Button>;
 };
+
+export { confirmDialog, generateDialogContent, waitDialog };
+export type { CustomWaitDialogOptions };

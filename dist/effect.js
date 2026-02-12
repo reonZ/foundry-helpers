@@ -1,4 +1,4 @@
-export function createCustomEffect({ badge, duration, img, itemSlug, name, rules, show, unidentified, }) {
+function createCustomEffect({ badge, duration, img, itemSlug, name, rules, show, unidentified, }) {
     const system = {
         unidentified,
         duration,
@@ -33,7 +33,7 @@ export function createCustomEffect({ badge, duration, img, itemSlug, name, rules
         system,
     };
 }
-export function createCustomCondition(options) {
+function createCustomCondition(options) {
     const { alterations = [], counter = 1, img, name, slug } = options;
     const condition = game.pf2e.ConditionManager.conditions.get(slug);
     if (!condition)
@@ -68,3 +68,4 @@ export function createCustomCondition(options) {
         show: false,
     });
 }
+export { createCustomCondition, createCustomEffect };

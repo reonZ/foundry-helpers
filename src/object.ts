@@ -19,9 +19,9 @@ import {
     TokenPF2e,
     WeaponPF2e,
 } from "foundry-pf2e";
-import { R } from ".";
+import { ClientDocument, R } from ".";
 
-export class MapOfArrays<K extends string | number, T> extends Map<K, T[]> {
+class MapOfArrays<K extends string | number, T> extends Map<K, T[]> {
     constructor(entries?: readonly (readonly [K, T[]])[] | Iterable<readonly [K, T[]]> | Record<K, T[]> | null) {
         if (entries && !(Symbol.iterator in entries)) {
             super(Object.entries(entries) as [K, T[]][]);
@@ -82,9 +82,9 @@ export class MapOfArrays<K extends string | number, T> extends Map<K, T[]> {
     }
 }
 
-export function isInstanceOf<T extends keyof IsInstanceOfClasses>(obj: any, cls: T): obj is IsInstanceOfClasses[T];
-export function isInstanceOf<T>(obj: any, cls: string): obj is T;
-export function isInstanceOf(obj: any, cls: keyof IsInstanceOfClasses | string) {
+function isInstanceOf<T extends keyof IsInstanceOfClasses>(obj: any, cls: T): obj is IsInstanceOfClasses[T];
+function isInstanceOf<T>(obj: any, cls: string): obj is T;
+function isInstanceOf(obj: any, cls: keyof IsInstanceOfClasses | string) {
     if (typeof obj !== "object" || obj === null) return false;
 
     let cursor = Reflect.getPrototypeOf(obj);
@@ -120,3 +120,5 @@ type IsInstanceOfItems = {
     SpellPF2e: SpellPF2e;
     WeaponPF2e: WeaponPF2e;
 };
+
+export { MapOfArrays, isInstanceOf };

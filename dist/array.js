@@ -1,4 +1,4 @@
-export class CycleArray extends Array {
+class CycleArray extends Array {
     #index = 0;
     get index() {
         if (this.#index > this.length - 1) {
@@ -33,7 +33,7 @@ export class CycleArray extends Array {
         return Number(direction) > 0 ? this.increment() : this.decrement();
     }
 }
-export function includesAny(arr, entries) {
+function includesAny(arr, entries) {
     for (const entry of entries) {
         if (arr.includes(entry)) {
             return true;
@@ -41,3 +41,4 @@ export function includesAny(arr, entries) {
     }
     return false;
 }
+export { CycleArray, includesAny };

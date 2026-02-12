@@ -9,7 +9,7 @@ function getDcRarity(item) {
  * https://github.com/foundryvtt/pf2e/blob/578620c2a35a76d904938fb3d4984ad0e14be241/src/module/item/identification.ts#L63
  * with option fallback
  */
-export function getItemIdentificationDCs(item, { pwol = false, notMatchingTraditionModifier } = {
+function getItemIdentificationDCs(item, { pwol = false, notMatchingTraditionModifier } = {
     pwol: game.pf2e.settings.variants.pwol.enabled,
     notMatchingTraditionModifier: game.settings.get(SYSTEM.id, "identifyMagicNotMatchingTraditionModifier"),
 }) {
@@ -54,7 +54,7 @@ function getIdentifyMagicDCs(item, baseDC, notMatchingTraditionModifier) {
  * modified version of
  * https://github.com/foundryvtt/pf2e/blob/578620c2a35a76d904938fb3d4984ad0e14be241/src/module/actor/sheet/popups/identify-popup.ts#L7
  */
-export class IdentifyItemPopup extends foundry.appv1.api.FormApplication {
+class IdentifyItemPopup extends foundry.appv1.api.FormApplication {
     static get defaultOptions() {
         return {
             ...super.defaultOptions,
@@ -109,3 +109,4 @@ export class IdentifyItemPopup extends foundry.appv1.api.FormApplication {
         }
     }
 }
+export { getItemIdentificationDCs, IdentifyItemPopup };

@@ -1,12 +1,16 @@
-export function belongToPartyAlliance(actor) {
+function actorsRespectAlliance(origin, target, alliance = "all") {
+    return alliance === "allies" ? target.isAllyOf(origin) : alliance === "enemies" ? target.isEnemyOf(origin) : true;
+}
+function belongToPartyAlliance(actor) {
     return actor.system.details.alliance === "party";
 }
-export function oppositeAlliance(alliance) {
+function oppositeAlliance(alliance) {
     return alliance === "party" ? "opposition" : alliance === "opposition" ? "party" : null;
 }
-export function isAllyActor(actor) {
+function isAllyActor(actor) {
     return actor.alliance === "party" || actor.testUserPermission(game.user, "OBSERVER");
 }
-export function isMerchant(actor) {
+function isMerchant(actor) {
     return !!actor?.isOfType("loot") && actor.isMerchant;
 }
+export { actorsRespectAlliance, belongToPartyAlliance, isAllyActor, isMerchant, oppositeAlliance };

@@ -8,9 +8,9 @@ import {
     GrantItemSource,
     RuleElementSource,
 } from "foundry-pf2e";
-import { ImageFilePath } from "foundry-pf2e/foundry/common/constants.mjs";
+import { ImageFilePath } from ".";
 
-export function createCustomEffect({
+function createCustomEffect({
     badge,
     duration,
     img,
@@ -61,7 +61,7 @@ export function createCustomEffect({
     };
 }
 
-export function createCustomCondition(options: CustomConditionOptions): PreCreate<EffectSource> | undefined {
+function createCustomCondition(options: CustomConditionOptions): PreCreate<EffectSource> | undefined {
     const { alterations = [], counter = 1, img, name, slug } = options;
     const condition = game.pf2e.ConditionManager.conditions.get(slug);
     if (!condition) return;
@@ -101,7 +101,7 @@ export function createCustomCondition(options: CustomConditionOptions): PreCreat
     });
 }
 
-export type CustomEffectOptions = {
+type CustomEffectOptions = {
     badge?: EffectBadgeSource;
     duration?: CustomEffectDuration;
     img?: ImageFilePath;
@@ -112,7 +112,7 @@ export type CustomEffectOptions = {
     unidentified?: boolean;
 };
 
-export type CustomConditionOptions = Omit<WithPartial<CustomEffectOptions, "name">, "badge" | "rules" | "show"> & {
+type CustomConditionOptions = Omit<WithPartial<CustomEffectOptions, "name">, "badge" | "rules" | "show"> & {
     slug: ConditionSlug;
     counter?: number;
     alterations?: Record<string, JSONValue>[];
@@ -122,7 +122,7 @@ type CustomEffectDuration = DurationData & {
     origin?: TargetDocuments;
 };
 
-export interface EffectsPanelViewData {
+interface EffectsPanelViewData {
     afflictions: EffectViewData[];
     conditions: EffectViewData[];
     effects: EffectViewData[];
@@ -130,8 +130,11 @@ export interface EffectsPanelViewData {
     user: { isGM: boolean };
 }
 
-export interface EffectViewData {
+interface EffectViewData {
     effect: AbstractEffectPF2e;
     description: string;
     remaining: string | null;
 }
+
+export { createCustomCondition, createCustomEffect };
+export type { CustomConditionOptions, CustomEffectOptions, EffectsPanelViewData, EffectViewData };

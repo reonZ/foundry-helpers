@@ -1,4 +1,4 @@
-export class CycleArray<T> extends Array<T> {
+class CycleArray<T> extends Array<T> {
     #index = 0;
 
     get index(): number {
@@ -43,7 +43,7 @@ export class CycleArray<T> extends Array<T> {
     }
 }
 
-export function includesAny(arr: any[], entries: any[]): boolean {
+function includesAny(arr: any[], entries: any[]): boolean {
     for (const entry of entries) {
         if (arr.includes(entry)) {
             return true;
@@ -52,3 +52,5 @@ export function includesAny(arr: any[], entries: any[]): boolean {
 
     return false;
 }
+
+export { CycleArray, includesAny };

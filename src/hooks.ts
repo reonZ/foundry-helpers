@@ -1,4 +1,4 @@
-export function registerUpstreamHook(event: string, listener: RegisterHookCallback, once?: boolean) {
+function registerUpstreamHook(event: string, listener: RegisterHookCallback, once?: boolean) {
     const id = Hooks[once ? "once" : "on"](event, listener);
     const hook = Hooks.events[event].findSplice((x) => x.id === id);
 
@@ -9,58 +9,53 @@ export function registerUpstreamHook(event: string, listener: RegisterHookCallba
     return id;
 }
 
-export class ToggleableHook {
-    #hooks: string[];
-    #ids: { id: number; path: string }[] = [];
-    #listener: RegisterHookCallback;
-    #options: HookOptions;
+function createToggleHook(
+    hook: string | string[],
+    listener: RegisterHookCallback,
+    options: HookOptions = {},
+): ToggleHook {
+    const _ids: { id: number; path: string }[] = [];
+    const _hook = Array.isArray(hook) ? hook : [hook];
 
-    constructor(hook: string | string[], listener: RegisterHookCallback, options: HookOptions = {}) {
-        this.#hooks = Array.isArray(hook) ? hook : [hook];
-        this.#listener = listener;
-        this.#options = options;
-    }
+    return {
+        get enabled(): boolean {
+            return _ids.length > 0;
+        },
+        activate() {
+            if (this.enabled) return;
 
-    get enabled(): boolean {
-        return this.#ids.length > 0;
-    }
+            for (const path of _hook) {
+                const id = options.upstream ? registerUpstreamHook(path, listener) : Hooks.on(path, listener);
 
-    activate() {
-        if (this.enabled) return;
+                _ids.push({ id, path });
+            }
 
-        for (const path of this.#hooks) {
-            const id = this.#options.upstream
-                ? registerUpstreamHook(path, this.#listener)
-                : Hooks.on(path, this.#listener);
+            options.onActivate?.();
+        },
+        disable() {
+            if (!this.enabled) return;
 
-            this.#ids.push({ id, path });
-        }
+            for (const { path, id } of _ids) {
+                Hooks.off(path, id);
+            }
 
-        this.#options.onActivate?.();
-    }
+            _ids.length = 0;
 
-    disable() {
-        if (!this.enabled) return;
+            options.onDisable?.();
+        },
+        toggle(enabled?: boolean) {
+            enabled ??= !this.enabled;
 
-        for (const { path, id } of this.#ids) {
-            Hooks.off(path, id);
-        }
-
-        this.#ids.length = 0;
-
-        this.#options.onDisable?.();
-    }
-
-    toggle(enabled: boolean = !this.enabled) {
-        if (enabled) {
-            this.activate();
-        } else {
-            this.disable();
-        }
-    }
+            if (enabled) {
+                this.activate();
+            } else {
+                this.disable();
+            }
+        },
+    };
 }
 
-export function executeWhenReady(fn: () => void) {
+function executeWhenReady(fn: () => void) {
     if (game.ready) {
         fn();
     } else {
@@ -68,10 +63,20 @@ export function executeWhenReady(fn: () => void) {
     }
 }
 
-export type RegisterHookCallback = (...args: any[]) => any;
+type ToggleHook = {
+    get enabled(): boolean;
+    activate(): void;
+    disable(): void;
+    toggle(enabled?: boolean): void;
+};
 
-export type HookOptions = {
+type RegisterHookCallback = (...args: any[]) => any;
+
+type HookOptions = {
     onDisable?: () => void;
     onActivate?: () => void;
     upstream?: boolean;
 };
+
+export { createToggleHook, executeWhenReady, registerUpstreamHook };
+export type { HookOptions, ToggleHook };

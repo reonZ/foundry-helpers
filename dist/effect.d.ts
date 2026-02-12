@@ -1,8 +1,8 @@
 import { AbstractEffectPF2e, ActorPF2e, ConditionSlug, DurationData, EffectBadgeSource, EffectSource, RuleElementSource } from "foundry-pf2e";
-import { ImageFilePath } from "foundry-pf2e/foundry/common/constants.mjs";
-export declare function createCustomEffect({ badge, duration, img, itemSlug, name, rules, show, unidentified, }: CustomEffectOptions): WithRequired<PreCreate<EffectSource>, "system">;
-export declare function createCustomCondition(options: CustomConditionOptions): PreCreate<EffectSource> | undefined;
-export type CustomEffectOptions = {
+import { ImageFilePath } from ".";
+declare function createCustomEffect({ badge, duration, img, itemSlug, name, rules, show, unidentified, }: CustomEffectOptions): WithRequired<PreCreate<EffectSource>, "system">;
+declare function createCustomCondition(options: CustomConditionOptions): PreCreate<EffectSource> | undefined;
+type CustomEffectOptions = {
     badge?: EffectBadgeSource;
     duration?: CustomEffectDuration;
     img?: ImageFilePath;
@@ -12,7 +12,7 @@ export type CustomEffectOptions = {
     itemSlug?: string;
     unidentified?: boolean;
 };
-export type CustomConditionOptions = Omit<WithPartial<CustomEffectOptions, "name">, "badge" | "rules" | "show"> & {
+type CustomConditionOptions = Omit<WithPartial<CustomEffectOptions, "name">, "badge" | "rules" | "show"> & {
     slug: ConditionSlug;
     counter?: number;
     alterations?: Record<string, JSONValue>[];
@@ -20,7 +20,7 @@ export type CustomConditionOptions = Omit<WithPartial<CustomEffectOptions, "name
 type CustomEffectDuration = DurationData & {
     origin?: TargetDocuments;
 };
-export interface EffectsPanelViewData {
+interface EffectsPanelViewData {
     afflictions: EffectViewData[];
     conditions: EffectViewData[];
     effects: EffectViewData[];
@@ -29,9 +29,10 @@ export interface EffectsPanelViewData {
         isGM: boolean;
     };
 }
-export interface EffectViewData {
+interface EffectViewData {
     effect: AbstractEffectPF2e;
     description: string;
     remaining: string | null;
 }
-export {};
+export { createCustomCondition, createCustomEffect };
+export type { CustomConditionOptions, CustomEffectOptions, EffectsPanelViewData, EffectViewData };

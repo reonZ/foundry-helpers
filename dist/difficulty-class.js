@@ -65,10 +65,10 @@ function rarityToDCAdjustment(rarity = "common") {
 function adjustDC(dc, adjustment = "normal") {
     return dc + (dcAdjustments.get(adjustment) ?? 0);
 }
-export function adjustDCByRarity(dc, rarity = "common") {
+function adjustDCByRarity(dc, rarity = "common") {
     return adjustDC(dc, rarityToDCAdjustment(rarity));
 }
-export function calculateDC(level, { pwol, rarity = "common" } = {}) {
+function calculateDC(level, { pwol, rarity = "common" } = {}) {
     pwol ??= game.pf2e.settings.variants.pwol.enabled;
     // assume level 0 if garbage comes in. We cast level to number because the backing data may actually have it
     // stored as a string, which we can't catch at compile time
@@ -82,7 +82,7 @@ export function calculateDC(level, { pwol, rarity = "common" } = {}) {
         return adjustDCByRarity(dc, rarity);
     }
 }
-export function calculateSimpleDC(rank, { pwol = false } = {}) {
+function calculateSimpleDC(rank, { pwol = false } = {}) {
     if (pwol) {
         return simpleDCsWithoutLevel.get(rank) ?? 10;
     }
@@ -90,6 +90,7 @@ export function calculateSimpleDC(rank, { pwol = false } = {}) {
         return simpleDCs.get(rank) ?? 10;
     }
 }
-export function calculateSpellDC(spellLevel, { pwol = false } = {}) {
+function calculateSpellDC(spellLevel, { pwol = false } = {}) {
     return calculateDC(spellLevel * 2 - 1, { pwol });
 }
+export { adjustDCByRarity, calculateDC, calculateSimpleDC, calculateSpellDC };

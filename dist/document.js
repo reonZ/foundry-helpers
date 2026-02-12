@@ -1,18 +1,18 @@
 import { MODULE, R } from ".";
-export function getInMemory(obj, ...path) {
+function getInMemory(obj, ...path) {
     return foundry.utils.getProperty(obj, `modules.${MODULE.id}.${path.join(".")}`);
 }
-export function setInMemory(obj, ...args) {
+function setInMemory(obj, ...args) {
     const value = args.pop();
     return foundry.utils.setProperty(obj, `modules.${MODULE.id}.${args.join(".")}`, value);
 }
-export function deleteInMemory(obj, ...path) {
+function deleteInMemory(obj, ...path) {
     return foundry.utils.deleteProperty(obj, `modules.${MODULE.id}.${path.join(".")}`);
 }
 /**
  * https://github.com/foundryvtt/pf2e/blob/89892b6fafec1456a0358de8c6d7b102e3fe2da2/src/module/actor/item-transfer.ts#L117
  */
-export function getPreferredName(document) {
+function getPreferredName(document) {
     if ("items" in document) {
         // Use a special moniker for party actors
         if (document.isOfType("party"))
@@ -31,11 +31,11 @@ export function getPreferredName(document) {
     // User with no assigned character (should never happen)
     return document.name;
 }
-export function isScriptMacro(doc) {
+function isScriptMacro(doc) {
     return doc instanceof Macro && doc.type === "script";
 }
 // It also auto converts Token into TokenDocument directly in the provided obj
-export function isValidTargetDocuments(target) {
+function isValidTargetDocuments(target) {
     if (!R.isPlainObject(target))
         return false;
     if (!(target.actor instanceof Actor))
@@ -43,3 +43,4 @@ export function isValidTargetDocuments(target) {
     target.token = target.token instanceof foundry.canvas.placeables.Token ? target.token.document : target.token;
     return !target.token || target.token instanceof TokenDocument;
 }
+export { deleteInMemory, getInMemory, getPreferredName, isScriptMacro, isValidTargetDocuments, setInMemory };

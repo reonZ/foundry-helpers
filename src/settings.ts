@@ -1,25 +1,21 @@
 import { SettingSubmenuConfig } from "foundry-pf2e/foundry/client/_module.mjs";
-import { createHTMLElement, htmlClosest, htmlQuery, localize, MODULE, R, userIsGM } from ".";
+import { createHTMLElement, htmlClosest, htmlQuery, localize, MODULE, R, sharedLocalize, userIsGM } from ".";
 
-export function sharedLocalize(key: CollapseOf<LEVIKTIMES>): string {
-    return game.i18n.localize(`LEVIKTIMES.${key}`);
-}
-
-export function settingPath(...path: string[]): string {
+function settingPath(...path: string[]): string {
     return MODULE.path("settings", ...path);
 }
 
-export function getSetting<T = boolean>(key: string): T;
-export function getSetting(key: string) {
+function getSetting<T = boolean>(key: string): T;
+function getSetting(key: string) {
     return game.settings.get(MODULE.id, key);
 }
 
-export function setSetting<TSetting>(key: string, value: TSetting): Promise<TSetting>;
-export function setSetting(key: string, value: any) {
+function setSetting<TSetting>(key: string, value: TSetting): Promise<TSetting>;
+function setSetting(key: string, value: any) {
     return game.settings.set(MODULE.id, key, value);
 }
 
-export function registerSetting(key: string, options: RegisterSettingOptions) {
+function registerSetting(key: string, options: RegisterSettingOptions) {
     const isGM = userIsGM();
     if ((options.gmOnly && !isGM) || (options.playerOnly && isGM)) return;
 
@@ -42,7 +38,7 @@ export function registerSetting(key: string, options: RegisterSettingOptions) {
     game.settings.register(MODULE.id, key, options as SettingRegistration);
 }
 
-export function registerSettingMenu(key: string, options: RegisterSettingMenuOptions) {
+function registerSettingMenu(key: string, options: RegisterSettingMenuOptions) {
     options.name ??= settingPath("menus", key, "name");
     options.label ??= settingPath("menus", key, "label");
     options.hint ??= settingPath("menus", key, "hint");
@@ -51,7 +47,7 @@ export function registerSettingMenu(key: string, options: RegisterSettingMenuOpt
     game.settings.registerMenu(MODULE.id, key, options as SettingSubmenuConfig);
 }
 
-export function registerModuleSettings(settings: ModuleSettingsRegistration) {
+function registerModuleSettings(settings: ModuleSettingsRegistration) {
     for (const [group, entries] of R.entries(settings)) {
         for (const setting of entries) {
             setting.key = group ? `${group}.${setting.key}` : setting.key;
@@ -136,13 +132,13 @@ function onRenderSettingsConfig(
     }
 }
 
-export type ModuleSettingsRegistration = Record<string, ReadonlyArray<RegisterSettingOptions & { key: string }>>;
+type ModuleSettingsRegistration = Record<string, ReadonlyArray<RegisterSettingOptions & { key: string }>>;
 
-export type SettingRegistration = Parameters<typeof game.settings.register>[2];
+type SettingRegistration = Parameters<typeof game.settings.register>[2];
 
-export type RegisterSettingMenuOptions = PartialExcept<SettingSubmenuConfig, "type" | "restricted">;
+type RegisterSettingMenuOptions = PartialExcept<SettingSubmenuConfig, "type" | "restricted">;
 
-export type RegisterSettingOptions = Omit<SettingRegistration, "name" | "scope" | "onChange" | "choices" | "range"> & {
+type RegisterSettingOptions = Omit<SettingRegistration, "name" | "scope" | "onChange" | "choices" | "range"> & {
     broadcast?: boolean;
     choices?: Record<string, string> | string[] | ReadonlyArray<string>;
     gmOnly?: boolean;
@@ -153,7 +149,7 @@ export type RegisterSettingOptions = Omit<SettingRegistration, "name" | "scope" 
     scope: "world" | "user";
 };
 
-export type RenderSettingsConfigOptions = {
+type RenderSettingsConfigOptions = {
     categories: Record<string, RenderSettingsConfigCategory>;
 };
 
@@ -165,3 +161,13 @@ type RenderSettingsConfigCategory = {
 type RenderSettingsConfigCategoryEntry = {
     label: string;
 } & ({ menu: true; key: string } | { menu: false; field: { name: string } });
+
+export { getSetting, registerModuleSettings, registerSetting, registerSettingMenu, setSetting, settingPath };
+export type {
+    ModuleSettingsRegistration,
+    RegisterSettingMenuOptions,
+    RegisterSettingOptions,
+    RenderSettingsConfigOptions,
+    SettingRegistration,
+    SettingSubmenuConfig,
+};

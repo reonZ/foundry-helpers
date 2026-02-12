@@ -1,6 +1,5 @@
-import { ClientDocument } from "foundry-pf2e/foundry/client/documents/abstract/_module.mjs";
-import { enrichHTML, R, SYSTEM } from ".";
 import { ChatMessagePF2e } from "foundry-pf2e";
+import { ClientDocument, enrichHTML, R, SYSTEM } from ".";
 
 export function createChatLink(
     docOrUuid: ClientDocument | string,

@@ -1,6 +1,6 @@
 import { MeasuredTemplateDocumentPF2e, MeasuredTemplatePF2e, TokenPF2e } from "foundry-pf2e";
 
-export function getTemplateTokens(
+function getTemplateTokens(
     measuredTemplate: MeasuredTemplateDocumentPF2e | MeasuredTemplatePF2e,
     { collisionOrigin, collisionType = "move" }: { collisionOrigin?: PIXI.Point; collisionType?: "move" } = {},
 ) {
@@ -61,3 +61,5 @@ export function getTemplateTokens(
 
     return containedTokens;
 }
+
+export { getTemplateTokens };

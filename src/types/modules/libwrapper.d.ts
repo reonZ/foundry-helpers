@@ -6,7 +6,12 @@ declare global {
 
         type RegisterCallback = (...args: any[]) => any;
 
-        function register(namespace: string, path: string, fn: RegisterCallback, type?: RegisterType): number;
+        function register(
+            namespace: string,
+            path: string,
+            fn: RegisterCallback,
+            type?: RegisterType
+        ): number;
 
         function unregister(namespace: string, target: number): void;
     }

@@ -1,63 +1,31 @@
 import { MODULE, R } from ".";
-class Localize extends Function {
-    constructor(...subkeys) {
-        super();
-        this.subkeys = subkeys;
-        const self = this;
-        function localize(...args) {
-            const { data, path } = self.getLocalizeData(...args);
-            return self.localizeOrFormat(path, data);
-        }
-        Object.assign(localize, this);
-        Object.setPrototypeOf(localize, Object.getPrototypeOf(this));
-        return localize;
-    }
-    path(...path) {
-        return MODULE.path(...this.subkeys, ...path);
-    }
-    getLocalizeData(...args) {
-        const data = R.isObjectType(args.at(-1)) ? args.pop() : undefined;
-        const path = this.path(...args);
-        return { path, data };
-    }
-    i18n(...subkeys) {
-        const self = this;
-        function i18n(...args) {
-            return self(...subkeys, ...args);
-        }
-        Object.defineProperties(i18n, {
-            tooltip: {
-                value: (...args) => {
-                    const path = args.slice(0, -1);
-                    const tooltip = i18n(...subkeys, ...path);
-                    return `data-tooltip="${tooltip}"`;
-                },
-                enumerable: false,
-                configurable: false,
-            },
-            root: {
-                value: (...args) => {
-                    const data = R.isObjectType(args.at(-1)) ? args.pop() : undefined;
-                    const path = MODULE.path(...subkeys, ...args);
-                    return self.localizeOrFormat(path, data);
-                },
-                enumerable: false,
-                configurable: false,
-            },
-        });
-        return i18n;
-    }
-    ifExist(...args) {
-        const { data, path } = this.getLocalizeData(...args);
-        if (game.i18n.has(path, true)) {
-            return this.localizeOrFormat(path, data);
-        }
-    }
-    sub(...subkeys) {
-        return new Localize(...this.subkeys, ...subkeys);
-    }
-    localizeOrFormat(path, data) {
-        return typeof data === "object" ? game.i18n.format(path, data) : game.i18n.localize(path);
+function foundryLocalizeIfExist(key) {
+    if (game.i18n.has(key, true)) {
+        return game.i18n.localize(key);
     }
 }
-export const localize = new Localize();
+function getLocalizeData(...args) {
+    const data = R.isObjectType(args.at(-1)) ? args.pop() : undefined;
+    const path = localizePath(...args);
+    return { path, data };
+}
+function localizeOrFormat(path, data) {
+    return typeof data === "object" ? game.i18n.format(path, data) : game.i18n.localize(path);
+}
+function localize(...args) {
+    const { data, path } = getLocalizeData(...args);
+    return localizeOrFormat(path, data);
+}
+function sharedLocalize(key) {
+    return game.i18n.localize(`LEVIKTIMES.${key}`);
+}
+function localizeIfExist(...args) {
+    const { data, path } = getLocalizeData(...args);
+    if (game.i18n.has(path, true)) {
+        return localizeOrFormat(path, data);
+    }
+}
+function localizePath(...path) {
+    return MODULE.path(...path);
+}
+export { foundryLocalizeIfExist, localize, localizeIfExist, localizePath, sharedLocalize };

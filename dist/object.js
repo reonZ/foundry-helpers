@@ -1,5 +1,5 @@
 import { R } from ".";
-export class MapOfArrays extends Map {
+class MapOfArrays extends Map {
     constructor(entries) {
         if (entries && !(Symbol.iterator in entries)) {
             super(Object.entries(entries));
@@ -48,7 +48,7 @@ export class MapOfArrays extends Map {
         return this.toObject();
     }
 }
-export function isInstanceOf(obj, cls) {
+function isInstanceOf(obj, cls) {
     if (typeof obj !== "object" || obj === null)
         return false;
     let cursor = Reflect.getPrototypeOf(obj);
@@ -59,3 +59,4 @@ export function isInstanceOf(obj, cls) {
     }
     return false;
 }
+export { MapOfArrays, isInstanceOf };

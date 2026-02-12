@@ -1,39 +1,39 @@
 import { R } from ".";
 
-export function htmlQuery<K extends keyof HTMLElementTagNameMap>(
+function htmlQuery<K extends keyof HTMLElementTagNameMap>(
     parent: MaybeHTML,
     selectors: K,
 ): HTMLElementTagNameMap[K] | null;
-export function htmlQuery<E extends HTMLElement = HTMLElement>(parent: MaybeHTML, selectors: string): E | null;
-export function htmlQuery(parent: MaybeHTML, selectors: string): HTMLElement | null;
-export function htmlQuery(parent: MaybeHTML, selectors: string): HTMLElement | null {
+function htmlQuery<E extends HTMLElement = HTMLElement>(parent: MaybeHTML, selectors: string): E | null;
+function htmlQuery(parent: MaybeHTML, selectors: string): HTMLElement | null;
+function htmlQuery(parent: MaybeHTML, selectors: string): HTMLElement | null {
     if (!(parent instanceof Element)) return null;
     return parent.querySelector<HTMLElement>(selectors);
 }
 
-export function htmlQueryAll<K extends keyof HTMLElementTagNameMap>(
+function htmlQueryAll<K extends keyof HTMLElementTagNameMap>(
     parent: MaybeHTML,
     selectors: K,
 ): HTMLElementTagNameMap[K][];
-export function htmlQueryAll<E extends HTMLElement = HTMLElement>(parent: MaybeHTML, selectors: string): E[];
-export function htmlQueryAll(parent: MaybeHTML, selectors: string): HTMLElement[];
-export function htmlQueryAll(parent: MaybeHTML, selectors: string): HTMLElement[] {
+function htmlQueryAll<E extends HTMLElement = HTMLElement>(parent: MaybeHTML, selectors: string): E[];
+function htmlQueryAll(parent: MaybeHTML, selectors: string): HTMLElement[];
+function htmlQueryAll(parent: MaybeHTML, selectors: string): HTMLElement[] {
     if (!(parent instanceof Element || parent instanceof Document)) return [];
     return Array.from(parent.querySelectorAll<HTMLElement>(selectors));
 }
 
-export function htmlClosest<K extends keyof HTMLElementTagNameMap>(
+function htmlClosest<K extends keyof HTMLElementTagNameMap>(
     child: MaybeHTML,
     selectors: K,
 ): HTMLElementTagNameMap[K] | null;
-export function htmlClosest(child: MaybeHTML, selectors: string): HTMLElement | null;
-export function htmlClosest<E extends HTMLElement = HTMLElement>(child: MaybeHTML, selectors: string): E | null;
-export function htmlClosest(child: MaybeHTML, selectors: string): HTMLElement | null {
+function htmlClosest(child: MaybeHTML, selectors: string): HTMLElement | null;
+function htmlClosest<E extends HTMLElement = HTMLElement>(child: MaybeHTML, selectors: string): E | null;
+function htmlClosest(child: MaybeHTML, selectors: string): HTMLElement | null {
     if (!(child instanceof Element)) return null;
     return child.closest<HTMLElement>(selectors);
 }
 
-export function createHTMLElement<K extends keyof HTMLElementTagNameMap>(
+function createHTMLElement<K extends keyof HTMLElementTagNameMap>(
     nodeName: K,
     { classes = [], dataset = {}, content, id, style }: CreateHTMLElementOptions = {},
 ): HTMLElementTagNameMap[K] {
@@ -71,11 +71,11 @@ export function createHTMLElement<K extends keyof HTMLElementTagNameMap>(
     return element;
 }
 
-export function createHTMLElementContent(options?: CreateHTMLElementOptions): HTMLElement {
+function createHTMLElementContent(options?: CreateHTMLElementOptions): HTMLElement {
     return createHTMLElement("div", options).firstChild as HTMLElement;
 }
 
-export function createButtonElement(options: CreateHTMLButtonElementOptions): HTMLButtonElement {
+function createButtonElement(options: CreateHTMLButtonElementOptions): HTMLButtonElement {
     let content = "";
 
     if (options.icon) {
@@ -89,22 +89,22 @@ export function createButtonElement(options: CreateHTMLButtonElementOptions): HT
     return createHTMLElement("button", { ...options, content });
 }
 
-export function addListener<K extends keyof HTMLElementTagNameMap, TEvent extends EventType = "click">(
+function addListener<K extends keyof HTMLElementTagNameMap, TEvent extends EventType = "click">(
     parent: MaybeHTML,
     selectors: K,
     ...args: ListenerCallbackArgs<HTMLElementTagNameMap[K], TEvent>
 ): void;
-export function addListener<TEvent extends EventType = "click">(
+function addListener<TEvent extends EventType = "click">(
     parent: MaybeHTML,
     selectors: string,
     ...args: ListenerCallbackArgs<HTMLElement, TEvent>
 ): void;
-export function addListener<E extends HTMLElement, TEvent extends EventType = "click">(
+function addListener<E extends HTMLElement, TEvent extends EventType = "click">(
     parent: MaybeHTML,
     selectors: string,
     ...args: ListenerCallbackArgs<E, TEvent>
 ): void;
-export function addListener(
+function addListener(
     parent: MaybeHTML,
     selectors: string,
     ...args: ListenerCallbackArgs<HTMLElement, EventType>
@@ -121,22 +121,22 @@ export function addListener(
     element.addEventListener(event, (e) => listener(element, e), useCapture);
 }
 
-export function addListenerAll<K extends keyof HTMLElementTagNameMap, TEvent extends EventType = "click">(
+function addListenerAll<K extends keyof HTMLElementTagNameMap, TEvent extends EventType = "click">(
     parent: MaybeHTML,
     selectors: K,
     ...args: ListenerCallbackArgs<HTMLElementTagNameMap[K], TEvent>
 ): void;
-export function addListenerAll<TEvent extends EventType = "click">(
+function addListenerAll<TEvent extends EventType = "click">(
     parent: MaybeHTML,
     selectors: string,
     ...args: ListenerCallbackArgs<HTMLElement, TEvent>
 ): void;
-export function addListenerAll<E extends HTMLElement, TEvent extends EventType = "click">(
+function addListenerAll<E extends HTMLElement, TEvent extends EventType = "click">(
     parent: MaybeHTML,
     selectors: string,
     ...args: ListenerCallbackArgs<E, TEvent>
 ): void;
-export function addListenerAll(
+function addListenerAll(
     parent: MaybeHTML,
     selectors: string,
     ...args: ListenerCallbackArgs<HTMLElement, EventType>
@@ -154,9 +154,9 @@ export function addListenerAll(
     }
 }
 
-export function createFormData<T extends Record<string, unknown>>(html: HTMLFormElement, expand?: boolean): T;
-export function createFormData<T extends Record<string, unknown>>(html: HTMLElement, expand?: boolean): T | null;
-export function createFormData<T extends Record<string, unknown>>(
+function createFormData<T extends Record<string, unknown>>(html: HTMLFormElement, expand?: boolean): T;
+function createFormData<T extends Record<string, unknown>>(html: HTMLElement, expand?: boolean): T | null;
+function createFormData<T extends Record<string, unknown>>(
     html: HTMLElement | HTMLFormElement,
     expand: boolean = false,
 ): T | null {
@@ -177,19 +177,19 @@ export function createFormData<T extends Record<string, unknown>>(
     return (expand ? (foundry.utils.expandObject(data) as Record<string, unknown>) : data) as T;
 }
 
-export function assignStyle(el: HTMLElement, style: Partial<CSSStyleDeclaration>) {
+function assignStyle(el: HTMLElement, style: Partial<CSSStyleDeclaration>) {
     Object.assign(el.style, style);
 }
 
-export function styleValue(value: number): `${number}px` {
+function styleValue(value: number): `${number}px` {
     return `${value}px`;
 }
 
-export function setStyleProperty(html: Maybe<HTMLElement>, property: string, value: number) {
+function setStyleProperty(html: Maybe<HTMLElement>, property: string, value: number) {
     html?.style.setProperty(property, styleValue(value));
 }
 
-export type CreateHTMLElementOptions = {
+type CreateHTMLElementOptions = {
     classes?: string[];
     content?: string | HTMLCollection | (Element | string)[] | Element;
     dataset?: Record<string, string | number | boolean | null | undefined>;
@@ -197,7 +197,7 @@ export type CreateHTMLElementOptions = {
     style?: Partial<CSSStyleDeclaration>;
 };
 
-export type CreateHTMLButtonElementOptions = Omit<CreateHTMLElementOptions, "id" | "content"> &
+type CreateHTMLButtonElementOptions = Omit<CreateHTMLElementOptions, "id" | "content"> &
     RequireAtLeastOne<{ icon?: string; label?: string }>;
 
 type ListenerCallbackArgs<E extends HTMLElement, TEvent extends EventType> =
@@ -210,3 +210,19 @@ type ListenerCallback<TElement extends HTMLElement, TEvent extends EventType> = 
     element: TElement,
     event: HTMLElementEventMap[TEvent],
 ) => void;
+
+export {
+    addListener,
+    addListenerAll,
+    assignStyle,
+    createButtonElement,
+    createFormData,
+    createHTMLElement,
+    createHTMLElementContent,
+    htmlClosest,
+    htmlQuery,
+    htmlQueryAll,
+    setStyleProperty,
+    styleValue,
+};
+export type { CreateHTMLButtonElementOptions, CreateHTMLElementOptions };

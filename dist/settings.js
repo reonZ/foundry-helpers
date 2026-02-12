@@ -1,17 +1,14 @@
-import { createHTMLElement, htmlClosest, htmlQuery, localize, MODULE, R, userIsGM } from ".";
-export function sharedLocalize(key) {
-    return game.i18n.localize(`LEVIKTIMES.${key}`);
-}
-export function settingPath(...path) {
+import { createHTMLElement, htmlClosest, htmlQuery, localize, MODULE, R, sharedLocalize, userIsGM } from ".";
+function settingPath(...path) {
     return MODULE.path("settings", ...path);
 }
-export function getSetting(key) {
+function getSetting(key) {
     return game.settings.get(MODULE.id, key);
 }
-export function setSetting(key, value) {
+function setSetting(key, value) {
     return game.settings.set(MODULE.id, key, value);
 }
-export function registerSetting(key, options) {
+function registerSetting(key, options) {
     const isGM = userIsGM();
     if ((options.gmOnly && !isGM) || (options.playerOnly && isGM))
         return;
@@ -31,14 +28,14 @@ export function registerSetting(key, options) {
     }
     game.settings.register(MODULE.id, key, options);
 }
-export function registerSettingMenu(key, options) {
+function registerSettingMenu(key, options) {
     options.name ??= settingPath("menus", key, "name");
     options.label ??= settingPath("menus", key, "label");
     options.hint ??= settingPath("menus", key, "hint");
     options.icon ??= "fas fa-cogs";
     game.settings.registerMenu(MODULE.id, key, options);
 }
-export function registerModuleSettings(settings) {
+function registerModuleSettings(settings) {
     for (const [group, entries] of R.entries(settings)) {
         for (const setting of entries) {
             setting.key = group ? `${group}.${setting.key}` : setting.key;
@@ -102,3 +99,4 @@ function onRenderSettingsConfig(html, options, settings) {
         group?.before(title);
     }
 }
+export { getSetting, registerModuleSettings, registerSetting, registerSettingMenu, setSetting, settingPath };
