@@ -1,4 +1,4 @@
-import { htmlQuery, localize, MODULE, R, render } from ".";
+import { createFormData, htmlQuery, localize, MODULE, R, render } from ".";
 
 export async function waitDialog<T extends Record<string, any>>({
     classes = [],
@@ -24,7 +24,7 @@ export async function waitDialog<T extends Record<string, any>>({
                 icon: yes?.icon ?? "fa-solid fa-check",
                 label: yes?.label ?? localize(i18n, "yes"),
                 default: !no?.default,
-                callback: yes?.callback ?? (async (_event, _btn, dialog) => createFormData(dialog.form, expand)),
+                callback: yes?.callback ?? (async (_event, _btn, dialog) => createFormData(dialog.element, expand)),
             },
             {
                 action: "no",
@@ -53,22 +53,27 @@ export async function waitDialog<T extends Record<string, any>>({
     return foundry.applications.api.DialogV2.wait(dialogOptions) as Promise<T | false | null>;
 }
 
-function createFormData(html: HTMLFormElement | null, expand: boolean = false): Record<string, unknown> | null {
-    const form = html instanceof HTMLFormElement ? html : htmlQuery(html, "form");
-    if (!form) return null;
+export async function confirmDialog(
+    i18n: string,
+    { classes = [], content, data = {}, no, title, yes }: CustomConfirmDialogOptions = {},
+): Promise<boolean | null> {
+    const dialogOptions: ConfirmDialogOption = {
+        classes,
+        content: content ?? localize.ifExist(i18n, "content", data) ?? (await generateDialogContent(i18n, data)),
+        no: {
+            default: !yes?.default,
+            label: no ?? localize.ifExist(i18n, "no") ?? "No",
+        },
+        window: {
+            title: generateDialogTitle(i18n, title, data),
+        },
+        yes: {
+            default: !!yes?.default,
+            label: yes?.label ?? localize.ifExist(i18n, "yes") ?? "Yes",
+        },
+    };
 
-    const formData = new foundry.applications.ux.FormDataExtended(form, { disabled: true, readonly: true });
-    const data = R.mapValues(formData.object, (value) => {
-        return typeof value === "string" ? value.trim() : value;
-    });
-
-    for (const element of form.elements) {
-        if (!(element instanceof HTMLInputElement) || element.type !== "file") continue;
-
-        data[element.name] = element.files?.[0];
-    }
-
-    return expand ? (foundry.utils.expandObject(data) as Record<string, unknown>) : data;
+    return foundry.applications.api.DialogV2.confirm(dialogOptions) as Promise<boolean | null>;
 }
 
 function generateDialogTitle(
@@ -111,8 +116,19 @@ export type CustomWaitDialogOptions = BaseDialogOptions & {
     };
 };
 
-type WaitDialogOptions = {
+type CustomConfirmDialogOptions = BaseDialogOptions & {
+    content?: string;
+    no?: string;
+    yes?: { label?: string; default?: true };
+};
+
+type WaitDialogOptions = DeepPartial<fa.api.DialogV2Configuration> & {
     rejectClose?: boolean;
     close?: fa.api.DialogV2CloseCallback;
     render?: fa.api.DialogV2RenderCallback;
-} & DeepPartial<fa.api.DialogV2Configuration>;
+};
+
+type ConfirmDialogOption = DeepPartial<fa.api.DialogV2Configuration & fa.api.DialogV2WaitOptions> & {
+    yes?: Partial<fa.api.DialogV2Button>;
+    no?: Partial<fa.api.DialogV2Button>;
+};

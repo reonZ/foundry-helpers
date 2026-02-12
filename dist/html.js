@@ -79,7 +79,7 @@ export function addListenerAll(parent, selectors, ...args) {
 export function createFormData(html, expand = false) {
     const form = html instanceof HTMLFormElement ? html : htmlQuery(html, "form");
     if (!form)
-        return {};
+        return null;
     const formData = new foundry.applications.ux.FormDataExtended(form, { disabled: true, readonly: true });
     const data = R.mapValues(formData.object, (value) => {
         return typeof value === "string" ? value.trim() : value;

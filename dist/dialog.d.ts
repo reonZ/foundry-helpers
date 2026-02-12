@@ -1,4 +1,5 @@
 export declare function waitDialog<T extends Record<string, any>>({ classes, content, data, expand, i18n, no, onRender, title, yes, }: CustomWaitDialogOptions): Promise<T | false | null>;
+export declare function confirmDialog(i18n: string, { classes, content, data, no, title, yes }?: CustomConfirmDialogOptions): Promise<boolean | null>;
 export declare function generateDialogContent(content: string, data?: Record<string, any>): Promise<string>;
 type BaseDialogOptions = {
     classes?: string[];
@@ -20,6 +21,14 @@ export type CustomWaitDialogOptions = BaseDialogOptions & {
         label?: string;
         icon?: string;
         callback?: fa.api.DialogV2ButtonCallback;
+    };
+};
+type CustomConfirmDialogOptions = BaseDialogOptions & {
+    content?: string;
+    no?: string;
+    yes?: {
+        label?: string;
+        default?: true;
     };
 };
 export {};

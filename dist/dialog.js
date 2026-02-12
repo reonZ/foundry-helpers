@@ -1,4 +1,4 @@
-import { htmlQuery, localize, MODULE, R, render } from ".";
+import { createFormData, htmlQuery, localize, MODULE, R, render } from ".";
 export async function waitDialog({ classes = [], content, data, expand, i18n, no, onRender, title, yes, }) {
     if (data) {
         data.i18n = localize.i18n(i18n);
@@ -11,7 +11,7 @@ export async function waitDialog({ classes = [], content, data, expand, i18n, no
                 icon: yes?.icon ?? "fa-solid fa-check",
                 label: yes?.label ?? localize(i18n, "yes"),
                 default: !no?.default,
-                callback: yes?.callback ?? (async (_event, _btn, dialog) => createFormData(dialog.form, expand)),
+                callback: yes?.callback ?? (async (_event, _btn, dialog) => createFormData(dialog.element, expand)),
             },
             {
                 action: "no",
@@ -37,20 +37,23 @@ export async function waitDialog({ classes = [], content, data, expand, i18n, no
     };
     return foundry.applications.api.DialogV2.wait(dialogOptions);
 }
-function createFormData(html, expand = false) {
-    const form = html instanceof HTMLFormElement ? html : htmlQuery(html, "form");
-    if (!form)
-        return null;
-    const formData = new foundry.applications.ux.FormDataExtended(form, { disabled: true, readonly: true });
-    const data = R.mapValues(formData.object, (value) => {
-        return typeof value === "string" ? value.trim() : value;
-    });
-    for (const element of form.elements) {
-        if (!(element instanceof HTMLInputElement) || element.type !== "file")
-            continue;
-        data[element.name] = element.files?.[0];
-    }
-    return expand ? foundry.utils.expandObject(data) : data;
+export async function confirmDialog(i18n, { classes = [], content, data = {}, no, title, yes } = {}) {
+    const dialogOptions = {
+        classes,
+        content: content ?? localize.ifExist(i18n, "content", data) ?? (await generateDialogContent(i18n, data)),
+        no: {
+            default: !yes?.default,
+            label: no ?? localize.ifExist(i18n, "no") ?? "No",
+        },
+        window: {
+            title: generateDialogTitle(i18n, title, data),
+        },
+        yes: {
+            default: !!yes?.default,
+            label: yes?.label ?? localize.ifExist(i18n, "yes") ?? "Yes",
+        },
+    };
+    return foundry.applications.api.DialogV2.confirm(dialogOptions);
 }
 function generateDialogTitle(i18n, title, data) {
     return R.isString(title) ? title : localize(i18n, "title", R.isObjectType(title) ? title : (data ?? {}));

@@ -143,9 +143,14 @@ export function addListenerAll(
     }
 }
 
-export function createFormData<T extends Record<string, unknown>>(html: HTMLElement, expand = false): T {
+export function createFormData<T extends Record<string, unknown>>(html: HTMLFormElement, expand?: boolean): T;
+export function createFormData<T extends Record<string, unknown>>(html: HTMLElement, expand?: boolean): T | null;
+export function createFormData<T extends Record<string, unknown>>(
+    html: HTMLElement | HTMLFormElement,
+    expand: boolean = false,
+): T | null {
     const form = html instanceof HTMLFormElement ? html : htmlQuery(html, "form");
-    if (!form) return {} as T;
+    if (!form) return null;
 
     const formData = new foundry.applications.ux.FormDataExtended(form, { disabled: true, readonly: true });
     const data = R.mapValues(formData.object, (value) => {

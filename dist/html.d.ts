@@ -13,7 +13,8 @@ export declare function addListener<E extends HTMLElement, TEvent extends EventT
 export declare function addListenerAll<K extends keyof HTMLElementTagNameMap, TEvent extends EventType = "click">(parent: MaybeHTML, selectors: K, ...args: ListenerCallbackArgs<HTMLElementTagNameMap[K], TEvent>): void;
 export declare function addListenerAll<TEvent extends EventType = "click">(parent: MaybeHTML, selectors: string, ...args: ListenerCallbackArgs<HTMLElement, TEvent>): void;
 export declare function addListenerAll<E extends HTMLElement, TEvent extends EventType = "click">(parent: MaybeHTML, selectors: string, ...args: ListenerCallbackArgs<E, TEvent>): void;
-export declare function createFormData<T extends Record<string, unknown>>(html: HTMLElement, expand?: boolean): T;
+export declare function createFormData<T extends Record<string, unknown>>(html: HTMLFormElement, expand?: boolean): T;
+export declare function createFormData<T extends Record<string, unknown>>(html: HTMLElement, expand?: boolean): T | null;
 export declare function assignStyle(el: HTMLElement, style: Partial<CSSStyleDeclaration>): void;
 export declare function styleValue(value: number): `${number}px`;
 export declare function setStyleProperty(html: Maybe<HTMLElement>, property: string, value: number): void;
