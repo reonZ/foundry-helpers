@@ -19,6 +19,68 @@ import {
     TokenPF2e,
     WeaponPF2e,
 } from "foundry-pf2e";
+import { R } from ".";
+
+export class MapOfArrays<K extends string | number, T> extends Map<K, T[]> {
+    constructor(entries?: readonly (readonly [K, T[]])[] | Iterable<readonly [K, T[]]> | Record<K, T[]> | null) {
+        if (entries && !(Symbol.iterator in entries)) {
+            super(Object.entries(entries) as [K, T[]][]);
+        } else {
+            super(entries);
+        }
+    }
+
+    add(key: K, entry: T | T[], create = true) {
+        const entries = R.isArray(entry) ? entry : [entry];
+        const arr = this.get(key, create);
+        arr?.push(...entries);
+    }
+
+    get(key: K, create: true): T[];
+    get(key: K, create?: boolean): T[] | undefined;
+    get(key: K, create = false) {
+        const exist = super.get(key);
+
+        if (exist || !create) {
+            return exist;
+        } else {
+            const arr: T[] = [];
+
+            this.set(key, arr);
+            return arr;
+        }
+    }
+
+    remove(key: K, entry: T): T | null {
+        const arr = this.get(key);
+        return arr?.findSplice((x) => x === entry) ?? null;
+    }
+
+    removeBy(key: K, fn: (entry: T) => boolean): T | null {
+        const arr = this.get(key);
+        return arr?.findSplice(fn) ?? null;
+    }
+
+    map<U>(fn: (value: T[], key: K, index: number, data: this) => U): U[] {
+        let index = 0;
+        const transformed: U[] = [];
+
+        for (const [key, value] of this.entries()) {
+            transformed.push(fn(value, key, index, this));
+            index++;
+        }
+
+        return transformed;
+    }
+
+    toObject(): Record<K, T[]> {
+        return Object.fromEntries(this) as Record<K, T[]>;
+    }
+
+    toJSON(): Record<K, T[]> {
+        return this.toObject();
+    }
+}
 
 export function isInstanceOf<T extends keyof IsInstanceOfClasses>(obj: any, cls: T): obj is IsInstanceOfClasses[T];
 export function isInstanceOf<T>(obj: any, cls: string): obj is T;

@@ -7,3 +7,6 @@ export function oppositeAlliance(alliance) {
 export function isAllyActor(actor) {
     return actor.alliance === "party" || actor.testUserPermission(game.user, "OBSERVER");
 }
+export function isMerchant(actor) {
+    return !!actor?.isOfType("loot") && actor.isMerchant;
+}
