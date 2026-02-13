@@ -16,6 +16,11 @@ declare function addListener<E extends HTMLElement, TEvent extends EventType = "
 declare function addListenerAll<K extends keyof HTMLElementTagNameMap, TEvent extends EventType = "click">(parent: MaybeHTML, selectors: K, ...args: ListenerCallbackArgs<HTMLElementTagNameMap[K], TEvent>): void;
 declare function addListenerAll<TEvent extends EventType = "click">(parent: MaybeHTML, selectors: string, ...args: ListenerCallbackArgs<HTMLElement, TEvent>): void;
 declare function addListenerAll<E extends HTMLElement, TEvent extends EventType = "click">(parent: MaybeHTML, selectors: string, ...args: ListenerCallbackArgs<E, TEvent>): void;
+/**
+ * repurposed version of
+ * https://github.com/foundryvtt/pf2e/blob/c0cfa1f4c266d7d843966b50a9fd1a34d42b2051/src/module/actor/sheet/item-summary-renderer.ts#L25
+ */
+declare function toggleSummary(summaryElem: HTMLElement): Promise<void>;
 declare function createFormData<T extends Record<string, unknown>>(html: HTMLFormElement, expand?: boolean): T;
 declare function createFormData<T extends Record<string, unknown>>(html: HTMLElement, expand?: boolean): T | null;
 declare function assignStyle(el: HTMLElement, style: Partial<CSSStyleDeclaration>): void;
@@ -34,5 +39,5 @@ type CreateHTMLButtonElementOptions = Omit<CreateHTMLElementOptions, "id" | "con
 }>;
 type ListenerCallbackArgs<E extends HTMLElement, TEvent extends EventType> = [TEvent, ListenerCallback<E, TEvent>, boolean] | [TEvent, ListenerCallback<E, TEvent>] | [ListenerCallback<E, TEvent>, boolean] | [ListenerCallback<E, TEvent>];
 type ListenerCallback<TElement extends HTMLElement, TEvent extends EventType> = (element: TElement, event: HTMLElementEventMap[TEvent]) => void;
-export { addListener, addListenerAll, assignStyle, createButtonElement, createFormData, createHTMLElement, createHTMLElementContent, htmlClosest, htmlQuery, htmlQueryAll, setStyleProperty, styleValue, };
+export { addListener, addListenerAll, assignStyle, createButtonElement, createFormData, createHTMLElement, createHTMLElementContent, htmlClosest, htmlQuery, htmlQueryAll, setStyleProperty, styleValue, toggleSummary, };
 export type { CreateHTMLButtonElementOptions, CreateHTMLElementOptions };

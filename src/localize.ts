@@ -1,4 +1,4 @@
-import { HelperDelegate } from "handlebars";
+import { HelperDelegate, HelperOptions } from "handlebars";
 import { MODULE, R } from ".";
 
 class Localize extends Function {
@@ -76,15 +76,21 @@ class Localize extends Function {
     i18n(...subkeys: string[]) {
         const self = this;
 
-        function i18n(...args: LocalizeArgs): string {
-            return self(...subkeys, ...args);
+        const getTemplateData = (...args: Parameters<HelperDelegate>): { path: string; data?: LocalizeData } => {
+            const data = R.isObjectType(args.at(-1)) ? (args.pop() as HelperOptions) : undefined;
+            const path = this.path(...subkeys, ...(args as string[]));
+            return { path, data: data?.hash };
+        };
+
+        function i18n(...args: Parameters<HelperDelegate>): string {
+            const { path, data } = getTemplateData(...args);
+            return self.localizeOrFormat(path, data);
         }
 
         Object.defineProperties(i18n, {
             tooltip: {
                 value: (...args: Parameters<HelperDelegate>): string => {
-                    const path = args.slice(0, -1);
-                    const tooltip = i18n(...subkeys, ...path);
+                    const tooltip = i18n(...args);
                     return `data-tooltip="${tooltip}"`;
                 },
                 enumerable: false,
@@ -92,9 +98,9 @@ class Localize extends Function {
             },
             root: {
                 value: (...args: Parameters<HelperDelegate>) => {
-                    const data = R.isObjectType(args.at(-1)) ? (args.pop() as LocalizeData) : undefined;
-                    const path = MODULE.path(...subkeys, ...(args as string[]));
-                    return self.localizeOrFormat(path, data);
+                    const data = R.isObjectType(args.at(-1)) ? (args.pop() as HelperOptions) : undefined;
+                    const path = MODULE.path(...(args as string[]));
+                    return self.localizeOrFormat(path, data?.hash);
                 },
                 enumerable: false,
                 configurable: false,

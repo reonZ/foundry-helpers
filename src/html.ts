@@ -154,6 +154,35 @@ function addListenerAll(
     }
 }
 
+/**
+ * repurposed version of
+ * https://github.com/foundryvtt/pf2e/blob/c0cfa1f4c266d7d843966b50a9fd1a34d42b2051/src/module/actor/sheet/item-summary-renderer.ts#L25
+ */
+async function toggleSummary(summaryElem: HTMLElement) {
+    const duration = 0.4;
+
+    if (summaryElem.hidden) {
+        await gsap.fromTo(
+            summaryElem,
+            { height: 0, opacity: 0, hidden: false },
+            { height: "auto", opacity: 1, duration },
+        );
+    } else {
+        await gsap.to(summaryElem, {
+            height: 0,
+            duration,
+            opacity: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
+            margin: 0,
+            clearProps: "all",
+            onComplete: () => {
+                summaryElem.hidden = true;
+            },
+        });
+    }
+}
+
 function createFormData<T extends Record<string, unknown>>(html: HTMLFormElement, expand?: boolean): T;
 function createFormData<T extends Record<string, unknown>>(html: HTMLElement, expand?: boolean): T | null;
 function createFormData<T extends Record<string, unknown>>(
@@ -224,5 +253,6 @@ export {
     htmlQueryAll,
     setStyleProperty,
     styleValue,
+    toggleSummary,
 };
 export type { CreateHTMLButtonElementOptions, CreateHTMLElementOptions };

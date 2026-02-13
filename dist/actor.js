@@ -13,4 +13,14 @@ function isAllyActor(actor) {
 function isMerchant(actor) {
     return !!actor?.isOfType("loot") && actor.isMerchant;
 }
-export { actorsRespectAlliance, belongToPartyAlliance, isAllyActor, isMerchant, oppositeAlliance };
+function getMythicOrHeroPoints(actor) {
+    const slug = actor.system.resources.mythicPoints.max ? "mythic-points" : "hero-points";
+    const resource = actor.getResource(slug);
+    return {
+        slug,
+        name: slug === "hero-points" ? "heroPoints" : "mythicPoints",
+        max: resource.max,
+        value: resource.value,
+    };
+}
+export { actorsRespectAlliance, belongToPartyAlliance, getMythicOrHeroPoints, isAllyActor, isMerchant, oppositeAlliance, };

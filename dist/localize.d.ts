@@ -1,3 +1,4 @@
+import { HelperOptions } from "handlebars";
 declare class Localize extends Function {
     subkeys: string[];
     constructor(...subkeys: string[]);
@@ -15,7 +16,7 @@ declare class Localize extends Function {
     error(...args: NotificationArgs): fa.ui.Notification;
     sub(...subkeys: string[]): Localize;
     shared(key: CollapseOf<LEVIKTIMES>): string;
-    i18n(...subkeys: string[]): (...args: LocalizeArgs) => string;
+    i18n(...subkeys: string[]): (context?: any, arg1?: any, arg2?: any, arg3?: any, arg4?: any, arg5?: any, options?: HelperOptions | undefined) => string;
 }
 interface Localize {
     (...args: LocalizeArgs): string;

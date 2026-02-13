@@ -1,4 +1,4 @@
-import { ActorAlliance, ActorPF2e, LootPF2e } from "foundry-pf2e";
+import { ActorAlliance, ActorPF2e, CharacterPF2e, LootPF2e, ValueAndMax } from "foundry-pf2e";
 import { ActorSheetOptions } from "foundry-pf2e/foundry/client/appv1/sheets/actor-sheet.mjs";
 import { ActorUUID } from "foundry-pf2e/foundry/common/documents/_module.mjs";
 
@@ -22,7 +22,31 @@ function isMerchant(actor: Maybe<ActorPF2e>): actor is LootPF2e {
     return !!actor?.isOfType("loot") && actor.isMerchant;
 }
 
+function getMythicOrHeroPoints(actor: CharacterPF2e): MythicOrHeroPoints {
+    const slug = actor.system.resources.mythicPoints.max ? "mythic-points" : "hero-points";
+    const resource = actor.getResource(slug);
+
+    return {
+        slug,
+        name: slug === "hero-points" ? "heroPoints" : "mythicPoints",
+        max: resource.max,
+        value: resource.value,
+    };
+}
+
 type ActorTargetAlliance = "all" | "allies" | "enemies";
 
-export { actorsRespectAlliance, belongToPartyAlliance, isAllyActor, isMerchant, oppositeAlliance };
-export type { ActorSheetOptions, ActorTargetAlliance, ActorUUID };
+type MythicOrHeroPoints = ValueAndMax & {
+    name: "mythicPoints" | "heroPoints";
+    slug: "mythic-points" | "hero-points";
+};
+
+export {
+    actorsRespectAlliance,
+    belongToPartyAlliance,
+    getMythicOrHeroPoints,
+    isAllyActor,
+    isMerchant,
+    oppositeAlliance,
+};
+export type { ActorSheetOptions, ActorTargetAlliance, ActorUUID, MythicOrHeroPoints };

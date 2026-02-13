@@ -1,5 +1,5 @@
 import { createFormData, htmlQuery, localize, MODULE, R, render } from ".";
-async function waitDialog({ classes = [], content, data, expand, i18n, no, onRender, title, yes, }) {
+async function waitDialog({ classes = [], content, data, expand, i18n, no, onRender, position, title, yes, }) {
     if (data) {
         data.i18n = localize.i18n(i18n);
     }
@@ -23,6 +23,7 @@ async function waitDialog({ classes = [], content, data, expand, i18n, no, onRen
         ],
         classes,
         content: await generateDialogContent(content, data),
+        position,
         render: (event, dialog) => {
             requestAnimationFrame(() => {
                 htmlQuery(dialog.element, `input[type="text"]`)?.focus();

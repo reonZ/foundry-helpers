@@ -8,6 +8,7 @@ async function waitDialog<T extends Record<string, any>>({
     i18n,
     no,
     onRender,
+    position,
     title,
     yes,
 }: CustomWaitDialogOptions): Promise<T | false | null> {
@@ -36,6 +37,7 @@ async function waitDialog<T extends Record<string, any>>({
         ],
         classes,
         content: await generateDialogContent(content, data),
+        position,
         render: (event, dialog) => {
             requestAnimationFrame(() => {
                 htmlQuery(dialog.element, `input[type="text"]`)?.focus();
@@ -109,6 +111,7 @@ type CustomWaitDialogOptions = BaseDialogOptions & {
         callback?: fa.api.DialogV2ButtonCallback;
     };
     onRender?: fa.api.DialogV2RenderCallback;
+    position?: Partial<fa.ApplicationPosition>;
     yes?: {
         label?: string;
         icon?: string;

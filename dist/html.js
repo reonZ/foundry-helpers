@@ -81,6 +81,30 @@ function addListenerAll(parent, selectors, ...args) {
         element.addEventListener(event, (e) => listener(element, e), useCapture);
     }
 }
+/**
+ * repurposed version of
+ * https://github.com/foundryvtt/pf2e/blob/c0cfa1f4c266d7d843966b50a9fd1a34d42b2051/src/module/actor/sheet/item-summary-renderer.ts#L25
+ */
+async function toggleSummary(summaryElem) {
+    const duration = 0.4;
+    if (summaryElem.hidden) {
+        await gsap.fromTo(summaryElem, { height: 0, opacity: 0, hidden: false }, { height: "auto", opacity: 1, duration });
+    }
+    else {
+        await gsap.to(summaryElem, {
+            height: 0,
+            duration,
+            opacity: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
+            margin: 0,
+            clearProps: "all",
+            onComplete: () => {
+                summaryElem.hidden = true;
+            },
+        });
+    }
+}
 function createFormData(html, expand = false) {
     const form = html instanceof HTMLFormElement ? html : htmlQuery(html, "form");
     if (!form)
@@ -105,4 +129,4 @@ function styleValue(value) {
 function setStyleProperty(html, property, value) {
     html?.style.setProperty(property, styleValue(value));
 }
-export { addListener, addListenerAll, assignStyle, createButtonElement, createFormData, createHTMLElement, createHTMLElementContent, htmlClosest, htmlQuery, htmlQueryAll, setStyleProperty, styleValue, };
+export { addListener, addListenerAll, assignStyle, createButtonElement, createFormData, createHTMLElement, createHTMLElementContent, htmlClosest, htmlQuery, htmlQueryAll, setStyleProperty, styleValue, toggleSummary, };

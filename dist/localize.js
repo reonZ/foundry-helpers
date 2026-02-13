@@ -54,14 +54,19 @@ class Localize extends Function {
     }
     i18n(...subkeys) {
         const self = this;
+        const getTemplateData = (...args) => {
+            const data = R.isObjectType(args.at(-1)) ? args.pop() : undefined;
+            const path = this.path(...subkeys, ...args);
+            return { path, data: data?.hash };
+        };
         function i18n(...args) {
-            return self(...subkeys, ...args);
+            const { path, data } = getTemplateData(...args);
+            return self.localizeOrFormat(path, data);
         }
         Object.defineProperties(i18n, {
             tooltip: {
                 value: (...args) => {
-                    const path = args.slice(0, -1);
-                    const tooltip = i18n(...subkeys, ...path);
+                    const tooltip = i18n(...args);
                     return `data-tooltip="${tooltip}"`;
                 },
                 enumerable: false,
@@ -70,8 +75,8 @@ class Localize extends Function {
             root: {
                 value: (...args) => {
                     const data = R.isObjectType(args.at(-1)) ? args.pop() : undefined;
-                    const path = MODULE.path(...subkeys, ...args);
-                    return self.localizeOrFormat(path, data);
+                    const path = MODULE.path(...args);
+                    return self.localizeOrFormat(path, data?.hash);
                 },
                 enumerable: false,
                 configurable: false,

@@ -136,8 +136,8 @@ declare global {
                 description: string;
             };
 
-            type HeroActionsTemplateData<T extends HeroAction[] = HeroAction[]> = {
-                actions: T;
+            type HeroActionsTemplateData = {
+                actions: HeroAction[];
                 usesCount: boolean;
                 mustDiscard: boolean;
                 mustDraw: boolean;
