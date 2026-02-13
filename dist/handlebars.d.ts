@@ -1,8 +1,8 @@
-import { HelperDelegate } from "handlebars";
+import { TemplateLocalize } from ".";
 declare function render(...args: HandlebarsRenderArgs): Promise<string>;
 type RenderData = {
     [k: string]: any;
-    i18n: (...args: Parameters<HelperDelegate>) => string;
+    i18n: TemplateLocalize;
     isSF2e: boolean;
 };
 type HandlebarsRenderData = Omit<RenderData, "i18n" | "isSF2e"> & {

@@ -1,4 +1,4 @@
-import { HelperOptions } from "handlebars";
+import { HelperDelegate } from "handlebars";
 declare class Localize extends Function {
     subkeys: string[];
     constructor(...subkeys: string[]);
@@ -16,14 +16,20 @@ declare class Localize extends Function {
     error(...args: NotificationArgs): fa.ui.Notification;
     sub(...subkeys: string[]): Localize;
     shared(key: CollapseOf<LEVIKTIMES>): string;
-    i18n(...subkeys: string[]): (context?: any, arg1?: any, arg2?: any, arg3?: any, arg4?: any, arg5?: any, options?: HelperOptions | undefined) => string;
+    i18n(...subkeys: string[]): TemplateLocalize;
 }
 interface Localize {
     (...args: LocalizeArgs): string;
+}
+interface TemplateLocalize {
+    (...args: TemplateLocalizeArgs): string;
+    root(...args: TemplateLocalizeArgs): string;
+    tooltip(...args: TemplateLocalizeArgs): string;
 }
 declare const localize: Localize;
 type LocalizeData = Record<string, any>;
 type LocalizeArgs = string[] | [...string[], string | LocalizeData];
 type NotificationArgs = LocalizeArgs | [...LocalizeArgs, string | LocalizeData | boolean];
+type TemplateLocalizeArgs = Parameters<HelperDelegate>;
 export { localize };
-export type { Localize, LocalizeArgs, LocalizeData, NotificationArgs };
+export type { Localize, LocalizeArgs, LocalizeData, NotificationArgs, TemplateLocalizeArgs, TemplateLocalize };
