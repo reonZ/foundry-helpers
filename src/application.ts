@@ -2,6 +2,7 @@ import { ActorType, ItemType } from "foundry-pf2e";
 import { ContextMenuEntry } from "foundry-pf2e/foundry/client/applications/ux/context-menu.mjs";
 import { EnrichmentOptions } from "foundry-pf2e/foundry/client/applications/ux/text-editor.mjs";
 import { isInstanceOf, R } from ".";
+import { ApplicationV1HeaderButton } from "foundry-pf2e/foundry/client/appv1/api/_module.mjs";
 
 function renderApplications(type: string | string[]) {
     const types = Array.isArray(type) ? type : [type];
@@ -34,4 +35,4 @@ type ActorSheetType = "ActorSheetPF2e" | `${Capitalize<ActorType>}SheetPF2e`;
 type ItemSheetType = "ItemSheetPF2e" | "AbilitySheetPF2e" | `${Capitalize<Exclude<ItemType, "action">>}SheetPF2e`;
 
 export { enrichHTML, renderActorSheets, renderCharacterSheets, renderItemSheets };
-export type { ContextMenuEntry, EnrichmentOptions };
+export type { ApplicationV1HeaderButton, ContextMenuEntry, EnrichmentOptions };
