@@ -1,6 +1,4 @@
-import { ActorAlliance, ActorPF2e, CharacterPF2e, LootPF2e, ValueAndMax } from "foundry-pf2e";
-import { ActorSheetOptions } from "foundry-pf2e/foundry/client/appv1/sheets/actor-sheet.mjs";
-import { ActorUUID } from "foundry-pf2e/foundry/common/documents/_module.mjs";
+import { ActorAlliance, ActorPF2e, CharacterPF2e, LootPF2e, ValueAndMax } from "pf2e-types";
 declare function actorsRespectAlliance(origin: ActorPF2e, target: ActorPF2e, alliance?: ActorTargetAlliance): boolean;
 declare function belongToPartyAlliance(actor: ActorPF2e): boolean;
 declare function oppositeAlliance(alliance: ActorAlliance): "party" | "opposition" | null;
@@ -13,4 +11,4 @@ type MythicOrHeroPoints = ValueAndMax & {
     slug: "mythic-points" | "hero-points";
 };
 export { actorsRespectAlliance, belongToPartyAlliance, getMythicOrHeroPoints, isAllyActor, isMerchant, oppositeAlliance, };
-export type { ActorSheetOptions, ActorTargetAlliance, ActorUUID, MythicOrHeroPoints };
+export type { ActorTargetAlliance, MythicOrHeroPoints };

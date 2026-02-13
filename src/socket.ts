@@ -1,4 +1,4 @@
-import { ActorPF2e, TokenDocumentPF2e } from "foundry-pf2e";
+import { ActorPF2e, TokenDocumentPF2e } from "pf2e-types";
 import { assignStyle, isValidTargetDocuments, localize, MODULE, R, userIsGM } from ".";
 
 const EMITING_STYLE: Partial<CSSStyleDeclaration> = {

@@ -1,6 +1,6 @@
-import { ActorPF2e } from "foundry-pf2e";
+import { ActorPF2e } from "pf2e-types";
 
-declare module "foundry-pf2e" {
+declare module "pf2e-types" {
     interface GamePF2e {
         // dice3d?: Dice3D;
 

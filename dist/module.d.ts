@@ -1,4 +1,4 @@
-import { Module } from "foundry-pf2e/foundry/client/packages/_module.mjs";
+import { Module } from ".";
 declare class CustomModule {
     #private;
     get id(): string;

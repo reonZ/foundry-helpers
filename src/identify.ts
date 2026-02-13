@@ -1,11 +1,4 @@
-import {
-    DCOptions,
-    IdentifyAlchemyDCs,
-    IdentifyMagicDCs,
-    MagicTradition,
-    PhysicalItemPF2e,
-    Rarity,
-} from "foundry-pf2e";
+import { DCOptions, IdentifyAlchemyDCs, IdentifyMagicDCs, MagicTradition, PhysicalItemPF2e, Rarity } from "pf2e-types";
 import { adjustDCByRarity, calculateDC, MAGIC_TRADITIONS, R, setHasElement, SYSTEM } from ".";
 
 /**

@@ -1,6 +1,5 @@
-import { SpellArea } from "foundry-pf2e";
-import Localization from "foundry-pf2e/foundry/client/helpers/localization.mjs";
-import { RollMode } from ".";
+import { Localization, RollMode } from ".";
+import { SpellArea } from "pf2e-types";
 /**
  * https://github.com/foundryvtt/pf2e/blob/f7d7441acbf856b490a4e0c0d799809cd6e3dc5d/src/util/misc.ts#L259
  */

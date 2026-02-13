@@ -1,4 +1,4 @@
-import { ConsumableSource, ItemPF2e, SpellConsumableItemType, SpellPF2e } from "foundry-pf2e";
+import { ConsumableSource, ItemPF2e, SpellConsumableItemType, SpellPF2e } from "pf2e-types";
 import { ErrorPF2e, ImageFilePath, MAGIC_TRADITIONS, objectHasKey, R, setHasElement } from ".";
 
 const CANTRIP_DECK_UUID = "Compendium.pf2e.equipment-srd.Item.tLa4bewBhyqzi6Ow";

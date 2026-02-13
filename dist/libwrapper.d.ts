@@ -1,4 +1,4 @@
-import { ClientDocument } from "foundry-pf2e/foundry/client/documents/abstract/_module.mjs";
+import { ClientDocument } from ".";
 declare function registerWrapper(type: libWrapper.RegisterType, path: string | string[], callback: libWrapper.RegisterCallback, context?: WrapperContext): number[];
 declare function unregisterWrapper(id: number | number[]): void;
 declare function createSharedWrapper<TDocument extends ClientDocument, TWrapperCallback extends libWrapper.RegisterCallback, TListener extends (...args: any[]) => any>(type: Exclude<libWrapper.RegisterType, "OVERRIDE">, path: string, sharedCallback: (this: TDocument, registered: TListener[], wrapped: () => ReturnType<TWrapperCallback>, args: Parameters<TWrapperCallback>) => void): {

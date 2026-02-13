@@ -1,4 +1,4 @@
-import { ActorPF2e, TokenDocumentPF2e } from "foundry-pf2e";
+import { ActorPF2e, TokenDocumentPF2e } from "pf2e-types";
 
 declare global {
     type Prettify<T> = { [K in keyof T]: T[K] } & {};

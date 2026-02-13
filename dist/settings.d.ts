@@ -1,4 +1,4 @@
-import { SettingSubmenuConfig } from "foundry-pf2e/foundry/client/_module.mjs";
+import { SettingSubmenuConfig } from ".";
 declare function settingPath(...path: string[]): string;
 declare function getSetting<T = boolean>(key: string): T;
 declare function setSetting<TSetting>(key: string, value: TSetting): Promise<TSetting>;
@@ -43,4 +43,4 @@ type RenderSettingsConfigCategoryEntry = {
     };
 });
 export { getSetting, registerModuleSettings, registerSetting, registerSettingMenu, setSetting, settingPath };
-export type { ModuleSettingsRegistration, RegisterSettingMenuOptions, RegisterSettingOptions, RenderSettingsConfigOptions, SettingRegistration, SettingSubmenuConfig, };
+export type { ModuleSettingsRegistration, RegisterSettingMenuOptions, RegisterSettingOptions, RenderSettingsConfigOptions, SettingRegistration, };

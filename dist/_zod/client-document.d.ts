@@ -1,4 +1,4 @@
-import { ActorPF2e, ItemPF2e } from "foundry-pf2e";
+import { ActorPF2e, ItemPF2e } from "pf2e-types";
 import z from "zod";
 declare function zClientDocument<T extends ClientDocumentType, D extends ClientDocumentInstance<T> = ClientDocumentInstance<T>>(model: T): z.ZodCustom<D, D>;
 type ClientDocumentMapping = {

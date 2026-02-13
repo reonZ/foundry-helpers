@@ -1,7 +1,5 @@
-import { ActorPF2e, MacroPF2e, UserPF2e } from "foundry-pf2e";
-import { ClientDocument } from "foundry-pf2e/foundry/client/documents/abstract/_module.mjs";
-import { DocumentUUID } from "foundry-pf2e/foundry/client/utils/_module.mjs";
-import { MODULE, R, Token } from ".";
+import { ActorPF2e, MacroPF2e, UserPF2e } from "pf2e-types";
+import { ClientDocument, MODULE, R, Token } from ".";
 
 function getInMemory<T>(obj: ClientDocument | Token, ...path: string[]): T | undefined {
     return foundry.utils.getProperty(obj, `modules.${MODULE.id}.${path.join(".")}`) as T | undefined;
@@ -53,4 +51,3 @@ function isValidTargetDocuments(target: unknown): target is TargetDocuments {
 }
 
 export { deleteInMemory, getInMemory, getPreferredName, isScriptMacro, isValidTargetDocuments, setInMemory };
-export type { ClientDocument, DocumentUUID };

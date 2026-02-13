@@ -1,4 +1,4 @@
-import { AbstractEffectPF2e, ActorPF2e, ArithmeticExpression, ChatMessagePF2e, ConsumablePF2e, CreatureConfig, CreaturePF2e, DamageRoll, EffectPF2e, FeatPF2e, Grouping, ItemPF2e, LootPF2e, MacroPF2e, SpellcastingEntryPF2e, SpellPF2e, TokenDocumentPF2e, TokenPF2e, WeaponPF2e } from "foundry-pf2e";
+import { AbstractEffectPF2e, ActorPF2e, ArithmeticExpression, ChatMessagePF2e, ConsumablePF2e, CreatureConfig, CreaturePF2e, DamageRoll, EffectPF2e, FeatPF2e, Grouping, ItemPF2e, LootPF2e, MacroPF2e, SpellcastingEntryPF2e, SpellPF2e, TokenDocumentPF2e, TokenPF2e, WeaponPF2e } from "pf2e-types";
 import { ClientDocument } from ".";
 declare class MapOfArrays<K extends string | number, T> extends Map<K, T[]> {
     constructor(entries?: readonly (readonly [K, T[]])[] | Iterable<readonly [K, T[]]> | Record<K, T[]> | null);

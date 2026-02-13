@@ -7,7 +7,7 @@ import {
     EffectSource,
     GrantItemSource,
     RuleElementSource,
-} from "foundry-pf2e";
+} from "pf2e-types";
 import { ImageFilePath } from ".";
 
 function createCustomEffect({

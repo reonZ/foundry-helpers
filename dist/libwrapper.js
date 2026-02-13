@@ -1,5 +1,4 @@
-import { R } from ".";
-import { MODULE } from "./module";
+import { MODULE, R } from ".";
 function registerWrapper(type, path, callback, context) {
     const ids = [];
     const paths = R.isArray(path) ? path : [path];

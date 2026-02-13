@@ -1,4 +1,4 @@
-import { createHTMLElement, htmlQuery, localize, MODULE, R } from ".";
+import { createHTMLElement, htmlQuery, localize, MODULE, R, } from ".";
 function isHoldingModifierKey(key) {
     const keys = R.isArray(key) ? key : [key];
     return keys.some((key) => game.keyboard.isModifierActive(key));

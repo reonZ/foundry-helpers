@@ -13,14 +13,15 @@
     "type": "module",
     "devDependencies": {
         "@typescript-eslint/types": "^8.54.0",
-        "foundry-pf2e": "github:7H3LaughingMan/foundry-pf2e",
         "typescript": "^5.9.3"
     },
     "dependencies": {
         "@types/jquery": "^3.5.32",
+        "foundry-types": "https://github.com/7H3LaughingMan/foundry-types.git",
         "gsap": "3.11.5",
         "handlebars": "4.7.8",
         "luxon": "^3.7.2",
+        "pf2e-types": "https://github.com/7H3LaughingMan/pf2e-types.git",
         "remeda": "^2.32.0",
         "socket.io": "4.8.1",
         "socket.io-client": "4.8.1",

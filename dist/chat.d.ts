@@ -1,10 +1,14 @@
-import { ChatMessagePF2e } from "foundry-pf2e";
+import { ChatMessagePF2e } from "pf2e-types";
 import { ClientDocument } from ".";
-export declare function createChatLink(docOrUuid: ClientDocument | string, options?: {
+export declare function createChatLink(docOrUuid: (ClientDocument & {
+    name: string;
+}) | string, options?: {
     label?: string;
     html: true;
 }): Promise<string>;
-export declare function createChatLink(docOrUuid: ClientDocument | string, options: {
+export declare function createChatLink(docOrUuid: (ClientDocument & {
+    name: string;
+}) | string, options: {
     label?: string;
     html?: false;
 }): string;

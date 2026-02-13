@@ -1,6 +1,4 @@
-import { ActorAlliance, ActorPF2e, CharacterPF2e, LootPF2e, ValueAndMax } from "foundry-pf2e";
-import { ActorSheetOptions } from "foundry-pf2e/foundry/client/appv1/sheets/actor-sheet.mjs";
-import { ActorUUID } from "foundry-pf2e/foundry/common/documents/_module.mjs";
+import { ActorAlliance, ActorPF2e, CharacterPF2e, LootPF2e, ValueAndMax } from "pf2e-types";
 
 function actorsRespectAlliance(origin: ActorPF2e, target: ActorPF2e, alliance: ActorTargetAlliance = "all") {
     return alliance === "allies" ? target.isAllyOf(origin) : alliance === "enemies" ? target.isEnemyOf(origin) : true;
@@ -49,4 +47,4 @@ export {
     isMerchant,
     oppositeAlliance,
 };
-export type { ActorSheetOptions, ActorTargetAlliance, ActorUUID, MythicOrHeroPoints };
+export type { ActorTargetAlliance, MythicOrHeroPoints };

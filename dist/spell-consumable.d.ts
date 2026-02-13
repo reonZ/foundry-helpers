@@ -1,4 +1,4 @@
-import { ConsumableSource, SpellConsumableItemType, SpellPF2e } from "foundry-pf2e";
+import { ConsumableSource, SpellConsumableItemType, SpellPF2e } from "pf2e-types";
 import { ImageFilePath } from ".";
 /**
  * slightly modified version of

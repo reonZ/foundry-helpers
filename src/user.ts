@@ -1,4 +1,4 @@
-import { ActorPF2e, UserPF2e } from "foundry-pf2e";
+import { ActorPF2e, UserPF2e } from "pf2e-types";
 
 function getCurrentUser(): UserPF2e {
     return game.user ?? game.data.users.find((x) => x._id === game.userId);

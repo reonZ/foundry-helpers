@@ -16,13 +16,8 @@ import {
     RollNoteSource,
     SaveType,
     TokenDocumentPF2e,
-} from "foundry-pf2e";
-
-import { ActorUUID } from "../../actor";
-import { TokenDocumentUUID } from "../../token";
-import { DocumentUUID } from "../../document";
-import { Rolled, RollJSON } from "../../_types";
-import { ItemUUID } from "../../item";
+} from "pf2e-types";
+import { ActorUUID, DocumentUUID, ItemUUID, Rolled, RollJSON, TokenDocumentUUID } from "../../_types";
 
 declare global {
     namespace toolbelt {

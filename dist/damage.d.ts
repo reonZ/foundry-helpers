@@ -1,4 +1,4 @@
-import { DamageInstance, DamageRoll, ItemPF2e, RollNotePF2e, RollNoteSource } from "foundry-pf2e";
+import { DamageInstance, DamageRoll, ItemPF2e, RollNotePF2e, RollNoteSource } from "pf2e-types";
 declare function getDamageRollClass(): typeof DamageRoll;
 declare function getDamageInstanceClass(): typeof DamageInstance;
 declare function rollDamageFromFormula(formula: string, { actionName, extraRollOptions, item, notes, origin, skipDialog, target, toolbelt, }: RollDamageOptions): Promise<ChatMessage>;

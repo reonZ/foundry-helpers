@@ -1,5 +1,4 @@
-import { SettingSubmenuConfig } from "foundry-pf2e/foundry/client/_module.mjs";
-import { createHTMLElement, htmlClosest, htmlQuery, localize, MODULE, R, userIsGM } from ".";
+import { createHTMLElement, htmlClosest, htmlQuery, localize, MODULE, R, SettingSubmenuConfig, userIsGM } from ".";
 
 function settingPath(...path: string[]): string {
     return MODULE.path("settings", ...path);
@@ -169,5 +168,4 @@ export type {
     RegisterSettingOptions,
     RenderSettingsConfigOptions,
     SettingRegistration,
-    SettingSubmenuConfig,
 };

@@ -7,11 +7,18 @@ import {
     ItemSourcePF2e,
     ItemType,
     PhysicalItemPF2e,
-} from "foundry-pf2e";
-import { ItemSheetData } from "foundry-pf2e/foundry/client/appv1/sheets/item-sheet.mjs";
-import { CompendiumIndexData } from "foundry-pf2e/foundry/client/documents/collections/_module.mjs";
-import { ItemUUID } from "foundry-pf2e/foundry/common/documents/_module.mjs";
-import { createHTMLElementContent, getDamageRollClass, htmlQuery, includesAny, R, setHasElement, SYSTEM } from ".";
+} from "pf2e-types";
+import {
+    CompendiumIndexData,
+    createHTMLElementContent,
+    getDamageRollClass,
+    htmlQuery,
+    includesAny,
+    ItemUUID,
+    R,
+    setHasElement,
+    SYSTEM,
+} from ".";
 
 /**
  * https://github.com/foundryvtt/pf2e/blob/95e941aecaf1fa6082825b206b0ac02345d10538/src/module/item/physical/values.ts#L1
@@ -238,4 +245,4 @@ export {
     itemIsOfType,
     usePhysicalItem,
 };
-export type { CompendiumIndexData, ItemOrSource, ItemSheetData, ItemUUID };
+export type { ItemOrSource };

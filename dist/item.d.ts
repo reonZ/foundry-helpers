@@ -1,7 +1,5 @@
-import { ActorPF2e, ConsumablePF2e, EquipmentPF2e, ItemInstances, ItemPF2e, ItemSourcePF2e, ItemType, PhysicalItemPF2e } from "foundry-pf2e";
-import { ItemSheetData } from "foundry-pf2e/foundry/client/appv1/sheets/item-sheet.mjs";
-import { CompendiumIndexData } from "foundry-pf2e/foundry/client/documents/collections/_module.mjs";
-import { ItemUUID } from "foundry-pf2e/foundry/common/documents/_module.mjs";
+import { ActorPF2e, ConsumablePF2e, EquipmentPF2e, ItemInstances, ItemPF2e, ItemSourcePF2e, ItemType, PhysicalItemPF2e } from "pf2e-types";
+import { CompendiumIndexData, ItemUUID } from ".";
 /**
  * https://github.com/foundryvtt/pf2e/blob/95e941aecaf1fa6082825b206b0ac02345d10538/src/module/item/helpers.ts#L13
  */
@@ -23,4 +21,4 @@ declare function isSF2eItem<T extends PhysicalItemPF2e>(item: T): boolean;
 type ActorItemInstances<TType extends ItemType, TActor extends ActorPF2e> = ItemInstances<TActor>[TType extends "weapon" | "shield" ? TType | "weapon" | "equipment" : TType];
 type ItemOrSource = PreCreate<ItemSourcePF2e> | CompendiumIndexData | ItemPF2e;
 export { consumeItem, findItemWithSourceId, getItemSourceId, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, usePhysicalItem, };
-export type { CompendiumIndexData, ItemOrSource, ItemSheetData, ItemUUID };
+export type { ItemOrSource };

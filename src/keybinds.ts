@@ -1,5 +1,13 @@
-import { KeybindingActionConfig, KeyboardEventContext, ModifierKey } from "foundry-pf2e/foundry/client/_module.mjs";
-import { createHTMLElement, htmlQuery, localize, MODULE, R } from ".";
+import {
+    createHTMLElement,
+    htmlQuery,
+    KeybindingActionConfig,
+    KeyboardEventContext,
+    localize,
+    ModifierKey,
+    MODULE,
+    R,
+} from ".";
 
 function isHoldingModifierKey(key: ModifierKey | ModifierKey[]): boolean {
     const keys = R.isArray(key) ? key : [key];
@@ -106,4 +114,3 @@ type RenderControlsConfigCategory = {
 };
 
 export { createToggleKeybind, isHoldingModifierKey, registerKeybind, registerModuleKeybinds };
-export type { KeybindingActionConfig };

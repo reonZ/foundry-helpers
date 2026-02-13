@@ -1,4 +1,4 @@
-import { AbilityItemPF2e, ActionCost, ActorPF2e, FeatPF2e } from "foundry-pf2e";
+import { AbilityItemPF2e, ActionCost, ActorPF2e, FeatPF2e } from "pf2e-types";
 import { ImageFilePath } from ".";
 /**
  * https://github.com/foundryvtt/pf2e/blob/6e5481af7bb1e1b9d28d35fb3ad324511c5170d1/src/module/sheet/helpers.ts#L304

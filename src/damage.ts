@@ -7,7 +7,7 @@ import {
     ItemPF2e,
     RollNotePF2e,
     RollNoteSource,
-} from "foundry-pf2e";
+} from "pf2e-types";
 import { getTargetToken, R } from ".";
 
 const _cached: {

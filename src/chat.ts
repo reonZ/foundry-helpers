@@ -1,4 +1,4 @@
-import { ChatMessagePF2e } from "foundry-pf2e";
+import { ChatMessagePF2e } from "pf2e-types";
 import { ClientDocument, enrichHTML, R, SYSTEM } from ".";
 
 export function createChatLink(

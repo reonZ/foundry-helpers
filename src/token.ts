@@ -1,6 +1,4 @@
-import { ActorPF2e, ScenePF2e, TokenDocumentPF2e, TokenPF2e } from "foundry-pf2e";
-import { Token } from "foundry-pf2e/foundry/client/canvas/placeables/_module.mjs";
-import { TokenDocumentUUID } from "foundry-pf2e/foundry/client/documents/_module.mjs";
+import { ActorPF2e, ScenePF2e, TokenDocumentPF2e, TokenPF2e } from "pf2e-types";
 
 function selectTokens(tokens: (TokenPF2e | TokenDocumentPF2e)[]) {
     canvas.tokens.releaseAll();
@@ -62,4 +60,4 @@ type FirstActiveTokenOptions = {
 };
 
 export { getFirstActiveToken, getTargetToken, positionTokenFromCoords, selectTokens };
-export type { FirstActiveTokenOptions, Token, TokenDocumentUUID };
+export type { FirstActiveTokenOptions };

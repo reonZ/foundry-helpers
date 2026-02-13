@@ -1,4 +1,4 @@
-import { ActorPF2e, UserPF2e } from "foundry-pf2e";
+import { ActorPF2e, UserPF2e } from "pf2e-types";
 declare function getCurrentUser(): UserPF2e;
 declare function userIsGM(user?: UserPF2e): boolean;
 declare function isPrimaryUpdater(actor: ActorPF2e): boolean;

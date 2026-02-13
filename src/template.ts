@@ -1,4 +1,4 @@
-import { MeasuredTemplateDocumentPF2e, MeasuredTemplatePF2e, TokenPF2e } from "foundry-pf2e";
+import { MeasuredTemplateDocumentPF2e, MeasuredTemplatePF2e, TokenPF2e } from "pf2e-types";
 
 function getTemplateTokens(
     measuredTemplate: MeasuredTemplateDocumentPF2e | MeasuredTemplatePF2e,

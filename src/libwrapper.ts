@@ -1,6 +1,4 @@
-import { ClientDocument } from "foundry-pf2e/foundry/client/documents/abstract/_module.mjs";
-import { R } from ".";
-import { MODULE } from "./module";
+import { ClientDocument, MODULE, R } from ".";
 
 function registerWrapper(
     type: libWrapper.RegisterType,

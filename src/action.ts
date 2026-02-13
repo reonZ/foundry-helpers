@@ -1,4 +1,4 @@
-import { AbilityItemPF2e, ActionCost, ActorPF2e, EffectPF2e, EffectSource, FeatPF2e } from "foundry-pf2e";
+import { AbilityItemPF2e, ActionCost, ActorPF2e, EffectPF2e, EffectSource, FeatPF2e } from "pf2e-types";
 import { ImageFilePath, R, SYSTEM } from ".";
 
 /**

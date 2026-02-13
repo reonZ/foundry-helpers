@@ -1,6 +1,4 @@
-import { DocumentUUID } from "foundry-pf2e/foundry/client/utils/_module.mjs";
-import { SlugCamel } from "foundry-pf2e/pf2e/util/misc.js";
-import { R } from ".";
+import { DocumentUUID, R } from ".";
 
 class SYSTEM {
     static get id(): SystemId {
@@ -39,4 +37,7 @@ class SYSTEM {
     }
 }
 
+type SlugCamel = "dromedary" | "bactrian" | null;
+
 export { SYSTEM };
+export type { SlugCamel };

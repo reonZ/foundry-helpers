@@ -1,5 +1,4 @@
-import { Module } from "foundry-pf2e/foundry/client/packages/_module.mjs";
-import { getSetting, localize, R } from ".";
+import { getSetting, localize, Module, R } from ".";
 
 class CustomModule {
     #api: Record<string, any> = {};

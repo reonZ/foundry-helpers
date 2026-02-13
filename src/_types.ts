@@ -1,20 +1,22 @@
-import { DropCanvasItemData } from "foundry-pf2e";
-import { SceneControl } from "foundry-pf2e/foundry/client/applications/ui/scene-controls.mjs";
-import PrimaryCanvasGroup from "foundry-pf2e/foundry/client/canvas/groups/primary.mjs";
-import { Rolled, RollJSON } from "foundry-pf2e/foundry/client/dice/roll.mjs";
-import { DropCanvasData } from "foundry-pf2e/foundry/client/helpers/hooks.mjs";
-import { DatabaseDeleteOperation, DatabaseUpdateOperation } from "foundry-pf2e/foundry/common/abstract/_types.mjs";
-import { ImageFilePath, RollMode } from "foundry-pf2e/foundry/common/constants.mjs";
+import PrimaryCanvasGroup from "foundry-types/client/canvas/groups/primary.mjs";
+import Localization from "foundry-types/client/helpers/localization.mjs";
+import { ImageFilePath, RollMode } from "foundry-types/common/constants.mjs";
 
-export type {
-    DatabaseDeleteOperation,
-    DatabaseUpdateOperation,
-    DropCanvasData,
-    DropCanvasItemData,
-    ImageFilePath,
-    PrimaryCanvasGroup,
-    Rolled,
-    RollJSON,
-    RollMode,
-    SceneControl,
-};
+export type * from "foundry-types/client/_module.mjs";
+export * from "foundry-types/client/applications/ui/scene-controls.mjs";
+export type * from "foundry-types/client/applications/ux/context-menu.mjs";
+export type * from "foundry-types/client/applications/ux/text-editor.mjs";
+export type * from "foundry-types/client/appv1/api/_module.mjs";
+export type * from "foundry-types/client/appv1/sheets/actor-sheet.mjs";
+export type * from "foundry-types/client/canvas/placeables/_module.mjs";
+export type * from "foundry-types/client/dice/roll.mjs";
+export type * from "foundry-types/client/documents/abstract/_module.mjs";
+export type * from "foundry-types/client/documents/collections/compendium-collection.mjs";
+export type * from "foundry-types/client/helpers/hooks.mjs";
+export type * from "foundry-types/client/helpers/localization.mjs";
+export type * from "foundry-types/client/packages/_module.mjs";
+export type * from "foundry-types/client/utils/_module.mjs";
+export type * from "foundry-types/common/abstract/_module.mjs";
+export type * from "foundry-types/common/documents/_module.mjs";
+
+export type { ImageFilePath, Localization, PrimaryCanvasGroup, RollMode };

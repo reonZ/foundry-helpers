@@ -1,4 +1,4 @@
-import { AbstractEffectPF2e, ActorPF2e, ConditionSlug, DurationData, EffectBadgeSource, EffectSource, RuleElementSource } from "foundry-pf2e";
+import { AbstractEffectPF2e, ActorPF2e, ConditionSlug, DurationData, EffectBadgeSource, EffectSource, RuleElementSource } from "pf2e-types";
 import { ImageFilePath } from ".";
 declare function createCustomEffect({ badge, duration, img, itemSlug, name, rules, show, unidentified, }: CustomEffectOptions): WithRequired<PreCreate<EffectSource>, "system">;
 declare function createCustomCondition(options: CustomConditionOptions): PreCreate<EffectSource> | undefined;
