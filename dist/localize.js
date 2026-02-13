@@ -29,6 +29,23 @@ class Localize extends Function {
             return this.localizeOrFormat(path, data);
         }
     }
+    notify(type, ...args) {
+        const permanent = R.isBoolean(args.at(-1)) ? args.pop() : false;
+        const str = this(...args);
+        return ui.notifications.notify(str, type, { permanent });
+    }
+    success(...args) {
+        return this.notify("success", ...args);
+    }
+    info(...args) {
+        return this.notify("info", ...args);
+    }
+    warning(...args) {
+        return this.notify("warning", ...args);
+    }
+    error(...args) {
+        return this.notify("error", ...args);
+    }
     sub(...subkeys) {
         return new Localize(...this.subkeys, ...subkeys);
     }

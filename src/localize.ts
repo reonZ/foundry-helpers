@@ -43,6 +43,28 @@ class Localize extends Function {
         }
     }
 
+    notify(type: "info" | "warning" | "error" | "success", ...args: NotificationArgs): fa.ui.Notification {
+        const permanent = R.isBoolean(args.at(-1)) ? (args.pop() as boolean) : false;
+        const str = this(...(args as LocalizeArgs));
+        return ui.notifications.notify(str, type, { permanent });
+    }
+
+    success(...args: NotificationArgs): fa.ui.Notification {
+        return this.notify("success", ...args);
+    }
+
+    info(...args: NotificationArgs): fa.ui.Notification {
+        return this.notify("info", ...args);
+    }
+
+    warning(...args: NotificationArgs): fa.ui.Notification {
+        return this.notify("warning", ...args);
+    }
+
+    error(...args: NotificationArgs): fa.ui.Notification {
+        return this.notify("error", ...args);
+    }
+
     sub(...subkeys: string[]): Localize {
         return new Localize(...this.subkeys, ...subkeys);
     }
@@ -93,5 +115,7 @@ type LocalizeData = Record<string, any>;
 
 type LocalizeArgs = string[] | [...string[], string | LocalizeData];
 
+type NotificationArgs = LocalizeArgs | [...LocalizeArgs, string | LocalizeData | boolean];
+
 export { localize };
-export type { Localize, LocalizeArgs, LocalizeData };
+export type { Localize, LocalizeArgs, LocalizeData, NotificationArgs };

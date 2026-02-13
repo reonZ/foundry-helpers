@@ -23,7 +23,6 @@ export * from "./keybinds";
 export * from "./libwrapper";
 export * from "./localize";
 export * from "./misc";
-export * from "./notification";
 export * from "./object";
 export * from "./pixi";
 export * from "./settings";

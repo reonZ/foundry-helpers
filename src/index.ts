@@ -35,7 +35,6 @@ export * from "./libwrapper";
 export * from "./localize";
 export * from "./misc";
 // export * from "./notes";
-export * from "./notification";
 export * from "./object";
 export * from "./pixi";
 // export * from "./rules";
