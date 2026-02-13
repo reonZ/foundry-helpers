@@ -2,12 +2,15 @@ import { ChatMessagePF2e } from "foundry-pf2e";
 import { ClientDocument, enrichHTML, R, SYSTEM } from ".";
 
 export function createChatLink(
-    docOrUuid: ClientDocument | string,
+    docOrUuid: (ClientDocument & { name: string }) | string,
     options?: { label?: string; html: true },
 ): Promise<string>;
-export function createChatLink(docOrUuid: ClientDocument | string, options: { label?: string; html?: false }): string;
 export function createChatLink(
-    docOrUuid: ClientDocument | string,
+    docOrUuid: (ClientDocument & { name: string }) | string,
+    options: { label?: string; html?: false },
+): string;
+export function createChatLink(
+    docOrUuid: (ClientDocument & { name: string }) | string,
     { label, html }: { label?: string; html?: boolean } = {},
 ) {
     const isDocument = docOrUuid instanceof foundry.abstract.Document;

@@ -1,4 +1,7 @@
 import { DateTime } from "luxon";
+function getWorldTime() {
+    return game.settings.get("core", "time");
+}
 function waitTimeout(time = 1) {
     return new Promise((resolve) => {
         setTimeout(resolve, time);
@@ -30,4 +33,4 @@ function getShortDateTime() {
         date,
     };
 }
-export { advanceTime, getShortDateTime, getShortTime, waitTimeout };
+export { advanceTime, getShortDateTime, getShortTime, getWorldTime, waitTimeout };
