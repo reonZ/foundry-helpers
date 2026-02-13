@@ -1,28 +1,28 @@
 import { R } from ".";
-const SYSTEM = {
-    get id() {
+class SYSTEM {
+    static get id() {
         return game.system.id;
-    },
-    get isPF2e() {
+    }
+    static get isPF2e() {
         return this.id === "pf2e";
-    },
-    get isSF2e() {
+    }
+    static get isSF2e() {
         return this.id === "sf2e";
-    },
-    relativePath(...path) {
+    }
+    static relativePath(...path) {
         const tail = R.join(path, "/");
         return `systems/${this.id}/${tail}`;
-    },
-    path(...path) {
+    }
+    static path(...path) {
         return () => this.relativePath(...path);
-    },
-    uuid(pf2e, sf2e) {
+    }
+    static uuid(pf2e, sf2e) {
         return () => {
             return this.isSF2e ? sf2e : pf2e;
         };
-    },
-    sluggify(text, options) {
+    }
+    static sluggify(text, options) {
         return game.pf2e.system.sluggify(text, options);
-    },
-};
+    }
+}
 export { SYSTEM };
