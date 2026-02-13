@@ -1,4 +1,4 @@
-import { localize, LocalizeArgs, MODULE, R, SYSTEM } from ".";
+import { localize, MODULE, R, SYSTEM, TemplateLocalize } from ".";
 
 function render(...args: HandlebarsRenderArgs): Promise<string> {
     const data = args.at(-1) as unknown as RenderData;
@@ -13,7 +13,7 @@ function render(...args: HandlebarsRenderArgs): Promise<string> {
 
 type RenderData = {
     [k: string]: any;
-    i18n: (...args: LocalizeArgs) => string;
+    i18n: TemplateLocalize;
     isSF2e: boolean;
 };
 

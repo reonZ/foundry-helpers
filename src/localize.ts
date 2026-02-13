@@ -73,23 +73,23 @@ class Localize extends Function {
         return game.i18n.localize(`LEVIKTIMES.${key}`);
     }
 
-    i18n(...subkeys: string[]) {
+    i18n(...subkeys: string[]): TemplateLocalize {
         const self = this;
 
-        const getTemplateData = (...args: Parameters<HelperDelegate>): { path: string; data?: LocalizeData } => {
+        const getTemplateData = (...args: TemplateLocalizeArgs): { path: string; data?: LocalizeData } => {
             const data = R.isObjectType(args.at(-1)) ? (args.pop() as HelperOptions) : undefined;
             const path = this.path(...subkeys, ...(args as string[]));
             return { path, data: data?.hash };
         };
 
-        function i18n(...args: Parameters<HelperDelegate>): string {
+        function i18n(...args: TemplateLocalizeArgs): string {
             const { path, data } = getTemplateData(...args);
             return self.localizeOrFormat(path, data);
         }
 
         Object.defineProperties(i18n, {
             tooltip: {
-                value: (...args: Parameters<HelperDelegate>): string => {
+                value: (...args: TemplateLocalizeArgs): string => {
                     const tooltip = i18n(...args);
                     return `data-tooltip="${tooltip}"`;
                 },
@@ -97,7 +97,7 @@ class Localize extends Function {
                 configurable: false,
             },
             root: {
-                value: (...args: Parameters<HelperDelegate>) => {
+                value: (...args: TemplateLocalizeArgs) => {
                     const data = R.isObjectType(args.at(-1)) ? (args.pop() as HelperOptions) : undefined;
                     const path = MODULE.path(...(args as string[]));
                     return self.localizeOrFormat(path, data?.hash);
@@ -107,12 +107,18 @@ class Localize extends Function {
             },
         });
 
-        return i18n;
+        return i18n as TemplateLocalize;
     }
 }
 
 interface Localize {
     (...args: LocalizeArgs): string;
+}
+
+interface TemplateLocalize {
+    (...args: TemplateLocalizeArgs): string;
+    root(...args: TemplateLocalizeArgs): string;
+    tooltip(...args: TemplateLocalizeArgs): string;
 }
 
 const localize = new Localize();
@@ -123,5 +129,7 @@ type LocalizeArgs = string[] | [...string[], string | LocalizeData];
 
 type NotificationArgs = LocalizeArgs | [...LocalizeArgs, string | LocalizeData | boolean];
 
+type TemplateLocalizeArgs = Parameters<HelperDelegate>;
+
 export { localize };
-export type { Localize, LocalizeArgs, LocalizeData, NotificationArgs };
+export type { Localize, LocalizeArgs, LocalizeData, NotificationArgs, TemplateLocalizeArgs, TemplateLocalize };
