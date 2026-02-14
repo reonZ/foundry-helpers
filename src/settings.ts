@@ -14,14 +14,14 @@ function setSetting(key: string, value: any) {
     return game.settings.set(MODULE.id, key, value);
 }
 
-function getUserSetting<T>(key: string, userId: string): (Setting & { value: T; user: string }) | undefined;
-function getUserSetting<T>(key: string, userId?: string): (Setting & { value: T; user: string })[];
-function getUserSetting<T>(key: string, userId?: string) {
+function getUserSetting<T>(key: string, userId: string): UserSetting<T> | undefined;
+function getUserSetting<T>(key: string, userId?: string): UserSetting<T>[];
+function getUserSetting<T>(key: string, userId?: string): UserSetting<T> | UserSetting<T>[] | undefined {
     const moduleKey = MODULE.path(key);
     const storage = game.settings.storage.get("user");
     return userId
-        ? storage.find((setting) => setting.user === userId && setting.key === moduleKey)
-        : storage.filter((setting) => !!setting.user && setting.key === moduleKey);
+        ? (storage.find((setting) => setting.user === userId && setting.key === moduleKey) as any)
+        : (storage.filter((setting) => !!setting.user && setting.key === moduleKey) as any);
 }
 
 function registerSetting(key: string, options: RegisterSettingOptions) {
@@ -170,6 +170,8 @@ type RenderSettingsConfigCategory = {
 type RenderSettingsConfigCategoryEntry = {
     label: string;
 } & ({ menu: true; key: string } | { menu: false; field: { name: string } });
+
+type UserSetting<T> = Omit<foundry.documents.Setting, "value"> & { value: T; user: string };
 
 export {
     getUserSetting,
