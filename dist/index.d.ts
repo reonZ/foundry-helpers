@@ -10,6 +10,7 @@ export * from "./application";
 export * from "./array";
 export * from "./chat";
 export * from "./damage";
+export * from "./degree-of-success";
 export * from "./dialog";
 export * from "./difficulty-class";
 export * from "./document";

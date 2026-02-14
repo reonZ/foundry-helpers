@@ -14,7 +14,7 @@ export * from "./chat";
 // export * from "./compendium";
 // export * from "./custom-elements";
 export * from "./damage";
-// export * from "./degree-of-success";
+export * from "./degree-of-success";
 export * from "./dialog";
 export * from "./difficulty-class";
 // export * from "./distance";
