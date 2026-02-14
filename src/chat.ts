@@ -1,15 +1,48 @@
 import { ChatMessagePF2e } from "pf2e-types";
 import { ClientDocument, enrichHTML, R, SYSTEM } from ".";
 
-export function createChatLink(
+function* latestChatMessages(nb: number, fromMessage?: ChatMessagePF2e): Generator<ChatMessagePF2e, void, undefined> {
+    if (!ui.chat) return;
+
+    const messages = game.messages.contents;
+    const startMessageIndex = fromMessage
+        ? messages.findLastIndex((message) => message === fromMessage)
+        : messages.length;
+
+    const startIndex = startMessageIndex - 1;
+
+    for (let i = startIndex; i >= startIndex - nb; i--) {
+        const message = messages[i];
+        if (message) {
+            yield message;
+        }
+    }
+}
+
+async function refreshLatestMessages(nb: number) {
+    const chat = ui.chat?.element;
+    if (!chat) return;
+
+    const messages = game.messages.contents;
+    const startIndex = messages.length - 1;
+
+    for (let i = startIndex; i >= startIndex - nb; i--) {
+        const message = messages[i];
+        if (message) {
+            ui.chat.updateMessage(message, { notify: false });
+        }
+    }
+}
+
+function createChatLink(
     docOrUuid: (ClientDocument & { name: string }) | string,
     options?: { label?: string; html: true },
 ): Promise<string>;
-export function createChatLink(
+function createChatLink(
     docOrUuid: (ClientDocument & { name: string }) | string,
     options: { label?: string; html?: false },
 ): string;
-export function createChatLink(
+function createChatLink(
     docOrUuid: (ClientDocument & { name: string }) | string,
     { label, html }: { label?: string; html?: boolean } = {},
 ) {
@@ -28,11 +61,13 @@ export function createChatLink(
     return html ? enrichHTML(link) : link;
 }
 
-export function isActionMessage(message: ChatMessagePF2e): boolean {
+function isActionMessage(message: ChatMessagePF2e): boolean {
     const type = message.flags[SYSTEM.id].origin?.type;
     return R.isIncludedIn(type, ["feat", "action"]);
 }
 
-export function isSpellMessage(message: ChatMessagePF2e): boolean {
+function isSpellMessage(message: ChatMessagePF2e): boolean {
     return R.isString(message.flags[SYSTEM.id].casting?.id);
 }
+
+export { createChatLink, isActionMessage, isSpellMessage, latestChatMessages, refreshLatestMessages };
