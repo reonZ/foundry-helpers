@@ -1,4 +1,4 @@
-import { createHTMLElement, htmlClosest, htmlQuery, localize, MODULE, R, userIsGM } from ".";
+import { createHTMLElement, htmlClosest, htmlQuery, localize, MODULE, R, userIsGM, } from ".";
 function settingPath(...path) {
     return MODULE.path("settings", ...path);
 }
@@ -7,13 +7,6 @@ function getSetting(key) {
 }
 function setSetting(key, value) {
     return game.settings.set(MODULE.id, key, value);
-}
-function getUserSetting(key, userId) {
-    const moduleKey = MODULE.path(key);
-    const storage = game.settings.storage.get("user");
-    return userId
-        ? storage.find((setting) => setting.user === userId && setting.key === moduleKey)
-        : storage.filter((setting) => !!setting.user && setting.key === moduleKey);
 }
 function registerSetting(key, options) {
     const isGM = userIsGM();
@@ -50,6 +43,66 @@ function registerModuleSettings(settings) {
         }
     }
     Hooks.on("renderSettingsConfig", (_, html, options) => onRenderSettingsConfig(html, options, settings));
+}
+function getUserSetting(key, userId) {
+    const moduleKey = MODULE.path(key);
+    const storage = game.settings.storage.get("user");
+    return userId
+        ? storage.find((setting) => setting.user === userId && setting.key === moduleKey)
+        : storage.filter((setting) => !!setting.user && setting.key === moduleKey);
+}
+/**
+ * modified version of
+ * client/helpers/client-settings.mjs#266
+ */
+async function setUserSetting(user, key, value) {
+    if (!game.ready) {
+        throw new Error("You may not set a World-level Setting before the Game is ready.");
+    }
+    const setting = assertSetting(MODULE.id, key);
+    if (!setting.id)
+        return;
+    const userId = user instanceof User ? user.id : user;
+    const json = cleanJSON(setting, value);
+    const current = game.settings.storage.get("user").getSetting(setting.id, userId);
+    if (current?._id) {
+        await current.update({ value: json });
+        return current;
+    }
+    return getDocumentClass("Setting").create({ key: setting.id, user: userId, value: json });
+}
+/**
+ * client/helpers/client-settings.mjs#247
+ */
+function assertSetting(namespace, key) {
+    const id = `${namespace}.${key}`;
+    if (!namespace || !key) {
+        throw new Error(`You must specify both namespace and key portions of the setting, you provided "${id}"`);
+    }
+    const setting = game.settings.settings.get(id);
+    if (!setting)
+        throw new Error(`"${id}" is not a registered game setting`);
+    return setting;
+}
+/**
+ * client/helpers/client-settings.mjs#315
+ */
+function cleanJSON(setting, value) {
+    // Assign using DataField
+    if (setting.type instanceof foundry.data.fields.DataField) {
+        value = setting.type.clean(value);
+        const err = setting.type.validate(value, { fallback: false });
+        if (err instanceof foundry.data.validation.DataModelValidationFailure)
+            throw err.asError();
+    }
+    // Assign using DataModel
+    if (foundry.utils.isSubclass(setting.type, foundry.abstract.DataModel)) {
+        value = setting.type.fromSource(value || {}, { strict: true });
+    }
+    // Plain default value
+    else if (value === undefined)
+        value = setting.default;
+    return JSON.stringify(value);
 }
 function onRenderSettingsConfig(html, options, settings) {
     const id = MODULE.id;
@@ -106,4 +159,4 @@ function onRenderSettingsConfig(html, options, settings) {
         group?.before(title);
     }
 }
-export { getUserSetting, getSetting, registerModuleSettings, registerSetting, registerSettingMenu, setSetting, settingPath, };
+export { getSetting, getUserSetting, registerModuleSettings, registerSetting, registerSettingMenu, setSetting, settingPath, setUserSetting, };

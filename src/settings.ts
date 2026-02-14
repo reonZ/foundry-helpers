@@ -1,4 +1,15 @@
-import { createHTMLElement, htmlClosest, htmlQuery, localize, MODULE, R, SettingSubmenuConfig, userIsGM } from ".";
+import { UserPF2e } from "pf2e-types";
+import {
+    createHTMLElement,
+    htmlClosest,
+    htmlQuery,
+    localize,
+    MODULE,
+    R,
+    SettingConfig,
+    SettingSubmenuConfig,
+    userIsGM,
+} from ".";
 
 function settingPath(...path: string[]): string {
     return MODULE.path("settings", ...path);
@@ -12,16 +23,6 @@ function getSetting(key: string) {
 function setSetting<TSetting>(key: string, value: TSetting): Promise<TSetting>;
 function setSetting(key: string, value: any) {
     return game.settings.set(MODULE.id, key, value);
-}
-
-function getUserSetting<T>(key: string, userId: string): UserSetting<T> | undefined;
-function getUserSetting<T>(key: string, userId?: string): UserSetting<T>[];
-function getUserSetting<T>(key: string, userId?: string): UserSetting<T> | UserSetting<T>[] | undefined {
-    const moduleKey = MODULE.path(key);
-    const storage = game.settings.storage.get("user");
-    return userId
-        ? (storage.find((setting) => setting.user === userId && setting.key === moduleKey) as any)
-        : (storage.filter((setting) => !!setting.user && setting.key === moduleKey) as any);
 }
 
 function registerSetting(key: string, options: RegisterSettingOptions) {
@@ -67,6 +68,74 @@ function registerModuleSettings(settings: ModuleSettingsRegistration) {
     Hooks.on("renderSettingsConfig", (_, html, options: RenderSettingsConfigOptions) =>
         onRenderSettingsConfig(html, options, settings),
     );
+}
+
+function getUserSetting<T>(key: string, userId: string): UserSetting<T> | undefined;
+function getUserSetting<T>(key: string, userId?: string): UserSetting<T>[];
+function getUserSetting<T>(key: string, userId?: string): UserSetting<T> | UserSetting<T>[] | undefined {
+    const moduleKey = MODULE.path(key);
+    const storage = game.settings.storage.get("user");
+    return userId
+        ? (storage.find((setting) => setting.user === userId && setting.key === moduleKey) as any)
+        : (storage.filter((setting) => !!setting.user && setting.key === moduleKey) as any);
+}
+
+/**
+ * modified version of
+ * client/helpers/client-settings.mjs#266
+ */
+async function setUserSetting(user: UserPF2e | string, key: string, value: any) {
+    if (!game.ready) {
+        throw new Error("You may not set a World-level Setting before the Game is ready.");
+    }
+
+    const setting = assertSetting(MODULE.id, key);
+    if (!setting.id) return;
+
+    const userId = user instanceof User ? user.id : user;
+    const json = cleanJSON(setting, value);
+    const current = game.settings.storage.get("user").getSetting(setting.id, userId);
+
+    if (current?._id) {
+        await current.update({ value: json });
+        return current;
+    }
+
+    return getDocumentClass("Setting").create({ key: setting.id, user: userId, value: json });
+}
+
+/**
+ * client/helpers/client-settings.mjs#247
+ */
+function assertSetting(namespace: string, key: string): SettingConfig {
+    const id = `${namespace}.${key}`;
+    if (!namespace || !key) {
+        throw new Error(`You must specify both namespace and key portions of the setting, you provided "${id}"`);
+    }
+    const setting = game.settings.settings.get(id);
+    if (!setting) throw new Error(`"${id}" is not a registered game setting`);
+    return setting;
+}
+
+/**
+ * client/helpers/client-settings.mjs#315
+ */
+function cleanJSON(setting: SettingConfig, value: unknown): string {
+    // Assign using DataField
+    if (setting.type instanceof foundry.data.fields.DataField) {
+        value = setting.type.clean(value);
+        const err = setting.type.validate(value, { fallback: false });
+        if (err instanceof foundry.data.validation.DataModelValidationFailure) throw err.asError();
+    }
+
+    // Assign using DataModel
+    if (foundry.utils.isSubclass(setting.type, foundry.abstract.DataModel)) {
+        value = setting.type.fromSource(value || {}, { strict: true });
+    }
+
+    // Plain default value
+    else if (value === undefined) value = setting.default;
+    return JSON.stringify(value);
 }
 
 function onRenderSettingsConfig(
@@ -174,13 +243,14 @@ type RenderSettingsConfigCategoryEntry = {
 type UserSetting<T> = Omit<foundry.documents.Setting, "value"> & { value: T; user: string };
 
 export {
-    getUserSetting,
     getSetting,
+    getUserSetting,
     registerModuleSettings,
     registerSetting,
     registerSettingMenu,
     setSetting,
     settingPath,
+    setUserSetting,
 };
 export type {
     ModuleSettingsRegistration,
