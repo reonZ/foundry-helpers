@@ -1,4 +1,5 @@
-import { ActorPF2e } from "pf2e-types";
+import { ActorPF2e, ChatMessageSourcePF2e } from "pf2e-types";
+import { RollJSON } from "..";
 
 declare module "pf2e-types" {
     interface GamePF2e {
@@ -14,4 +15,8 @@ declare module "pf2e-types" {
         // tcal?: tcal.GamePF2e;
         toolbelt?: toolbelt.GamePF2e;
     }
+}
+
+declare global {
+    type ChatMessageData = DeepPartial<Omit<ChatMessageSourcePF2e, "rolls">> & { rolls?: (string | RollJSON)[] };
 }

@@ -10,6 +10,7 @@ export type * from "foundry-types/client/appv1/api/_module.mjs";
 export type * from "foundry-types/client/appv1/sheets/actor-sheet.mjs";
 export type * from "foundry-types/client/canvas/placeables/_module.mjs";
 export type * from "foundry-types/client/dice/roll.mjs";
+export type * from "foundry-types/client/dice/terms/_types.mjs";
 export type * from "foundry-types/client/documents/abstract/_module.mjs";
 export type * from "foundry-types/client/documents/collections/compendium-collection.mjs";
 export type * from "foundry-types/client/helpers/hooks.mjs";
