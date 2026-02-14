@@ -1,3 +1,5 @@
+import { R } from ".";
+
 class CycleArray<T> extends Array<T> {
     #index = 0;
 
@@ -43,6 +45,12 @@ class CycleArray<T> extends Array<T> {
     }
 }
 
+function arraysEqual<T extends any[]>(arr1: T, arr2: any[]): arr2 is T {
+    arr1 = R.unique(arr1) as unknown as T;
+    arr2 = R.unique(arr2);
+    return arr1.length === arr2.length && arr1.every((entry) => arr2.includes(entry));
+}
+
 function includesAny(arr: any[], entries: any[]): boolean {
     for (const entry of entries) {
         if (arr.includes(entry)) {
@@ -53,4 +61,4 @@ function includesAny(arr: any[], entries: any[]): boolean {
     return false;
 }
 
-export { CycleArray, includesAny };
+export { arraysEqual, CycleArray, includesAny };

@@ -1,3 +1,4 @@
+import { R } from ".";
 class CycleArray extends Array {
     #index = 0;
     get index() {
@@ -33,6 +34,11 @@ class CycleArray extends Array {
         return Number(direction) > 0 ? this.increment() : this.decrement();
     }
 }
+function arraysEqual(arr1, arr2) {
+    arr1 = R.unique(arr1);
+    arr2 = R.unique(arr2);
+    return arr1.length === arr2.length && arr1.every((entry) => arr2.includes(entry));
+}
 function includesAny(arr, entries) {
     for (const entry of entries) {
         if (arr.includes(entry)) {
@@ -41,4 +47,4 @@ function includesAny(arr, entries) {
     }
     return false;
 }
-export { CycleArray, includesAny };
+export { arraysEqual, CycleArray, includesAny };
