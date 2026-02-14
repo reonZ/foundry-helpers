@@ -16,7 +16,6 @@ function zDocumentUUID<T extends DocumentUUID>(
 
         if (!resolvedUUID) return false;
         if (type && resolvedUUID.type !== type) return false;
-        if (resolvedUUID.type && !R.isIncludedIn(resolvedUUID.type, CONST.ALL_DOCUMENT_TYPES)) return false;
         if (embedded === true && !resolvedUUID.embedded.length) return false;
         if (embedded === false && resolvedUUID.embedded.length) return false;
         if (!resolvedUUID.documentId || !validators.isValidId(resolvedUUID.documentId)) return false;
