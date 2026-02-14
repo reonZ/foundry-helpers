@@ -33,4 +33,7 @@ function getShortDateTime() {
         date,
     };
 }
-export { advanceTime, getShortDateTime, getShortTime, getWorldTime, waitTimeout };
+function timestampToLocalTime(time) {
+    return new Date(time).toLocaleString();
+}
+export { advanceTime, getShortDateTime, getShortTime, getWorldTime, timestampToLocalTime, waitTimeout };

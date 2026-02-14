@@ -9,5 +9,6 @@ declare function getShortDateTime(): {
     time: string;
     date: string;
 };
+declare function timestampToLocalTime(time: number): string;
 type TimeInterval = "dawn" | "noon" | "dusk" | "midnight" | `${number}` | number;
-export { advanceTime, getShortDateTime, getShortTime, getWorldTime, waitTimeout };
+export { advanceTime, getShortDateTime, getShortTime, getWorldTime, timestampToLocalTime, waitTimeout };
