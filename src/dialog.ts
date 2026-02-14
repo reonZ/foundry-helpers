@@ -8,7 +8,7 @@ async function waitDialog<T extends Record<string, any>>({
     i18n,
     no,
     onRender,
-    position,
+    position = {},
     title,
     yes,
 }: CustomWaitDialogOptions): Promise<T | false | null> {
