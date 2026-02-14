@@ -2,7 +2,7 @@ import PrimaryCanvasGroup from "foundry-types/client/canvas/groups/primary.mjs";
 import Localization from "foundry-types/client/helpers/localization.mjs";
 import { ImageFilePath, RollMode } from "foundry-types/common/constants.mjs";
 export type * from "foundry-types/client/_module.mjs";
-export * from "foundry-types/client/applications/ui/scene-controls.mjs";
+export type * from "foundry-types/client/applications/ui/scene-controls.mjs";
 export type * from "foundry-types/client/applications/ux/context-menu.mjs";
 export type * from "foundry-types/client/applications/ux/text-editor.mjs";
 export type * from "foundry-types/client/appv1/api/_module.mjs";
