@@ -2,6 +2,14 @@ import { SettingSubmenuConfig } from ".";
 declare function settingPath(...path: string[]): string;
 declare function getSetting<T = boolean>(key: string): T;
 declare function setSetting<TSetting>(key: string, value: TSetting): Promise<TSetting>;
+declare function getUserSetting<T>(key: string, userId: string): (Setting & {
+    value: T;
+    user: string;
+}) | undefined;
+declare function getUserSetting<T>(key: string, userId?: string): (Setting & {
+    value: T;
+    user: string;
+})[];
 declare function registerSetting(key: string, options: RegisterSettingOptions): void;
 declare function registerSettingMenu(key: string, options: RegisterSettingMenuOptions): void;
 declare function registerModuleSettings(settings: ModuleSettingsRegistration): void;
@@ -42,5 +50,5 @@ type RenderSettingsConfigCategoryEntry = {
         name: string;
     };
 });
-export { getSetting, registerModuleSettings, registerSetting, registerSettingMenu, setSetting, settingPath };
+export { getUserSetting, getSetting, registerModuleSettings, registerSetting, registerSettingMenu, setSetting, settingPath, };
 export type { ModuleSettingsRegistration, RegisterSettingMenuOptions, RegisterSettingOptions, RenderSettingsConfigOptions, SettingRegistration, };

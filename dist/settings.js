@@ -8,6 +8,13 @@ function getSetting(key) {
 function setSetting(key, value) {
     return game.settings.set(MODULE.id, key, value);
 }
+function getUserSetting(key, userId) {
+    const moduleKey = MODULE.path(key);
+    const storage = game.settings.storage.get("user");
+    return userId
+        ? storage.find((setting) => setting.user === userId && setting.key === moduleKey)
+        : storage.filter((setting) => !!setting.user && setting.key === moduleKey);
+}
 function registerSetting(key, options) {
     const isGM = userIsGM();
     if ((options.gmOnly && !isGM) || (options.playerOnly && isGM))
@@ -99,4 +106,4 @@ function onRenderSettingsConfig(html, options, settings) {
         group?.before(title);
     }
 }
-export { getSetting, registerModuleSettings, registerSetting, registerSettingMenu, setSetting, settingPath };
+export { getUserSetting, getSetting, registerModuleSettings, registerSetting, registerSettingMenu, setSetting, settingPath, };
