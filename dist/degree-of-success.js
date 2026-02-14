@@ -1,2 +1,5 @@
 const DEGREE_OF_SUCCESS_STRINGS = ["criticalFailure", "failure", "success", "criticalSuccess"];
-export { DEGREE_OF_SUCCESS_STRINGS };
+function degreeOfSuccessString(value) {
+    return DEGREE_OF_SUCCESS_STRINGS.at(value);
+}
+export { DEGREE_OF_SUCCESS_STRINGS, degreeOfSuccessString };
