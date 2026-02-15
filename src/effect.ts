@@ -7,7 +7,7 @@ import {
     EffectSource,
     GrantItemSource,
     RuleElementSource,
-} from "pf2e-types";
+} from "@7h3laughingman/pf2e-types";
 import { ImageFilePath } from ".";
 
 function createCustomEffect({

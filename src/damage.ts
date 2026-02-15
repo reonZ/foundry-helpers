@@ -7,7 +7,7 @@ import {
     ItemPF2e,
     RollNotePF2e,
     RollNoteSource,
-} from "pf2e-types";
+} from "@7h3laughingman/pf2e-types";
 import { getTargetToken, R } from ".";
 
 const _cached: {

@@ -1,4 +1,4 @@
-import { DCAdjustment, DCOptions, PositiveDCAdjustment, ProficiencyRank, Rarity } from "pf2e-types";
+import { DCAdjustment, DCOptions, PositiveDCAdjustment, ProficiencyRank, Rarity } from "@7h3laughingman/pf2e-types";
 
 const dcAdjustments = new Map<DCAdjustment, number>([
     ["incredibly-easy", -10],

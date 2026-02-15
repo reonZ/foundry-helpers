@@ -1,5 +1,5 @@
 import { Localization, R, RollMode } from ".";
-import { SpellArea } from "pf2e-types";
+import { SpellArea } from "@7h3laughingman/pf2e-types";
 
 /**
  * https://github.com/foundryvtt/pf2e/blob/f7d7441acbf856b490a4e0c0d799809cd6e3dc5d/src/util/misc.ts#L259

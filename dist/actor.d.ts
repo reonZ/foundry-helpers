@@ -1,4 +1,4 @@
-import { ActorAlliance, ActorPF2e, CharacterPF2e, LootPF2e, ValueAndMax } from "pf2e-types";
+import { ActorAlliance, ActorPF2e, CharacterPF2e, LootPF2e, ValueAndMax } from "@7h3laughingman/pf2e-types";
 declare function actorsRespectAlliance(origin: ActorPF2e, target: ActorPF2e, alliance?: ActorTargetAlliance): boolean;
 declare function belongToPartyAlliance(actor: ActorPF2e): boolean;
 declare function oppositeAlliance(alliance: ActorAlliance): "party" | "opposition" | null;

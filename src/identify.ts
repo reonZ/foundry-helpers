@@ -1,4 +1,11 @@
-import { DCOptions, IdentifyAlchemyDCs, IdentifyMagicDCs, MagicTradition, PhysicalItemPF2e, Rarity } from "pf2e-types";
+import {
+    DCOptions,
+    IdentifyAlchemyDCs,
+    IdentifyMagicDCs,
+    MagicTradition,
+    PhysicalItemPF2e,
+    Rarity,
+} from "@7h3laughingman/pf2e-types";
 import { adjustDCByRarity, calculateDC, MAGIC_TRADITIONS, R, setHasElement, SYSTEM } from ".";
 
 /**

@@ -1,4 +1,4 @@
-import { ActorPF2e, ScenePF2e, TokenDocumentPF2e, TokenPF2e } from "pf2e-types";
+import { ActorPF2e, ScenePF2e, TokenDocumentPF2e, TokenPF2e } from "@7h3laughingman/pf2e-types";
 
 function selectTokens(tokens: (TokenPF2e | TokenDocumentPF2e)[]) {
     canvas.tokens.releaseAll();

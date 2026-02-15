@@ -1,4 +1,4 @@
-import { DegreeOfSuccessString, ZeroToThree } from "pf2e-types";
+import { DegreeOfSuccessString, ZeroToThree } from "@7h3laughingman/pf2e-types";
 
 const DEGREE_OF_SUCCESS_STRINGS = ["criticalFailure", "failure", "success", "criticalSuccess"] as const;
 

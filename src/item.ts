@@ -7,7 +7,7 @@ import {
     ItemSourcePF2e,
     ItemType,
     PhysicalItemPF2e,
-} from "pf2e-types";
+} from "@7h3laughingman/pf2e-types";
 import {
     CompendiumIndexData,
     createHTMLElementContent,

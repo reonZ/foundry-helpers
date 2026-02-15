@@ -1,4 +1,4 @@
-import { UserPF2e } from "pf2e-types";
+import { UserPF2e } from "@7h3laughingman/pf2e-types";
 import { SettingSubmenuConfig } from ".";
 declare function settingPath(...path: string[]): string;
 declare function getSetting<T = boolean>(key: string): T;

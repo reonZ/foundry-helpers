@@ -1,4 +1,4 @@
-import { ActorType, ItemType } from "pf2e-types";
+import { ActorType, ItemType } from "@7h3laughingman/pf2e-types";
 import { EnrichmentOptions } from ".";
 declare function renderCharacterSheets(): void;
 declare function renderActorSheets(type?: ActorSheetType | ActorSheetType[]): void;

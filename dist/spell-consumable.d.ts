@@ -1,4 +1,4 @@
-import { ConsumableSource, SpellConsumableItemType, SpellPF2e } from "pf2e-types";
+import { ConsumableSource, SpellConsumableItemType, SpellPF2e } from "@7h3laughingman/pf2e-types";
 import { ImageFilePath } from ".";
 /**
  * slightly modified version of

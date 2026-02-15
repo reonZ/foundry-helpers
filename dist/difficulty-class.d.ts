@@ -1,4 +1,4 @@
-import { DCOptions, ProficiencyRank, Rarity } from "pf2e-types";
+import { DCOptions, ProficiencyRank, Rarity } from "@7h3laughingman/pf2e-types";
 declare function adjustDCByRarity(dc: number, rarity?: Rarity): number;
 declare function calculateDC(level: number, { pwol, rarity }?: DCOptions): number;
 declare function calculateSimpleDC(rank: ProficiencyRank, { pwol }?: DCOptions): number;

@@ -1,4 +1,4 @@
-import { DCOptions, IdentifyAlchemyDCs, IdentifyMagicDCs, PhysicalItemPF2e } from "pf2e-types";
+import { DCOptions, IdentifyAlchemyDCs, IdentifyMagicDCs, PhysicalItemPF2e } from "@7h3laughingman/pf2e-types";
 /**
  * https://github.com/foundryvtt/pf2e/blob/578620c2a35a76d904938fb3d4984ad0e14be241/src/module/item/identification.ts#L63
  * with option fallback

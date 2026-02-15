@@ -1,4 +1,4 @@
-import { ActorPF2e, UserPF2e } from "pf2e-types";
+import { ActorPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
 declare function getCurrentUser(): UserPF2e;
 declare function userIsGM(user?: UserPF2e): boolean;
 declare function isPrimaryUpdater(actor: ActorPF2e): boolean;

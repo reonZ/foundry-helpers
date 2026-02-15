@@ -1,7 +1,7 @@
-import { ActorPF2e, ChatMessageSourcePF2e } from "pf2e-types";
+import { ActorPF2e, ChatMessageSourcePF2e } from "@7h3laughingman/pf2e-types";
 import { RollJSON } from "..";
 
-declare module "pf2e-types" {
+declare module "@7h3laughingman/pf2e-types" {
     interface GamePF2e {
         // dice3d?: Dice3D;
 

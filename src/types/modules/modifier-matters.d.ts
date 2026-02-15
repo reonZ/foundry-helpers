@@ -1,4 +1,4 @@
-import { ChatMessagePF2e } from "pf2e-types";
+import { ChatMessagePF2e } from "@7h3laughingman/pf2e-types";
 
 export {};
 

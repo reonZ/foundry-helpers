@@ -1,4 +1,4 @@
-import { ActorPF2e, MacroPF2e, UserPF2e } from "pf2e-types";
+import { ActorPF2e, MacroPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
 import { ClientDocument, MODULE, R, Token } from ".";
 
 function getInMemory<T>(obj: ClientDocument | Token, ...path: string[]): T | undefined {

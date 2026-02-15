@@ -1,4 +1,4 @@
-import { ActorPF2e, TokenDocumentPF2e } from "pf2e-types";
+import { ActorPF2e, TokenDocumentPF2e } from "@7h3laughingman/pf2e-types";
 
 declare global {
     type Prettify<T> = { [K in keyof T]: T[K] } & {};

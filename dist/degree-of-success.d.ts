@@ -1,4 +1,4 @@
-import { DegreeOfSuccessString, ZeroToThree } from "pf2e-types";
+import { DegreeOfSuccessString, ZeroToThree } from "@7h3laughingman/pf2e-types";
 declare const DEGREE_OF_SUCCESS_STRINGS: readonly ["criticalFailure", "failure", "success", "criticalSuccess"];
 declare const DEGREE_VALUES: Record<ZeroToThree | DegreeOfSuccessString, ZeroToThree>;
 declare const DEGREE_ADJUSTMENT_AMOUNTS: {

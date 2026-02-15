@@ -1,7 +1,8 @@
 /// <reference types="jquery" />
+/// <reference types="gsap" />
 
 export type * from "./src/types";
-export type * from "pf2e-types";
+export type * from "@7h3laughingman/pf2e-types";
 
 export { DateTime } from "luxon";
 export * as R from "remeda";

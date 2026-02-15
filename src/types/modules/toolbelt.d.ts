@@ -16,7 +16,7 @@ import {
     RollNoteSource,
     SaveType,
     TokenDocumentPF2e,
-} from "pf2e-types";
+} from "@7h3laughingman/pf2e-types";
 import { ActorUUID, DocumentUUID, ItemUUID, Rolled, RollJSON, TokenDocumentUUID } from "../../_types";
 
 declare global {

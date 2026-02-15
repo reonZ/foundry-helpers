@@ -1,4 +1,4 @@
-import { ActorPF2e, UserPF2e } from "pf2e-types";
+import { ActorPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
 
 function getCurrentUser(): UserPF2e {
     return game.user ?? game.data.users.find((x) => x._id === game.userId);

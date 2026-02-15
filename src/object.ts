@@ -18,7 +18,7 @@ import {
     TokenDocumentPF2e,
     TokenPF2e,
     WeaponPF2e,
-} from "pf2e-types";
+} from "@7h3laughingman/pf2e-types";
 import { ClientDocument, R } from ".";
 
 class MapOfArrays<K extends string | number, T> extends Map<K, T[]> {

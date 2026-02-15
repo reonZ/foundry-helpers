@@ -1,4 +1,4 @@
-import { MeasuredTemplateDocumentPF2e, MeasuredTemplatePF2e, TokenPF2e } from "pf2e-types";
+import { MeasuredTemplateDocumentPF2e, MeasuredTemplatePF2e, TokenPF2e } from "@7h3laughingman/pf2e-types";
 
 function getTemplateTokens(
     measuredTemplate: MeasuredTemplateDocumentPF2e | MeasuredTemplatePF2e,

@@ -1,4 +1,4 @@
-import { ActorAlliance, ActorPF2e, CharacterPF2e, LootPF2e, ValueAndMax } from "pf2e-types";
+import { ActorAlliance, ActorPF2e, CharacterPF2e, LootPF2e, ValueAndMax } from "@7h3laughingman/pf2e-types";
 
 function actorsRespectAlliance(origin: ActorPF2e, target: ActorPF2e, alliance: ActorTargetAlliance = "all") {
     return alliance === "allies" ? target.isAllyOf(origin) : alliance === "enemies" ? target.isEnemyOf(origin) : true;
