@@ -12,7 +12,7 @@ export * from "./actor";
 export * from "./application";
 export * from "./array";
 export * from "./chat";
-// export * from "./check";
+export * from "./check";
 // export * from "./combat";
 // export * from "./compendium";
 // export * from "./custom-elements";

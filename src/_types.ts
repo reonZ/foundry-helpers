@@ -1,5 +1,6 @@
 import PrimaryCanvasGroup from "foundry-types/client/canvas/groups/primary.mjs";
 import Localization from "foundry-types/client/helpers/localization.mjs";
+import { DocumentUUID } from "foundry-types/client/utils/_module.mjs";
 import { ImageFilePath, RollMode } from "foundry-types/common/constants.mjs";
 
 export type * from "foundry-types/client/_module.mjs";
@@ -16,8 +17,7 @@ export type * from "foundry-types/client/documents/collections/compendium-collec
 export type * from "foundry-types/client/helpers/hooks.mjs";
 export type * from "foundry-types/client/helpers/localization.mjs";
 export type * from "foundry-types/client/packages/_module.mjs";
-export type * from "foundry-types/client/utils/_module.mjs";
 export type * from "foundry-types/common/abstract/_module.mjs";
 export type * from "foundry-types/common/documents/_module.mjs";
 
-export type { ImageFilePath, Localization, PrimaryCanvasGroup, RollMode };
+export type { DocumentUUID, ImageFilePath, Localization, PrimaryCanvasGroup, RollMode };

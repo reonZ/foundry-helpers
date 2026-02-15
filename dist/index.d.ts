@@ -9,6 +9,7 @@ export * from "./actor";
 export * from "./application";
 export * from "./array";
 export * from "./chat";
+export * from "./check";
 export * from "./damage";
 export * from "./degree-of-success";
 export * from "./dialog";

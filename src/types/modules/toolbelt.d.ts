@@ -105,11 +105,11 @@ declare global {
                 getSlavesInMemory(actor: CreaturePF2e, idOnly?: true): Set<ActorUUID> | undefined;
             };
             targetHelper: {
-                getMessageTargets: (message: ChatMessagePF2e) => TokenDocumentUUID[];
-                setMessageFlagTargets: (
-                    updates: Record<string, any>,
+                getMessageTargets: (message: ChatMessagePF2e) => TokenDocumentUUID[] | undefined;
+                setMessageFlagTargets: <T extends Record<string, unknown>>(
+                    updates: T,
                     targets: TokenDocumentUUID[],
-                ) => Record<string, any>;
+                ) => T;
             };
         }
 
@@ -145,7 +145,7 @@ declare global {
         namespace targetHelper {
             type TargetMessageType = "area" | "damage" | "spell" | "action" | "check";
 
-            type MessageTargetSave = {
+            type TargetSaveInstance = {
                 die: number;
                 dosAdjustments?: DegreeAdjustmentsRecord | undefined;
                 modifiers: { label: string; modifier: number; slug: string }[];
@@ -165,7 +165,7 @@ declare global {
                 message: ChatMessagePF2e;
                 rollMessage: ChatMessagePF2e;
                 target: TokenDocumentPF2e;
-                data: MessageTargetSave;
+                data: TargetSaveInstance;
             };
 
             type RerollSaveHook = {
@@ -174,7 +174,7 @@ declare global {
                 keptRoll: Rolled<CheckRoll>;
                 message: ChatMessagePF2e;
                 target: TokenDocumentPF2e;
-                data: MessageTargetSave;
+                data: TargetSaveInstance;
             };
 
             type MessageTargetApplied = Record<`${number}` | number, boolean>;
@@ -197,7 +197,7 @@ declare global {
             type MessageSaveFlag = {
                 basic: boolean;
                 dc: number;
-                saves?: Record<string, MessageTargetSave>;
+                saves?: Record<string, TargetSaveInstance>;
                 statistic: SaveType;
             };
         }
