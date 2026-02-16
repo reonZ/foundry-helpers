@@ -224,6 +224,10 @@ function isSF2eItem<T extends PhysicalItemPF2e>(item: T): boolean {
     return includesAny(item._source.system.traits.value, ["tech", "analog"]);
 }
 
+function isAreaOrAutoFireType(type: string): type is "area-fire" | "auto-fire" {
+    return R.isIncludedIn(type, ["area-fire", "auto-fire"]);
+}
+
 type AttachableType = keyof typeof ATTACHABLE_TYPES;
 type AttachToType<T extends AttachableType> = (typeof ATTACHABLE_TYPES)[T][number];
 
@@ -239,6 +243,7 @@ export {
     consumeItem,
     findItemWithSourceId,
     getItemSourceId,
+    isAreaOrAutoFireType,
     isCastConsumable,
     isSF2eItem,
     isSupressedFeat,

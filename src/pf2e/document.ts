@@ -1,0 +1,112 @@
+import { ActorPF2e, ChatMessagePF2e, ItemPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
+import {
+    ClientDocument,
+    CompendiumItemUUID,
+    EmbeddedItemUUID,
+    htmlClosest,
+    isInstanceOf,
+    ItemUUID,
+    WorldItemUUID,
+} from "..";
+
+/**
+ * https://github.com/foundryvtt/pf2e/blob/89892b6fafec1456a0358de8c6d7b102e3fe2da2/src/module/actor/item-transfer.ts#L117
+ */
+function getPreferredName(document: ActorPF2e | UserPF2e) {
+    if ("items" in document) {
+        // Use a special moniker for party actors
+        if (document.isOfType("party")) return game.i18n.localize("PF2E.loot.PartyStash");
+        // Synthetic actor: use its token name or, failing that, actor name
+        if (document.token) return document.token.name;
+
+        // Linked actor: use its token prototype name
+        return document.prototypeToken?.name ?? document.name;
+    }
+    // User with an assigned character
+    if (document.character) {
+        const token = canvas.tokens.placeables.find((t) => t.actor?.id === document.id);
+        return token?.name ?? document.character?.name;
+    }
+
+    // User with no assigned character (should never happen)
+    return document.name;
+}
+
+/**
+ * https://github.com/foundryvtt/pf2e/blob/f7d7441acbf856b490a4e0c0d799809cd6e3dc5d/src/scripts/helpers.ts#L16
+ */
+function resolveActorAndItemFromHTML(html: HTMLElement): {
+    /**
+     * The containing sheet's primary document, if an actor.
+     * Generally used to test if something was dragged from an actor sheet specifically.
+     */
+    sheetActor: ActorPF2e | null;
+    actor: ActorPF2e | null;
+    item: ItemPF2e | null;
+    /** The message the actor and item are from */
+    message: ChatMessagePF2e | null;
+    /** The message, sheet document, or journal for this element. */
+    appDocument: ClientDocument | null;
+} {
+    const messageId = htmlClosest(html, "[data-message-id]")?.dataset.messageId;
+    const message = messageId ? (game.messages.get(messageId) ?? null) : null;
+    const sheetDocument = resolveSheetDocument(html);
+    const sheetActor = isInstanceOf(sheetDocument, "ActorPF2e") ? sheetDocument : null;
+    const sheetItem = isInstanceOf(sheetDocument, "ItemPF2e") ? sheetDocument : null;
+
+    const item = (() => {
+        if (isItemUUID(html.dataset.itemUuid)) {
+            const document = fromUuidSync(html.dataset.itemUuid);
+            if (isInstanceOf(document, "ItemPF2e")) return document;
+        }
+
+        if (sheetItem) {
+            return sheetItem;
+        }
+
+        if (sheetActor) {
+            const itemId = htmlClosest(html, "[data-item-id]")?.dataset.itemId;
+            const document = itemId ? sheetActor.items.get(itemId) : null;
+            if (document) return document;
+        }
+
+        return message?.item ?? null;
+    })();
+
+    return {
+        sheetActor,
+        actor: item?.actor ?? message?.actor ?? null,
+        item,
+        message,
+        appDocument: message ?? sheetDocument,
+    };
+}
+
+/**
+ * https://github.com/foundryvtt/pf2e/blob/f7d7441acbf856b490a4e0c0d799809cd6e3dc5d/src/scripts/helpers.ts#L8
+ */
+function resolveSheetDocument(html: HTMLElement): ClientDocument | null {
+    const sheet: { id?: string; document?: unknown } | null =
+        ui.windows[Number(html.closest<HTMLElement>(".app.sheet")?.dataset.appid)] ?? null;
+    const doc = sheet?.document;
+    return doc instanceof Actor || doc instanceof Item || doc instanceof JournalEntry ? doc : null;
+}
+
+function isItemUUID(uuid: unknown, options: { embedded: true }): uuid is EmbeddedItemUUID;
+function isItemUUID(uuid: unknown, options: { embedded: false }): uuid is WorldItemUUID | CompendiumItemUUID;
+function isItemUUID(uuid: unknown, options?: { embedded?: boolean }): uuid is ItemUUID;
+function isItemUUID(uuid: unknown, options: { embedded?: boolean } = {}): uuid is ItemUUID {
+    if (typeof uuid !== "string") return false;
+    try {
+        const parseResult = foundry.utils.parseUuid(uuid);
+        const isEmbedded = !!parseResult && parseResult.embedded.length > 0;
+        return (
+            parseResult?.type === "Item" &&
+            (options.embedded === true ? isEmbedded : options.embedded === false ? !isEmbedded : true)
+        );
+    } catch {
+        return false;
+    }
+}
+
+export { getPreferredName, resolveActorAndItemFromHTML };

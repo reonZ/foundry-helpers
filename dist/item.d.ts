@@ -18,7 +18,8 @@ declare function consumeItem(event: Event, item: ConsumablePF2e<ActorPF2e>): Pro
 declare function isSupressedFeat<TActor extends ActorPF2e | null>(item: ItemPF2e<TActor>): boolean;
 declare function isCastConsumable(item: ConsumablePF2e): boolean;
 declare function isSF2eItem<T extends PhysicalItemPF2e>(item: T): boolean;
+declare function isAreaOrAutoFireType(type: string): type is "area-fire" | "auto-fire";
 type ActorItemInstances<TType extends ItemType, TActor extends ActorPF2e> = ItemInstances<TActor>[TType extends "weapon" | "shield" ? TType | "weapon" | "equipment" : TType];
 type ItemOrSource = PreCreate<ItemSourcePF2e> | CompendiumIndexData | ItemPF2e;
-export { consumeItem, findItemWithSourceId, getItemSourceId, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, usePhysicalItem, };
+export { consumeItem, findItemWithSourceId, getItemSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, usePhysicalItem, };
 export type { ItemOrSource };

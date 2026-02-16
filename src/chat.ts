@@ -1,5 +1,5 @@
-import { ChatMessagePF2e } from "@7h3laughingman/pf2e-types";
-import { ClientDocument, enrichHTML, R, SYSTEM } from ".";
+import { ChatMessagePF2e, DamageRoll } from "@7h3laughingman/pf2e-types";
+import { ClientDocument, enrichHTML, R, Rolled, SYSTEM } from ".";
 
 function* latestChatMessages(nb: number, fromMessage?: ChatMessagePF2e): Generator<ChatMessagePF2e, void, undefined> {
     if (!ui.chat) return;
@@ -70,4 +70,9 @@ function isSpellMessage(message: ChatMessagePF2e): boolean {
     return R.isString(message.flags[SYSTEM.id].casting?.id);
 }
 
+type DamageMessage = ChatMessagePF2e & {
+    rolls: Rolled<DamageRoll>[];
+};
+
 export { createChatLink, isActionMessage, isSpellMessage, latestChatMessages, refreshLatestMessages };
+export type { DamageMessage };

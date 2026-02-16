@@ -16,10 +16,14 @@ declare class CustomModule {
     apiExpose(key: string, toExpose: Record<string, any>): void;
     debugExpose(key: string, toExpose: any): void;
 }
+declare function getActiveModule(key: string): ActiveModule | undefined;
 declare const MODULE: CustomModule;
 type ExtendedModule<TModule extends Module = Module> = TModule & {
     getSetting<T = boolean>(key: string): T;
     setSetting<T>(key: string, value: T): Promise<T>;
 };
-export { MODULE };
+type ActiveModule = Module & {
+    getSetting<T = boolean>(...path: string[]): T;
+};
+export { getActiveModule, MODULE };
 export type { ExtendedModule };

@@ -1,5 +1,17 @@
-import { ActorPF2e, MacroPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
-import { ClientDocument, MODULE, R, Token } from ".";
+import { MacroPF2e } from "@7h3laughingman/pf2e-types";
+import { ClientDocument, DocumentType, MODULE, R, Token } from ".";
+
+async function getDocumentFromUUID<T extends DocumentType, D = InstanceType<DocumentTypeMap[T]>>(
+    type: T,
+    uuid: Maybe<string>,
+): Promise<D | null> {
+    if (!uuid) return null;
+
+    const DocumentCls = getDocumentClass(type);
+    const doc = await fromUuid(uuid);
+
+    return doc instanceof DocumentCls ? (doc as D) : null;
+}
 
 function getInMemory<T>(obj: ClientDocument | Token, ...path: string[]): T | undefined {
     return foundry.utils.getProperty(obj, `modules.${MODULE.id}.${path.join(".")}`) as T | undefined;
@@ -12,29 +24,6 @@ function setInMemory<T>(obj: ClientDocument | Token, ...args: [...string[], T]):
 
 function deleteInMemory(obj: ClientDocument | Token, ...path: string[]) {
     return foundry.utils.deleteProperty(obj, `modules.${MODULE.id}.${path.join(".")}`);
-}
-
-/**
- * https://github.com/foundryvtt/pf2e/blob/89892b6fafec1456a0358de8c6d7b102e3fe2da2/src/module/actor/item-transfer.ts#L117
- */
-function getPreferredName(document: ActorPF2e | UserPF2e) {
-    if ("items" in document) {
-        // Use a special moniker for party actors
-        if (document.isOfType("party")) return game.i18n.localize("PF2E.loot.PartyStash");
-        // Synthetic actor: use its token name or, failing that, actor name
-        if (document.token) return document.token.name;
-
-        // Linked actor: use its token prototype name
-        return document.prototypeToken?.name ?? document.name;
-    }
-    // User with an assigned character
-    if (document.character) {
-        const token = canvas.tokens.placeables.find((t) => t.actor?.id === document.id);
-        return token?.name ?? document.character?.name;
-    }
-
-    // User with no assigned character (should never happen)
-    return document.name;
 }
 
 function isScriptMacro(doc: any): doc is MacroPF2e {
@@ -50,4 +39,4 @@ function isValidTargetDocuments(target: unknown): target is TargetDocuments {
     return !target.token || target.token instanceof TokenDocument;
 }
 
-export { deleteInMemory, getInMemory, getPreferredName, isScriptMacro, isValidTargetDocuments, setInMemory };
+export { deleteInMemory, getDocumentFromUUID, getInMemory, isScriptMacro, isValidTargetDocuments, setInMemory };

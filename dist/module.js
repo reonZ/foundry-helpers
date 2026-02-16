@@ -134,5 +134,16 @@ class CustomModule {
         });
     }
 }
+function getActiveModule(key) {
+    const module = game.modules.get(key);
+    if (!module?.active)
+        return;
+    return {
+        ...module,
+        getSetting(...path) {
+            return game.settings.get(module.id, R.join(path, "."));
+        },
+    };
+}
 const MODULE = new CustomModule();
-export { MODULE };
+export { getActiveModule, MODULE };

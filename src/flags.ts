@@ -1,18 +1,18 @@
-import { MODULE } from ".";
+import { ClientDocument, MODULE, R } from ".";
 
 type Document = foundry.abstract.Document;
 
 function getFlag<T>(doc: Document, ...path: string[]): T | undefined {
-    return doc.getFlag(MODULE.id, path.join(".")) as T | undefined;
+    return doc.getFlag(MODULE.id, R.join(path, ".")) as T | undefined;
 }
 
 function setFlag<D extends Document, T>(doc: D, ...args: [...string[], T]): Promise<D> {
     const value = args.pop();
-    return doc.setFlag(MODULE.id, args.join("."), value);
+    return doc.setFlag(MODULE.id, R.join(args as string[], "."), value);
 }
 
 function unsetFlag<D extends Document>(doc: D, ...path: string[]): Promise<D | undefined> {
-    return doc.unsetFlag(MODULE.id, path.join("."));
+    return doc.unsetFlag(MODULE.id, R.join(path, "."));
 }
 
 function flagPath(...path: string[]): string {
@@ -50,6 +50,11 @@ function deleteFlagProperty<T extends object>(obj: T, ...path: string[]): T {
     return obj;
 }
 
+function updateSourceFlag<T extends ClientDocument>(doc: T, ...args: [...string[], any]): DeepPartial<T["_source"]> {
+    const value = args.pop();
+    return doc.updateSource({ [flagPath(...args)]: value });
+}
+
 export {
     deleteFlagProperty,
     getFlag,
@@ -59,4 +64,5 @@ export {
     setFlagProperty,
     unsetFlag,
     unsetFlagProperty,
+    updateSourceFlag,
 };

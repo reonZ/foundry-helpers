@@ -159,6 +159,18 @@ class CustomModule {
     }
 }
 
+function getActiveModule(key: string): ActiveModule | undefined {
+    const module = game.modules.get(key);
+    if (!module?.active) return;
+
+    return {
+        ...module,
+        getSetting<T>(...path: string[]) {
+            return game.settings.get(module.id, R.join(path, ".")) as T;
+        },
+    } as ActiveModule;
+}
+
 const MODULE = new CustomModule();
 
 type ExtendedModule<TModule extends Module = Module> = TModule & {
@@ -166,5 +178,9 @@ type ExtendedModule<TModule extends Module = Module> = TModule & {
     setSetting<T>(key: string, value: T): Promise<T>;
 };
 
-export { MODULE };
+type ActiveModule = Module & {
+    getSetting<T = boolean>(...path: string[]): T;
+};
+
+export { getActiveModule, MODULE };
 export type { ExtendedModule };

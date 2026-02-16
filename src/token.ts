@@ -1,4 +1,27 @@
-import { ActorPF2e, ScenePF2e, TokenDocumentPF2e, TokenPF2e } from "@7h3laughingman/pf2e-types";
+import { ActorPF2e, ActorType, ScenePF2e, TokenDocumentPF2e, TokenPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
+import { ActivityData, isInstanceOf, PingOptions, TokenDocumentUUID } from ".";
+
+function getCurrentTargets(options?: {
+    types?: ("creature" | ActorType)[];
+    user?: UserPF2e;
+    uuid: true;
+}): TokenDocumentUUID[];
+function getCurrentTargets(options?: {
+    types?: ("creature" | ActorType)[];
+    user?: UserPF2e;
+    uuid?: boolean;
+}): TokenPF2e<TokenDocumentPF2e<ScenePF2e>>[];
+function getCurrentTargets({
+    types = [],
+    user = game.user,
+    uuid,
+}: { array?: boolean; types?: ("creature" | ActorType)[]; user?: UserPF2e; uuid?: boolean } = {}) {
+    const targets = user.targets.filter((target) => {
+        const actor = target.actor;
+        return !!actor && (!types.length || actor.isOfType(...types));
+    });
+    return uuid ? Array.from(targets.map((target) => target.document.uuid)) : Array.from(targets);
+}
 
 function selectTokens(tokens: (TokenPF2e | TokenDocumentPF2e)[]) {
     canvas.tokens.releaseAll();
@@ -54,10 +77,72 @@ function getFirstTokenThatMatches<T extends TokenDocument>(
     return null;
 }
 
+/**
+ * slightly modified core foundry version
+ */
+async function ping(origin: Point, options?: PingOptions & { local?: boolean }): Promise<boolean> {
+    // Don't allow pinging outside of the canvas bounds
+    if (!canvas.dimensions.rect.contains(origin.x, origin.y)) return false;
+    // Configure the ping to be dispatched
+    const types = CONFIG.Canvas.pings.types;
+    const isPull = game.keyboard.isModifierActive("Shift");
+    const isAlert = game.keyboard.isModifierActive("Alt");
+    let style: string = types.PULSE;
+    if (isPull) style = types.PULL;
+    else if (isAlert) style = types.ALERT;
+    let ping = { scene: canvas.scene?.id, pull: isPull, style, zoom: canvas.stage.scale.x };
+    ping = foundry.utils.mergeObject(ping, options);
+
+    if (!options?.local) {
+        // Broadcast the ping to other connected clients
+        const activity: ActivityData = { cursor: origin, ping };
+        game.user.broadcastActivity(activity);
+    }
+
+    // Display the ping locally
+    return canvas.controls.handlePing(game.user, origin, ping);
+}
+
+async function pingToken(token: TokenPF2e | TokenDocumentPF2e, local?: boolean): Promise<boolean> {
+    if (!canvas.ready) return false;
+    return ping(token.center, { local });
+}
+
+function emitTokenHover(event: MouseEvent, token: TokenPF2e | TokenDocumentPF2e, hover: boolean) {
+    if (!canvas.ready) return;
+
+    const tokenObj = isInstanceOf(token, "TokenPF2e") ? token : token.object;
+
+    if (hover && tokenObj?.isVisible && !tokenObj.controlled) {
+        tokenObj.emitHoverIn(event);
+    } else if (!hover) {
+        tokenObj?.emitHoverOut(event);
+    }
+}
+
+function panToToken(token: TokenPF2e | TokenDocumentPF2e, control?: boolean) {
+    if (control) {
+        const tokenObj = isInstanceOf(token, "TokenPF2e") ? token : token.object;
+        tokenObj?.control({ releaseOthers: true });
+    }
+
+    canvas.animatePan(token.center);
+}
+
 type FirstActiveTokenOptions = {
     linked?: boolean;
     scene?: ScenePF2e | null;
 };
 
-export { getFirstActiveToken, getTargetToken, positionTokenFromCoords, selectTokens };
+export {
+    emitTokenHover,
+    getCurrentTargets,
+    getFirstActiveToken,
+    getTargetToken,
+    panToToken,
+    ping,
+    pingToken,
+    positionTokenFromCoords,
+    selectTokens,
+};
 export type { FirstActiveTokenOptions };

@@ -1,5 +1,5 @@
-import { ChatMessagePF2e } from "@7h3laughingman/pf2e-types";
-import { ClientDocument } from ".";
+import { ChatMessagePF2e, DamageRoll } from "@7h3laughingman/pf2e-types";
+import { ClientDocument, Rolled } from ".";
 declare function latestChatMessages(nb: number, fromMessage?: ChatMessagePF2e): Generator<ChatMessagePF2e, void, undefined>;
 declare function refreshLatestMessages(nb: number): Promise<void>;
 declare function createChatLink(docOrUuid: (ClientDocument & {
@@ -16,4 +16,8 @@ declare function createChatLink(docOrUuid: (ClientDocument & {
 }): string;
 declare function isActionMessage(message: ChatMessagePF2e): boolean;
 declare function isSpellMessage(message: ChatMessagePF2e): boolean;
+type DamageMessage = ChatMessagePF2e & {
+    rolls: Rolled<DamageRoll>[];
+};
 export { createChatLink, isActionMessage, isSpellMessage, latestChatMessages, refreshLatestMessages };
+export type { DamageMessage };

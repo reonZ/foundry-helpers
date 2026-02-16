@@ -151,4 +151,7 @@ function isCastConsumable(item) {
 function isSF2eItem(item) {
     return includesAny(item._source.system.traits.value, ["tech", "analog"]);
 }
-export { consumeItem, findItemWithSourceId, getItemSourceId, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, usePhysicalItem, };
+function isAreaOrAutoFireType(type) {
+    return R.isIncludedIn(type, ["area-fire", "auto-fire"]);
+}
+export { consumeItem, findItemWithSourceId, getItemSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, usePhysicalItem, };

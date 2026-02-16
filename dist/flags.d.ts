@@ -1,3 +1,4 @@
+import { ClientDocument } from ".";
 type Document = foundry.abstract.Document;
 declare function getFlag<T>(doc: Document, ...path: string[]): T | undefined;
 declare function setFlag<D extends Document, T>(doc: D, ...args: [...string[], T]): Promise<D>;
@@ -7,4 +8,5 @@ declare function setFlagProperty<T extends object>(obj: T, ...args: [...string[]
 declare function setFlagProperties<T extends object>(obj: T, ...args: [...string[], properties: Record<string, any>]): T;
 declare function unsetFlagProperty<T extends object>(obj: T, ...path: [string, ...string[]]): T;
 declare function deleteFlagProperty<T extends object>(obj: T, ...path: string[]): T;
-export { deleteFlagProperty, getFlag, getFlagProperty, setFlag, setFlagProperties, setFlagProperty, unsetFlag, unsetFlagProperty, };
+declare function updateSourceFlag<T extends ClientDocument>(doc: T, ...args: [...string[], any]): DeepPartial<T["_source"]>;
+export { deleteFlagProperty, getFlag, getFlagProperty, setFlag, setFlagProperties, setFlagProperty, unsetFlag, unsetFlagProperty, updateSourceFlag, };

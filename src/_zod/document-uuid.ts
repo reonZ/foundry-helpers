@@ -27,4 +27,3 @@ function zDocumentUUID<T extends DocumentUUID>(
 type DocumentType = (typeof CONST.ALL_DOCUMENT_TYPES)[number];
 
 export { zDocumentUUID };
-export type { DocumentType };

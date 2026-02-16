@@ -1,3 +1,11 @@
+import { isInstanceOf } from ".";
+function getCurrentTargets({ types = [], user = game.user, uuid, } = {}) {
+    const targets = user.targets.filter((target) => {
+        const actor = target.actor;
+        return !!actor && (!types.length || actor.isOfType(...types));
+    });
+    return uuid ? Array.from(targets.map((target) => target.document.uuid)) : Array.from(targets);
+}
 function selectTokens(tokens) {
     canvas.tokens.releaseAll();
     for (const target of tokens) {
@@ -33,4 +41,53 @@ function getFirstTokenThatMatches(actor, predicate, scene = game.scenes.current)
     }
     return null;
 }
-export { getFirstActiveToken, getTargetToken, positionTokenFromCoords, selectTokens };
+/**
+ * slightly modified core foundry version
+ */
+async function ping(origin, options) {
+    // Don't allow pinging outside of the canvas bounds
+    if (!canvas.dimensions.rect.contains(origin.x, origin.y))
+        return false;
+    // Configure the ping to be dispatched
+    const types = CONFIG.Canvas.pings.types;
+    const isPull = game.keyboard.isModifierActive("Shift");
+    const isAlert = game.keyboard.isModifierActive("Alt");
+    let style = types.PULSE;
+    if (isPull)
+        style = types.PULL;
+    else if (isAlert)
+        style = types.ALERT;
+    let ping = { scene: canvas.scene?.id, pull: isPull, style, zoom: canvas.stage.scale.x };
+    ping = foundry.utils.mergeObject(ping, options);
+    if (!options?.local) {
+        // Broadcast the ping to other connected clients
+        const activity = { cursor: origin, ping };
+        game.user.broadcastActivity(activity);
+    }
+    // Display the ping locally
+    return canvas.controls.handlePing(game.user, origin, ping);
+}
+async function pingToken(token, local) {
+    if (!canvas.ready)
+        return false;
+    return ping(token.center, { local });
+}
+function emitTokenHover(event, token, hover) {
+    if (!canvas.ready)
+        return;
+    const tokenObj = isInstanceOf(token, "TokenPF2e") ? token : token.object;
+    if (hover && tokenObj?.isVisible && !tokenObj.controlled) {
+        tokenObj.emitHoverIn(event);
+    }
+    else if (!hover) {
+        tokenObj?.emitHoverOut(event);
+    }
+}
+function panToToken(token, control) {
+    if (control) {
+        const tokenObj = isInstanceOf(token, "TokenPF2e") ? token : token.object;
+        tokenObj?.control({ releaseOthers: true });
+    }
+    canvas.animatePan(token.center);
+}
+export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetToken, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, };

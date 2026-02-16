@@ -105,7 +105,7 @@ declare global {
                 getSlavesInMemory(actor: CreaturePF2e, idOnly?: true): Set<ActorUUID> | undefined;
             };
             targetHelper: {
-                getMessageTargets: (message: ChatMessagePF2e) => TokenDocumentUUID[] | undefined;
+                getMessageTargets: (message: ChatMessagePF2e) => TokenDocumentPF2e[] | undefined;
                 setMessageFlagTargets: <T extends Record<string, unknown>>(
                     updates: T,
                     targets: TokenDocumentUUID[],
@@ -160,6 +160,30 @@ declare global {
                 value: number;
             };
 
+            type TargetsSaves = {
+                basic: boolean;
+                dc: number;
+                saves?: Record<string, TargetSaveInstance>;
+                statistic: SaveType;
+            };
+
+            type MessageFlag = {
+                author?: ActorUUID;
+                applied?: Record<string, AppliedDamages>;
+                isRegen?: boolean;
+                item?: ItemUUID;
+                options?: string[];
+                private?: boolean;
+                saveVariants?: Record<string, TargetsSaves>;
+                splashIndex?: number;
+                splashTargets?: string[];
+                targets?: TokenDocumentUUID[];
+                traits?: string[];
+                type?: TargetMessageType;
+            };
+
+            type AppliedDamages = Record<`${number}` | number, boolean>;
+
             type RollSaveHook = {
                 roll: Rolled<CheckRoll>;
                 message: ChatMessagePF2e;
@@ -175,30 +199,6 @@ declare global {
                 message: ChatMessagePF2e;
                 target: TokenDocumentPF2e;
                 data: TargetSaveInstance;
-            };
-
-            type MessageTargetApplied = Record<`${number}` | number, boolean>;
-
-            type MessageFlag = {
-                author?: ActorUUID;
-                applied?: Record<string, MessageTargetApplied>;
-                isRegen?: boolean;
-                item?: ItemUUID;
-                options?: string[];
-                private?: boolean;
-                saveVariants?: Record<string, MessageSaveFlag>;
-                splashIndex?: number;
-                splashTargets?: string[];
-                targets?: TokenDocumentUUID[];
-                traits?: string[];
-                type?: TargetMessageType;
-            };
-
-            type MessageSaveFlag = {
-                basic: boolean;
-                dc: number;
-                saves?: Record<string, TargetSaveInstance>;
-                statistic: SaveType;
             };
         }
     }
