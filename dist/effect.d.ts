@@ -3,7 +3,7 @@ import { ImageFilePath } from ".";
 declare function createCustomEffect({ badge, duration, img, itemSlug, name, rules, show, unidentified, }: CustomEffectOptions): WithRequired<PreCreate<EffectSource>, "system">;
 declare function createCustomCondition(options: CustomConditionOptions): PreCreate<EffectSource> | undefined;
 type CustomEffectOptions = {
-    badge?: EffectBadgeSource;
+    badge?: DeepPartial<EffectBadgeSource>;
     duration?: CustomEffectDuration;
     img?: ImageFilePath;
     name: string;
@@ -35,4 +35,4 @@ interface EffectViewData {
     remaining: string | null;
 }
 export { createCustomCondition, createCustomEffect };
-export type { CustomConditionOptions, CustomEffectOptions, EffectsPanelViewData, EffectViewData };
+export type { CustomConditionOptions, CustomEffectDuration, CustomEffectOptions, EffectsPanelViewData, EffectViewData };

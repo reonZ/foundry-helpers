@@ -143,6 +143,7 @@ declare global {
         }
 
         namespace targetHelper {
+            type RerollType = "hero" | "mythic" | "new" | "lower" | "higher";
             type TargetMessageType = "area" | "damage" | "spell" | "action" | "check";
 
             type TargetSaveInstance = {
@@ -151,7 +152,7 @@ declare global {
                 modifiers: { label: string; modifier: number; slug: string }[];
                 notes: RollNoteSource[];
                 private: boolean;
-                rerolled?: "hero" | "mythic" | "new" | "lower" | "higher";
+                rerolled?: RerollType;
                 roll: string;
                 significantModifiers?: modifiersMatter.SignificantModifier[] | undefined;
                 statistic: SaveType;

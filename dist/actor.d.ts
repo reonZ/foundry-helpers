@@ -5,10 +5,11 @@ declare function oppositeAlliance(alliance: ActorAlliance): "party" | "oppositio
 declare function isAllyActor(actor: ActorPF2e): boolean;
 declare function isMerchant(actor: Maybe<ActorPF2e>): actor is LootPF2e;
 declare function getMythicOrHeroPoints(actor: CharacterPF2e): MythicOrHeroPoints;
+declare function getActorMaster(actor: Maybe<ActorPF2e>): ActorPF2e | null;
 type ActorTargetAlliance = "all" | "allies" | "enemies";
 type MythicOrHeroPoints = ValueAndMax & {
     name: "mythicPoints" | "heroPoints";
     slug: "mythic-points" | "hero-points";
 };
-export { actorsRespectAlliance, belongToPartyAlliance, getMythicOrHeroPoints, isAllyActor, isMerchant, oppositeAlliance, };
+export { actorsRespectAlliance, belongToPartyAlliance, getActorMaster, getMythicOrHeroPoints, isAllyActor, isMerchant, oppositeAlliance, };
 export type { ActorTargetAlliance, MythicOrHeroPoints };

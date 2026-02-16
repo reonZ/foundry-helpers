@@ -11,4 +11,5 @@ declare class CycleArray<T> extends Array<T> {
 }
 declare function arraysEqual<T extends any[]>(arr1: T, arr2: any[]): arr2 is T;
 declare function includesAny(arr: any[], entries: any[]): boolean;
-export { arraysEqual, CycleArray, includesAny };
+declare function includesAll(arr: any[], entries: any[]): boolean;
+export { arraysEqual, CycleArray, includesAll, includesAny };

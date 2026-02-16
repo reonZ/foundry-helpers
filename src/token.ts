@@ -1,5 +1,13 @@
 import { ActorPF2e, ActorType, ScenePF2e, TokenDocumentPF2e, TokenPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
-import { ActivityData, isInstanceOf, PingOptions, TokenDocumentUUID } from ".";
+import { ActivityData, isInstanceOf, PingOptions, R, TokenDocumentUUID } from ".";
+
+function getTokenDocument(token: unknown): TokenDocumentPF2e | undefined {
+    return token instanceof foundry.canvas.placeables.Token
+        ? token.document
+        : token instanceof TokenDocument
+          ? (token as TokenDocumentPF2e)
+          : undefined;
+}
 
 function getCurrentTargets(options?: {
     types?: ("creature" | ActorType)[];
@@ -61,6 +69,19 @@ function getTargetToken(
     return target.token ?? target.actor.token ?? getFirstActiveToken(target.actor, options) ?? undefined;
 }
 
+function getTargetsTokens(targets: TargetDocuments[], uuid: true): TokenDocumentUUID[];
+function getTargetsTokens(targets: TargetDocuments[], uuid?: boolean): TokenDocumentPF2e[];
+function getTargetsTokens(targets: TargetDocuments[], uuid?: boolean) {
+    return R.pipe(
+        targets,
+        R.map((target) => {
+            const token = getTargetToken(target);
+            return uuid ? token?.uuid : token;
+        }),
+        R.filter(R.isTruthy),
+    );
+}
+
 function getFirstTokenThatMatches<T extends TokenDocument>(
     actor: ActorPF2e,
     predicate: (token: TokenDocument) => boolean,
@@ -81,6 +102,9 @@ function getFirstTokenThatMatches<T extends TokenDocument>(
  * slightly modified core foundry version
  */
 async function ping(origin: Point, options?: PingOptions & { local?: boolean }): Promise<boolean> {
+    const scene = canvas.scene;
+    if (!scene) return false;
+
     // Don't allow pinging outside of the canvas bounds
     if (!canvas.dimensions.rect.contains(origin.x, origin.y)) return false;
     // Configure the ping to be dispatched
@@ -90,7 +114,7 @@ async function ping(origin: Point, options?: PingOptions & { local?: boolean }):
     let style: string = types.PULSE;
     if (isPull) style = types.PULL;
     else if (isAlert) style = types.ALERT;
-    let ping = { scene: canvas.scene?.id, pull: isPull, style, zoom: canvas.stage.scale.x };
+    let ping = { scene: scene.id, pull: isPull, style, zoom: canvas.stage.scale.x };
     ping = foundry.utils.mergeObject(ping, options);
 
     if (!options?.local) {
@@ -138,7 +162,9 @@ export {
     emitTokenHover,
     getCurrentTargets,
     getFirstActiveToken,
+    getTargetsTokens,
     getTargetToken,
+    getTokenDocument,
     panToToken,
     ping,
     pingToken,

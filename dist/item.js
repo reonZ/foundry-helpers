@@ -22,6 +22,15 @@ function itemIsOfType(item, ...types) {
     return (typeof item.name === "string" &&
         types.some((t) => (t === "physical" ? setHasElement(PHYSICAL_ITEM_TYPES, item.type) : item.type === t)));
 }
+function getItemSource(item, clearId) {
+    const source = item.toObject();
+    source._stats.compendiumSource ??= item.uuid;
+    if (clearId) {
+        // @ts-expect-error
+        delete source._id;
+    }
+    return source;
+}
 function* actorItems(actor, type) {
     const types = R.isArray(type) ? type : type ? [type] : R.keys(CONFIG.PF2E.Item.documentClasses);
     // we must add parent types for subitems lookup
@@ -58,9 +67,23 @@ function findItemWithSourceId(actor, uuid, type) {
     }
     return null;
 }
+function findItemWithSlug(actor, slug, type) {
+    for (const item of actorItems(actor, type)) {
+        if (isSupressedFeat(item))
+            continue;
+        const itemSlug = getItemSlug(item);
+        if (itemSlug === slug) {
+            return item;
+        }
+    }
+    return null;
+}
 function getItemSourceId(item) {
     const isCompendiumItem = item._id && item.pack && !item.isEmbedded;
     return isCompendiumItem ? item.uuid : (item._stats.compendiumSource ?? item._stats.duplicateSource ?? item.uuid);
+}
+function getItemSlug(item) {
+    return item instanceof Item ? item.slug || SYSTEM.sluggify(item._source.name) : SYSTEM.sluggify(item.name);
 }
 async function usePhysicalItem(event, item) {
     const isConsumable = item.isOfType("consumable");
@@ -154,4 +177,4 @@ function isSF2eItem(item) {
 function isAreaOrAutoFireType(type) {
     return R.isIncludedIn(type, ["area-fire", "auto-fire"]);
 }
-export { consumeItem, findItemWithSourceId, getItemSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, usePhysicalItem, };
+export { consumeItem, findItemWithSlug, findItemWithSourceId, getItemSlug, getItemSource, getItemSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, usePhysicalItem, };

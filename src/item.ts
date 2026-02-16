@@ -67,6 +67,18 @@ function itemIsOfType(item: ItemOrSource, ...types: string[]): boolean {
     );
 }
 
+function getItemSource<T extends ItemPF2e>(item: T, clearId?: boolean): T["_source"] {
+    const source = item.toObject();
+    source._stats.compendiumSource ??= item.uuid;
+
+    if (clearId) {
+        // @ts-expect-error
+        delete source._id;
+    }
+
+    return source;
+}
+
 function* actorItems<TType extends ItemType, TActor extends ActorPF2e>(
     actor: TActor,
     type?: TType | TType[],
@@ -116,9 +128,30 @@ function findItemWithSourceId<TType extends ItemType, TActor extends ActorPF2e>(
     return null;
 }
 
+function findItemWithSlug<TType extends ItemType, TActor extends ActorPF2e>(
+    actor: TActor,
+    slug: string,
+    type?: TType,
+): ActorItemInstances<TType, TActor> | null {
+    for (const item of actorItems(actor, type)) {
+        if (isSupressedFeat(item)) continue;
+
+        const itemSlug = getItemSlug(item);
+        if (itemSlug === slug) {
+            return item as any;
+        }
+    }
+
+    return null;
+}
+
 function getItemSourceId(item: ItemPF2e): ItemUUID {
     const isCompendiumItem = item._id && item.pack && !item.isEmbedded;
     return isCompendiumItem ? item.uuid : (item._stats.compendiumSource ?? item._stats.duplicateSource ?? item.uuid);
+}
+
+function getItemSlug(item: ItemPF2e | CompendiumIndexData): string {
+    return item instanceof Item ? item.slug || SYSTEM.sluggify(item._source.name) : SYSTEM.sluggify(item.name);
 }
 
 async function usePhysicalItem(event: Event, item: EquipmentPF2e<ActorPF2e> | ConsumablePF2e<ActorPF2e>) {
@@ -241,7 +274,10 @@ type ItemOrSource = PreCreate<ItemSourcePF2e> | CompendiumIndexData | ItemPF2e;
 
 export {
     consumeItem,
+    findItemWithSlug,
     findItemWithSourceId,
+    getItemSlug,
+    getItemSource,
     getItemSourceId,
     isAreaOrAutoFireType,
     isCastConsumable,

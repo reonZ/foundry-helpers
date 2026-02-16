@@ -1,3 +1,5 @@
+import { R } from ".";
+
 function activateHooksAndWrappers(entries: { activate: () => void }[]) {
     for (const entry of entries) {
         entry.activate();
@@ -24,10 +26,23 @@ function sortByLocaleCompare<T extends Record<string, any>>(list: Array<T>, key:
     list.sort((a, b) => localeCompare(a[key], b[key]));
 }
 
+function recordToSelectOptions(
+    record: Record<string, string | undefined>,
+): { value: string; label: string | undefined }[] {
+    return R.pipe(
+        record,
+        R.entries(),
+        R.map(([value, label]) => {
+            return { value, label };
+        }),
+    );
+}
+
 export {
     activateHooksAndWrappers,
     disableHooksAndWrappers,
     localeCompare,
+    recordToSelectOptions,
     sortByLocaleCompare,
     toggleHooksAndWrappers,
 };

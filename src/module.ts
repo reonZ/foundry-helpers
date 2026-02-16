@@ -5,6 +5,7 @@ class CustomModule {
     #current?: Module;
     #debug: Record<string, any> = {};
     #globalName: string = "";
+    #group: string | boolean = false;
     #id?: string;
 
     get id(): string {
@@ -85,6 +86,35 @@ class CustomModule {
         });
     }
 
+    group(label: string) {
+        this.groupEnd();
+        this.#group = label;
+    }
+
+    groupEnd() {
+        console.groupEnd();
+        this.#group = false;
+    }
+
+    log(...args: any[]) {
+        if (R.isString(this.#group)) {
+            console.group(`[${this.name}] ${this.#group}`);
+            this.#group = true;
+        }
+
+        if (this.#group) {
+            console.log(...args);
+        } else {
+            console.log(`[${this.name}]`, ...args);
+        }
+    }
+
+    debug(...args: any[]) {
+        if (this.isDebug) {
+            this.log(...args);
+        }
+    }
+
     globalPath(...path: string[]): string {
         const joined = R.join(path, ".");
         return joined ? `${this.#globalName}.${joined}` : `${this.#globalName}`;
@@ -126,12 +156,12 @@ class CustomModule {
         console.error(message);
     }
 
-    apiExpose(key: string, toExpose: Record<string, any>) {
+    apiExpose(key: string, toExpose: Record<string, any> | Function) {
         if (foundry.utils.hasProperty(this.#api, key)) {
             throw this.Error(`the api key was already defined: ${key}`);
         }
 
-        const exposed = foundry.utils.deepClone(toExpose);
+        const exposed = R.isObjectType(toExpose) ? foundry.utils.deepClone(toExpose) : toExpose;
 
         Object.freeze(exposed);
         Object.defineProperty(this.#api, key, {

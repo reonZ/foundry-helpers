@@ -9,4 +9,8 @@ declare function toggleHooksAndWrappers(entries: {
 }[], enabled: boolean): void;
 declare function localeCompare(a: string, b: string): number;
 declare function sortByLocaleCompare<T extends Record<string, any>>(list: Array<T>, key: keyof T): void;
-export { activateHooksAndWrappers, disableHooksAndWrappers, localeCompare, sortByLocaleCompare, toggleHooksAndWrappers, };
+declare function recordToSelectOptions(record: Record<string, string | undefined>): {
+    value: string;
+    label: string | undefined;
+}[];
+export { activateHooksAndWrappers, disableHooksAndWrappers, localeCompare, recordToSelectOptions, sortByLocaleCompare, toggleHooksAndWrappers, };

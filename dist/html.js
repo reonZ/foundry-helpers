@@ -1,4 +1,4 @@
-import { R } from ".";
+import { MODULE, R } from ".";
 function htmlQuery(parent, selectors) {
     if (!(parent instanceof Element))
         return null;
@@ -57,6 +57,25 @@ function createButtonElement(options) {
     }
     return createHTMLElement("button", { ...options, content });
 }
+function createInputElement(type, name, value, options) {
+    const input = createHTMLElement("input", options);
+    input.type = type;
+    input.name = name;
+    if (type === "text") {
+        input.value = String(value);
+    }
+    else if (type === "number") {
+        input.valueAsNumber = Number(value) || 0;
+    }
+    else if (type === "checkbox") {
+        input.checked = Boolean(value);
+    }
+    else {
+        input.value = String(value);
+        input.checked = !!options?.checked;
+    }
+    return input;
+}
 function addListener(parent, selectors, ...args) {
     if (!(parent instanceof Element || parent instanceof Document))
         return;
@@ -80,6 +99,27 @@ function addListenerAll(parent, selectors, ...args) {
             continue;
         element.addEventListener(event, (e) => listener(element, e), useCapture);
     }
+}
+function addEnterKeyListeners(html, inputType = "all") {
+    const types = inputType === "all" ? ["text", "number"] : [inputType];
+    const selector = types.map((type) => `input[type="${type}"]`).join(", ");
+    addListenerAll(html, selector, "keypress", (el, event) => {
+        if (event.key === "Enter") {
+            event.stopPropagation();
+            event.preventDefault();
+            el.blur();
+        }
+    });
+}
+function getInputValue(el) {
+    if (el instanceof HTMLSelectElement) {
+        return el.value;
+    }
+    return el.nodeName === "RANGE-PICKER" || ["number", "range"].includes(el.type)
+        ? el.valueAsNumber
+        : el.type === "checkbox"
+            ? el.checked
+            : el.value;
 }
 /**
  * repurposed version of
@@ -129,4 +169,19 @@ function styleValue(value) {
 function setStyleProperty(html, property, value) {
     html?.style.setProperty(property, styleValue(value));
 }
-export { addListener, addListenerAll, assignStyle, createButtonElement, createFormData, createHTMLElement, createHTMLElementContent, htmlClosest, htmlQuery, htmlQueryAll, setStyleProperty, styleValue, toggleSummary, };
+function setStyleProperties(el, properties) {
+    for (const [property, value] of R.entries(properties)) {
+        el.style.setProperty(property, String(value));
+    }
+}
+function registerCustomElement(tag, element) {
+    try {
+        if (window.customElements.get(tag))
+            return;
+        window.customElements.define(tag, element);
+    }
+    catch (error) {
+        MODULE.error(`an error occurred while registering a custom element: ${tag}`, error);
+    }
+}
+export { addEnterKeyListeners, addListener, addListenerAll, assignStyle, createButtonElement, createFormData, createHTMLElement, createHTMLElementContent, createInputElement, getInputValue, htmlClosest, htmlQuery, htmlQueryAll, registerCustomElement, setStyleProperties, setStyleProperty, styleValue, toggleSummary, };

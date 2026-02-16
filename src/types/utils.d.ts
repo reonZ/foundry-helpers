@@ -39,5 +39,5 @@ declare global {
 
     type NonEmptyArray<T> = [T, ...T[]];
 
-    type Point = { x: number; y: number };
+    type MaybeFalsy<T> = Maybe<T> | false;
 }

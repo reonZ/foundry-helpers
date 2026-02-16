@@ -18,6 +18,7 @@ declare class Localize extends Function {
     shared(key: CollapseOf<LEVIKTIMES>): string;
     i18n(...subkeys: string[]): TemplateLocalize;
 }
+declare function foundryLocalizeIfExist(key: string): string | undefined;
 interface Localize {
     (...args: LocalizeArgs): string;
 }
@@ -31,5 +32,5 @@ type LocalizeData = Record<string, any>;
 type LocalizeArgs = string[] | [...string[], string | LocalizeData];
 type NotificationArgs = LocalizeArgs | [...LocalizeArgs, string | LocalizeData | boolean];
 type TemplateLocalizeArgs = Parameters<HelperDelegate>;
-export { localize };
+export { localize, foundryLocalizeIfExist };
 export type { Localize, LocalizeArgs, LocalizeData, NotificationArgs, TemplateLocalizeArgs, TemplateLocalize };

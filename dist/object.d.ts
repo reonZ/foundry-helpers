@@ -13,6 +13,7 @@ declare class MapOfArrays<K extends string | number, T> extends Map<K, T[]> {
 }
 declare function isInstanceOf<T extends keyof IsInstanceOfClasses>(obj: any, cls: T): obj is IsInstanceOfClasses[T];
 declare function isInstanceOf<T>(obj: any, cls: string): obj is T;
+declare function purgeObject(obj: any): any;
 type IsInstanceOfClasses = IsInstanceOfItems & {
     ActorPF2e: ActorPF2e;
     ArithmeticExpression: ArithmeticExpression;
@@ -36,4 +37,4 @@ type IsInstanceOfItems = {
     SpellPF2e: SpellPF2e;
     WeaponPF2e: WeaponPF2e;
 };
-export { MapOfArrays, isInstanceOf };
+export { isInstanceOf, MapOfArrays, purgeObject };

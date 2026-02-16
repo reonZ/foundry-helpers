@@ -4,6 +4,7 @@ class CustomModule {
     #current;
     #debug = {};
     #globalName = "";
+    #group = false;
     #id;
     get id() {
         if (!this.#id) {
@@ -74,6 +75,31 @@ class CustomModule {
             });
         });
     }
+    group(label) {
+        this.groupEnd();
+        this.#group = label;
+    }
+    groupEnd() {
+        console.groupEnd();
+        this.#group = false;
+    }
+    log(...args) {
+        if (R.isString(this.#group)) {
+            console.group(`[${this.name}] ${this.#group}`);
+            this.#group = true;
+        }
+        if (this.#group) {
+            console.log(...args);
+        }
+        else {
+            console.log(`[${this.name}]`, ...args);
+        }
+    }
+    debug(...args) {
+        if (this.isDebug) {
+            this.log(...args);
+        }
+    }
     globalPath(...path) {
         const joined = R.join(path, ".");
         return joined ? `${this.#globalName}.${joined}` : `${this.#globalName}`;
@@ -111,7 +137,7 @@ class CustomModule {
         if (foundry.utils.hasProperty(this.#api, key)) {
             throw this.Error(`the api key was already defined: ${key}`);
         }
-        const exposed = foundry.utils.deepClone(toExpose);
+        const exposed = R.isObjectType(toExpose) ? foundry.utils.deepClone(toExpose) : toExpose;
         Object.freeze(exposed);
         Object.defineProperty(this.#api, key, {
             value: exposed,

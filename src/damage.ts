@@ -154,3 +154,4 @@ type RollDamageToolbeltFlag = Pick<
 >;
 
 export { getDamageInstanceClass, getDamageRollClass, rollDamageFromFormula };
+export type { RollDamageOptions };

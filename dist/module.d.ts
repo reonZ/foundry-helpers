@@ -6,6 +6,10 @@ declare class CustomModule {
     get name(): string;
     get isDebug(): boolean;
     register(id: string, globalName?: string): void;
+    group(label: string): void;
+    groupEnd(): void;
+    log(...args: any[]): void;
+    debug(...args: any[]): void;
     globalPath(...path: string[]): string;
     path(...path: string[]): string;
     relativePath(...path: string[]): string;
@@ -13,7 +17,7 @@ declare class CustomModule {
     templatePath(...path: string[]): string;
     Error(str: string): Error;
     error(str: string, error?: Error): void;
-    apiExpose(key: string, toExpose: Record<string, any>): void;
+    apiExpose(key: string, toExpose: Record<string, any> | Function): void;
     debugExpose(key: string, toExpose: any): void;
 }
 declare function getActiveModule(key: string): ActiveModule | undefined;

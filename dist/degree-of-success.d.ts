@@ -13,4 +13,6 @@ declare const DEGREE_ADJUSTMENT_AMOUNTS: {
 };
 declare function degreeOfSuccessString(value: ZeroToThree): DegreeOfSuccessString;
 declare function degreeOfSuccessString(value: number): DegreeOfSuccessString | undefined;
-export { DEGREE_ADJUSTMENT_AMOUNTS, DEGREE_OF_SUCCESS_STRINGS, DEGREE_VALUES, degreeOfSuccessString };
+declare function degreeOfSuccessNumber(value: Maybe<string | number>): ZeroToThree | undefined;
+declare function isDegreeOfSuccessValue(value: unknown): value is ZeroToThree | DegreeOfSuccessString;
+export { DEGREE_ADJUSTMENT_AMOUNTS, DEGREE_OF_SUCCESS_STRINGS, DEGREE_VALUES, degreeOfSuccessNumber, degreeOfSuccessString, isDegreeOfSuccessValue, };

@@ -1,4 +1,4 @@
-import { R } from ".";
+import { MODULE, R } from ".";
 
 function htmlQuery<K extends keyof HTMLElementTagNameMap>(
     parent: MaybeHTML,
@@ -89,6 +89,31 @@ function createButtonElement(options: CreateHTMLButtonElementOptions): HTMLButto
     return createHTMLElement("button", { ...options, content });
 }
 
+function createInputElement(
+    type: "text" | "number" | "radio" | "checkbox",
+    name: string,
+    value: string | number | boolean,
+    options?: CreateHTMLInputElementOptions,
+): HTMLInputElement {
+    const input = createHTMLElement("input", options);
+
+    input.type = type;
+    input.name = name;
+
+    if (type === "text") {
+        input.value = String(value);
+    } else if (type === "number") {
+        input.valueAsNumber = Number(value) || 0;
+    } else if (type === "checkbox") {
+        input.checked = Boolean(value);
+    } else {
+        input.value = String(value);
+        input.checked = !!options?.checked;
+    }
+
+    return input;
+}
+
 function addListener<K extends keyof HTMLElementTagNameMap, TEvent extends EventType = "click">(
     parent: MaybeHTML,
     selectors: K,
@@ -152,6 +177,31 @@ function addListenerAll(
         if (!(element instanceof HTMLElement)) continue;
         element.addEventListener(event, (e) => listener(element, e), useCapture);
     }
+}
+
+function addEnterKeyListeners(html: HTMLElement, inputType: "number" | "text" | "all" = "all") {
+    const types: ("text" | "number")[] = inputType === "all" ? ["text", "number"] : [inputType];
+    const selector = types.map((type) => `input[type="${type}"]`).join(", ");
+
+    addListenerAll(html, selector, "keypress", (el, event) => {
+        if (event.key === "Enter") {
+            event.stopPropagation();
+            event.preventDefault();
+            el.blur();
+        }
+    });
+}
+
+function getInputValue(el: HTMLInputElement | HTMLSelectElement) {
+    if (el instanceof HTMLSelectElement) {
+        return el.value;
+    }
+
+    return el.nodeName === "RANGE-PICKER" || ["number", "range"].includes(el.type)
+        ? el.valueAsNumber
+        : el.type === "checkbox"
+          ? el.checked
+          : el.value;
 }
 
 /**
@@ -218,6 +268,21 @@ function setStyleProperty(html: Maybe<HTMLElement>, property: string, value: num
     html?.style.setProperty(property, styleValue(value));
 }
 
+function setStyleProperties(el: HTMLElement, properties: Record<string, string | number | boolean>) {
+    for (const [property, value] of R.entries(properties)) {
+        el.style.setProperty(property, String(value));
+    }
+}
+
+function registerCustomElement(tag: string, element: CustomElementConstructor) {
+    try {
+        if (window.customElements.get(tag)) return;
+        window.customElements.define(tag, element);
+    } catch (error: any) {
+        MODULE.error(`an error occurred while registering a custom element: ${tag}`, error);
+    }
+}
+
 type CreateHTMLElementOptions = {
     classes?: string[];
     content?: string | HTMLCollection | (Element | string)[] | Element;
@@ -240,7 +305,12 @@ type ListenerCallback<TElement extends HTMLElement, TEvent extends EventType> = 
     event: HTMLElementEventMap[TEvent],
 ) => void;
 
+type CreateHTMLInputElementOptions = Omit<CreateHTMLElementOptions, "content" | "id"> & {
+    checked?: boolean;
+};
+
 export {
+    addEnterKeyListeners,
     addListener,
     addListenerAll,
     assignStyle,
@@ -248,9 +318,13 @@ export {
     createFormData,
     createHTMLElement,
     createHTMLElementContent,
+    createInputElement,
+    getInputValue,
     htmlClosest,
     htmlQuery,
     htmlQueryAll,
+    registerCustomElement,
+    setStyleProperties,
     setStyleProperty,
     styleValue,
     toggleSummary,

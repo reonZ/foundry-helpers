@@ -1,4 +1,11 @@
-import { isInstanceOf } from ".";
+import { isInstanceOf, R } from ".";
+function getTokenDocument(token) {
+    return token instanceof foundry.canvas.placeables.Token
+        ? token.document
+        : token instanceof TokenDocument
+            ? token
+            : undefined;
+}
 function getCurrentTargets({ types = [], user = game.user, uuid, } = {}) {
     const targets = user.targets.filter((target) => {
         const actor = target.actor;
@@ -31,6 +38,12 @@ function getTargetToken(target, options) {
         return undefined;
     return target.token ?? target.actor.token ?? getFirstActiveToken(target.actor, options) ?? undefined;
 }
+function getTargetsTokens(targets, uuid) {
+    return R.pipe(targets, R.map((target) => {
+        const token = getTargetToken(target);
+        return uuid ? token?.uuid : token;
+    }), R.filter(R.isTruthy));
+}
 function getFirstTokenThatMatches(actor, predicate, scene = game.scenes.current) {
     if (!scene)
         return null;
@@ -45,6 +58,9 @@ function getFirstTokenThatMatches(actor, predicate, scene = game.scenes.current)
  * slightly modified core foundry version
  */
 async function ping(origin, options) {
+    const scene = canvas.scene;
+    if (!scene)
+        return false;
     // Don't allow pinging outside of the canvas bounds
     if (!canvas.dimensions.rect.contains(origin.x, origin.y))
         return false;
@@ -57,7 +73,7 @@ async function ping(origin, options) {
         style = types.PULL;
     else if (isAlert)
         style = types.ALERT;
-    let ping = { scene: canvas.scene?.id, pull: isPull, style, zoom: canvas.stage.scale.x };
+    let ping = { scene: scene.id, pull: isPull, style, zoom: canvas.stage.scale.x };
     ping = foundry.utils.mergeObject(ping, options);
     if (!options?.local) {
         // Broadcast the ping to other connected clients
@@ -90,4 +106,4 @@ function panToToken(token, control) {
     }
     canvas.animatePan(token.center);
 }
-export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetToken, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, };
+export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, };

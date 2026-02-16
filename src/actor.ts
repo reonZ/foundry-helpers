@@ -1,4 +1,12 @@
-import { ActorAlliance, ActorPF2e, CharacterPF2e, LootPF2e, ValueAndMax } from "@7h3laughingman/pf2e-types";
+import {
+    ActorAlliance,
+    ActorPF2e,
+    CharacterPF2e,
+    CreaturePF2e,
+    FamiliarPF2e,
+    LootPF2e,
+    ValueAndMax,
+} from "@7h3laughingman/pf2e-types";
 
 function actorsRespectAlliance(origin: ActorPF2e, target: ActorPF2e, alliance: ActorTargetAlliance = "all") {
     return alliance === "allies" ? target.isAllyOf(origin) : alliance === "enemies" ? target.isEnemyOf(origin) : true;
@@ -32,6 +40,14 @@ function getMythicOrHeroPoints(actor: CharacterPF2e): MythicOrHeroPoints {
     };
 }
 
+function getActorMaster(actor: Maybe<ActorPF2e>): ActorPF2e | null {
+    if (!actor) return null;
+
+    return (
+        (actor as FamiliarPF2e).master ?? game.toolbelt?.api.shareData.getMasterInMemory(actor as CreaturePF2e) ?? null
+    );
+}
+
 type ActorTargetAlliance = "all" | "allies" | "enemies";
 
 type MythicOrHeroPoints = ValueAndMax & {
@@ -42,6 +58,7 @@ type MythicOrHeroPoints = ValueAndMax & {
 export {
     actorsRespectAlliance,
     belongToPartyAlliance,
+    getActorMaster,
     getMythicOrHeroPoints,
     isAllyActor,
     isMerchant,

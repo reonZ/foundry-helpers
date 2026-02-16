@@ -96,6 +96,18 @@ function isInstanceOf(obj: any, cls: keyof IsInstanceOfClasses | string) {
     return false;
 }
 
+function purgeObject(obj: any): any {
+    if (R.isArray(obj)) {
+        const newObj = R.pipe(obj, R.map(purgeObject), R.filter(R.isNonNullish));
+        return newObj.length ? newObj : undefined;
+    } else if (R.isObjectType(obj)) {
+        const newObj = R.pipe(obj, R.mapValues(purgeObject), R.pickBy(R.isNonNullish));
+        return foundry.utils.isEmpty(newObj) ? undefined : newObj;
+    } else {
+        return obj === "" ? undefined : obj;
+    }
+}
+
 type IsInstanceOfClasses = IsInstanceOfItems & {
     ActorPF2e: ActorPF2e;
     ArithmeticExpression: ArithmeticExpression;
@@ -121,4 +133,4 @@ type IsInstanceOfItems = {
     WeaponPF2e: WeaponPF2e;
 };
 
-export { MapOfArrays, isInstanceOf };
+export { isInstanceOf, MapOfArrays, purgeObject };

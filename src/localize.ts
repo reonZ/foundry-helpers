@@ -111,6 +111,12 @@ class Localize extends Function {
     }
 }
 
+function foundryLocalizeIfExist(key: string): string | undefined {
+    if (game.i18n.has(key, true)) {
+        return game.i18n.localize(key);
+    }
+}
+
 interface Localize {
     (...args: LocalizeArgs): string;
 }
@@ -131,5 +137,5 @@ type NotificationArgs = LocalizeArgs | [...LocalizeArgs, string | LocalizeData |
 
 type TemplateLocalizeArgs = Parameters<HelperDelegate>;
 
-export { localize };
+export { localize, foundryLocalizeIfExist };
 export type { Localize, LocalizeArgs, LocalizeData, NotificationArgs, TemplateLocalizeArgs, TemplateLocalize };

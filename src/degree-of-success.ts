@@ -1,4 +1,5 @@
 import { DegreeOfSuccessString, ZeroToThree } from "@7h3laughingman/pf2e-types";
+import { R } from ".";
 
 const DEGREE_OF_SUCCESS_STRINGS = ["criticalFailure", "failure", "success", "criticalSuccess"] as const;
 
@@ -30,4 +31,19 @@ function degreeOfSuccessString(value: number) {
     return DEGREE_OF_SUCCESS_STRINGS.at(value);
 }
 
-export { DEGREE_ADJUSTMENT_AMOUNTS, DEGREE_OF_SUCCESS_STRINGS, DEGREE_VALUES, degreeOfSuccessString };
+function degreeOfSuccessNumber(value: Maybe<string | number>): ZeroToThree | undefined {
+    return DEGREE_VALUES[value as ZeroToThree | DegreeOfSuccessString];
+}
+
+function isDegreeOfSuccessValue(value: unknown): value is ZeroToThree | DegreeOfSuccessString {
+    return (R.isString(value) || R.isNumber(value)) && value in DEGREE_VALUES;
+}
+
+export {
+    DEGREE_ADJUSTMENT_AMOUNTS,
+    DEGREE_OF_SUCCESS_STRINGS,
+    DEGREE_VALUES,
+    degreeOfSuccessNumber,
+    degreeOfSuccessString,
+    isDegreeOfSuccessValue,
+};

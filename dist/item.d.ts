@@ -6,8 +6,11 @@ import { CompendiumIndexData, ItemUUID } from ".";
 declare function itemIsOfType<TParent extends ActorPF2e | null, TType extends ItemType>(item: ItemOrSource, ...types: TType[]): item is ItemInstances<TParent>[TType] | ItemInstances<TParent>[TType]["_source"];
 declare function itemIsOfType<TParent extends ActorPF2e | null, TType extends "physical" | ItemType>(item: ItemOrSource, ...types: TType[]): item is TType extends "physical" ? PhysicalItemPF2e<TParent> | PhysicalItemPF2e<TParent>["_source"] : TType extends ItemType ? ItemInstances<TParent>[TType] | ItemInstances<TParent>[TType]["_source"] : never;
 declare function itemIsOfType<TParent extends ActorPF2e | null>(item: ItemOrSource, type: "physical"): item is PhysicalItemPF2e<TParent> | PhysicalItemPF2e["_source"];
+declare function getItemSource<T extends ItemPF2e>(item: T, clearId?: boolean): T["_source"];
 declare function findItemWithSourceId<TType extends ItemType, TActor extends ActorPF2e>(actor: TActor, uuid: string, type?: TType): ActorItemInstances<TType, TActor> | null;
+declare function findItemWithSlug<TType extends ItemType, TActor extends ActorPF2e>(actor: TActor, slug: string, type?: TType): ActorItemInstances<TType, TActor> | null;
 declare function getItemSourceId(item: ItemPF2e): ItemUUID;
+declare function getItemSlug(item: ItemPF2e | CompendiumIndexData): string;
 declare function usePhysicalItem(event: Event, item: EquipmentPF2e<ActorPF2e> | ConsumablePF2e<ActorPF2e>): Promise<unknown>;
 /**
  * upgraded version of
@@ -21,5 +24,5 @@ declare function isSF2eItem<T extends PhysicalItemPF2e>(item: T): boolean;
 declare function isAreaOrAutoFireType(type: string): type is "area-fire" | "auto-fire";
 type ActorItemInstances<TType extends ItemType, TActor extends ActorPF2e> = ItemInstances<TActor>[TType extends "weapon" | "shield" ? TType | "weapon" | "equipment" : TType];
 type ItemOrSource = PreCreate<ItemSourcePF2e> | CompendiumIndexData | ItemPF2e;
-export { consumeItem, findItemWithSourceId, getItemSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, usePhysicalItem, };
+export { consumeItem, findItemWithSlug, findItemWithSourceId, getItemSlug, getItemSource, getItemSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, usePhysicalItem, };
 export type { ItemOrSource };

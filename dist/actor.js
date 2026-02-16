@@ -23,4 +23,9 @@ function getMythicOrHeroPoints(actor) {
         value: resource.value,
     };
 }
-export { actorsRespectAlliance, belongToPartyAlliance, getMythicOrHeroPoints, isAllyActor, isMerchant, oppositeAlliance, };
+function getActorMaster(actor) {
+    if (!actor)
+        return null;
+    return (actor.master ?? game.toolbelt?.api.shareData.getMasterInMemory(actor) ?? null);
+}
+export { actorsRespectAlliance, belongToPartyAlliance, getActorMaster, getMythicOrHeroPoints, isAllyActor, isMerchant, oppositeAlliance, };

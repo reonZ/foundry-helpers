@@ -102,7 +102,7 @@ function createCustomCondition(options: CustomConditionOptions): PreCreate<Effec
 }
 
 type CustomEffectOptions = {
-    badge?: EffectBadgeSource;
+    badge?: DeepPartial<EffectBadgeSource>;
     duration?: CustomEffectDuration;
     img?: ImageFilePath;
     name: string;
@@ -137,4 +137,4 @@ interface EffectViewData {
 }
 
 export { createCustomCondition, createCustomEffect };
-export type { CustomConditionOptions, CustomEffectOptions, EffectsPanelViewData, EffectViewData };
+export type { CustomConditionOptions, CustomEffectDuration, CustomEffectOptions, EffectsPanelViewData, EffectViewData };

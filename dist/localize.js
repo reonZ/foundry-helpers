@@ -85,5 +85,10 @@ class Localize extends Function {
         return i18n;
     }
 }
+function foundryLocalizeIfExist(key) {
+    if (game.i18n.has(key, true)) {
+        return game.i18n.localize(key);
+    }
+}
 const localize = new Localize();
-export { localize };
+export { localize, foundryLocalizeIfExist };
