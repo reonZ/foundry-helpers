@@ -1,7 +1,14 @@
-import { AbilityTrait } from "@7h3laughingman/pf2e-types";
-import { R, splitListString } from ".";
+import { AbilityTrait, CheckRoll } from "@7h3laughingman/pf2e-types";
+import { splitListString } from ".";
+import { R } from "..";
+
+const _cached: { checkRoll?: typeof CheckRoll } = {};
 
 const SAVE_TYPES = ["fortitude", "reflex", "will"] as const;
+
+function getCheckRollClass(): typeof CheckRoll {
+    return (_cached.checkRoll ??= CONFIG.Dice.rolls.find((Roll) => Roll.name === "CheckRoll") as typeof CheckRoll);
+}
 
 /**
  * modified version of
@@ -25,4 +32,4 @@ function getExtraRollOptions(
     return R.unique([maybeTraits, additionalTraits.map((t) => `item:trait:${t}`), allOptions].flat());
 }
 
-export { getExtraRollOptions, SAVE_TYPES };
+export { getCheckRollClass, getExtraRollOptions, SAVE_TYPES };

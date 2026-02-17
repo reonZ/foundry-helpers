@@ -13,4 +13,5 @@ declare function recordToSelectOptions(record: Record<string, string | undefined
     value: string;
     label: string | undefined;
 }[];
-export { activateHooksAndWrappers, disableHooksAndWrappers, localeCompare, recordToSelectOptions, sortByLocaleCompare, toggleHooksAndWrappers, };
+declare function getDragEventData<T extends Record<string, JSONValue>>(event: DragEvent): T;
+export { activateHooksAndWrappers, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, toggleHooksAndWrappers, };

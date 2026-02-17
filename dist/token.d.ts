@@ -1,7 +1,7 @@
 import { ActorPF2e, ActorType, ScenePF2e, TokenDocumentPF2e, TokenPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
 import { PingOptions, TokenDocumentUUID } from ".";
 declare function getTokenDocument(token: unknown): TokenDocumentPF2e | undefined;
-declare function getCurrentTargets(options?: {
+declare function getCurrentTargets(options: {
     types?: ("creature" | ActorType)[];
     user?: UserPF2e;
     uuid: true;

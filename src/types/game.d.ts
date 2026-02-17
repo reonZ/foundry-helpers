@@ -3,7 +3,7 @@ import { RollJSON } from "..";
 
 declare module "@7h3laughingman/pf2e-types" {
     interface GamePF2e {
-        // dice3d?: Dice3D;
+        dice3d?: Dice3D;
 
         trigger?: {
             test: () => void;

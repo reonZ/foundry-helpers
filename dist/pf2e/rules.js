@@ -1,4 +1,4 @@
-import { R } from ".";
+import { R } from "..";
 function getChoiceSetSelection(item, { option, flag } = {}) {
     const rules = item._source.system.rules;
     const rule = rules.find((rule) => {

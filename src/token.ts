@@ -9,7 +9,7 @@ function getTokenDocument(token: unknown): TokenDocumentPF2e | undefined {
           : undefined;
 }
 
-function getCurrentTargets(options?: {
+function getCurrentTargets(options: {
     types?: ("creature" | ActorType)[];
     user?: UserPF2e;
     uuid: true;

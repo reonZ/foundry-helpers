@@ -6,7 +6,8 @@ import {
     PhysicalItemPF2e,
     Rarity,
 } from "@7h3laughingman/pf2e-types";
-import { adjustDCByRarity, calculateDC, MAGIC_TRADITIONS, R, setHasElement, SYSTEM } from ".";
+import { adjustDCByRarity, calculateDC, MAGIC_TRADITIONS, setHasElement } from ".";
+import { R, SYSTEM } from "..";
 
 /**
  * https://github.com/foundryvtt/pf2e/blob/578620c2a35a76d904938fb3d4984ad0e14be241/src/module/item/identification.ts#L30

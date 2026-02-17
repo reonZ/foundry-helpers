@@ -25,4 +25,7 @@ function recordToSelectOptions(record) {
         return { value, label };
     }));
 }
-export { activateHooksAndWrappers, disableHooksAndWrappers, localeCompare, recordToSelectOptions, sortByLocaleCompare, toggleHooksAndWrappers, };
+function getDragEventData(event) {
+    return foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
+}
+export { activateHooksAndWrappers, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, toggleHooksAndWrappers, };
