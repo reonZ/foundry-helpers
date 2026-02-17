@@ -33,6 +33,28 @@ function htmlClosest(child: MaybeHTML, selectors: string): HTMLElement | null {
     return child.closest<HTMLElement>(selectors);
 }
 
+function firstElementWithText(el: Maybe<Element>, skipEmpty = true): HTMLElement | null {
+    if (!(el instanceof HTMLElement)) return null;
+
+    const childNodes = el.childNodes;
+    if (!childNodes.length) return null;
+
+    for (const child of childNodes) {
+        if (child.nodeType === Node.TEXT_NODE && (!skipEmpty || child.textContent?.trim())) {
+            return el;
+        }
+    }
+
+    for (const child of el.children) {
+        const withText = firstElementWithText(child);
+        if (withText) {
+            return withText;
+        }
+    }
+
+    return null;
+}
+
 function createHTMLElement<K extends keyof HTMLElementTagNameMap>(
     nodeName: K,
     { classes = [], dataset = {}, content, id, style }: CreateHTMLElementOptions = {},
@@ -319,6 +341,7 @@ export {
     createHTMLElement,
     createHTMLElementContent,
     createInputElement,
+    firstElementWithText,
     getInputValue,
     htmlClosest,
     htmlQuery,

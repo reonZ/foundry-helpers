@@ -34,6 +34,14 @@ class CycleArray extends Array {
         return Number(direction) > 0 ? this.increment() : this.decrement();
     }
 }
+function removeIndexFromArray(array, index, copy = true) {
+    const usedArray = (copy ? array.slice() : array);
+    if (index < 0 || index >= array.length) {
+        return usedArray;
+    }
+    usedArray.splice(index, 1);
+    return usedArray;
+}
 function arraysEqual(arr1, arr2) {
     arr1 = R.unique(arr1);
     arr2 = R.unique(arr2);
@@ -55,4 +63,4 @@ function includesAll(arr, entries) {
     }
     return true;
 }
-export { arraysEqual, CycleArray, includesAll, includesAny };
+export { arraysEqual, CycleArray, includesAll, includesAny, removeIndexFromArray };

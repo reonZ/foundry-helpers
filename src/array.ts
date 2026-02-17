@@ -45,6 +45,17 @@ class CycleArray<T> extends Array<T> {
     }
 }
 
+function removeIndexFromArray<T extends any[]>(array: T, index: number, copy = true): T {
+    const usedArray = (copy ? array.slice() : array) as T;
+
+    if (index < 0 || index >= array.length) {
+        return usedArray;
+    }
+
+    usedArray.splice(index, 1);
+    return usedArray;
+}
+
 function arraysEqual<T extends any[]>(arr1: T, arr2: any[]): arr2 is T {
     arr1 = R.unique(arr1) as unknown as T;
     arr2 = R.unique(arr2);
@@ -71,4 +82,4 @@ function includesAll(arr: any[], entries: any[]): boolean {
     return true;
 }
 
-export { arraysEqual, CycleArray, includesAll, includesAny };
+export { arraysEqual, CycleArray, includesAll, includesAny, removeIndexFromArray };

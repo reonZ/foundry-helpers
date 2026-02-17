@@ -1,4 +1,4 @@
-import { ActorPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
+import { ActorPF2e, CreaturePF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
 
 function getCurrentUser(): UserPF2e {
     return game.user ?? game.data.users.find((x) => x._id === game.userId);
@@ -26,4 +26,17 @@ function isPrimaryOwner(actor: ActorPF2e, user = game.user): boolean {
     return user.isGM || primaryPlayerOwner(actor) === user;
 }
 
-export { getCurrentUser, userIsGM, isPrimaryUpdater, primaryPlayerOwner, isPrimaryOwner };
+function canObserveActor(actor: Maybe<ActorPF2e>, withParty: boolean = true): actor is ActorPF2e {
+    if (!actor) return false;
+
+    const user = game.user;
+    if (actor.testUserPermission(user, "OBSERVER")) return true;
+
+    return (
+        !!withParty &&
+        game.pf2e.settings.metagame.partyStats &&
+        (actor as CreaturePF2e).parties?.some((party) => party.testUserPermission(user, "LIMITED"))
+    );
+}
+
+export { canObserveActor, getCurrentUser, isPrimaryOwner, isPrimaryUpdater, primaryPlayerOwner, userIsGM };

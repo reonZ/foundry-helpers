@@ -9,7 +9,8 @@ declare class CycleArray<T> extends Array<T> {
     decrement(): T;
     cycle(direction: number | boolean): T;
 }
+declare function removeIndexFromArray<T extends any[]>(array: T, index: number, copy?: boolean): T;
 declare function arraysEqual<T extends any[]>(arr1: T, arr2: any[]): arr2 is T;
 declare function includesAny(arr: any[], entries: any[]): boolean;
 declare function includesAll(arr: any[], entries: any[]): boolean;
-export { arraysEqual, CycleArray, includesAll, includesAny };
+export { arraysEqual, CycleArray, includesAll, includesAny, removeIndexFromArray };
