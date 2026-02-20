@@ -13,7 +13,7 @@ async function waitDialog<T extends Record<string, any>>({
     yes,
 }: CustomWaitDialogOptions): Promise<T | false | null> {
     if (data) {
-        data.i18n = localize.i18n(i18n);
+        data.i18n = i18n;
     }
 
     classes.push(MODULE.id);
