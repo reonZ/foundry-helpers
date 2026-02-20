@@ -1,7 +1,19 @@
 import { ActorPF2e, CreaturePF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
+import { R } from ".";
 
 function getCurrentUser(): UserPF2e {
     return game.user ?? game.data.users.find((x) => x._id === game.userId);
+}
+
+function getSelectedActor(fn = (actor: ActorPF2e) => true): ActorPF2e | null {
+    const selected = R.only(canvas.tokens.controlled)?.actor;
+
+    if (selected && fn(selected)) {
+        return selected;
+    }
+
+    const assigned = game.user.character;
+    return assigned && fn(assigned) ? assigned : null;
 }
 
 function userIsGM(user: UserPF2e = getCurrentUser()): boolean {
@@ -39,4 +51,12 @@ function canObserveActor(actor: Maybe<ActorPF2e>, withParty: boolean = true): ac
     );
 }
 
-export { canObserveActor, getCurrentUser, isPrimaryOwner, isPrimaryUpdater, primaryPlayerOwner, userIsGM };
+export {
+    canObserveActor,
+    getCurrentUser,
+    getSelectedActor,
+    isPrimaryOwner,
+    isPrimaryUpdater,
+    primaryPlayerOwner,
+    userIsGM,
+};

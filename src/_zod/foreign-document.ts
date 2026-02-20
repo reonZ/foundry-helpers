@@ -6,8 +6,9 @@ import {
     zClientDocument,
     zDocumentID,
     zDocumentId,
+    zDocumentUUID,
 } from ".";
-import { ClientDocument } from "..";
+import { ClientDocument, DocumentUUID, R } from "..";
 
 function zForeignDocument<
     T extends ClientDocumentType,
@@ -29,4 +30,24 @@ function zForeignDocument<
     });
 }
 
-export { zForeignDocument };
+function zForeignDocumentUUID<
+    T extends ClientDocumentType,
+    D extends ClientDocumentInstance<T> = ClientDocumentInstance<T>,
+>(
+    options: { embedded?: boolean; type: T } | T,
+): z.ZodCodec<z.ZodNullable<z.ZodCustom<DocumentUUID, DocumentUUID>>, z.ZodNullable<z.ZodCustom<D, D>>> {
+    const { embedded, type } = R.isObjectType(options) ? options : { embedded: undefined, type: options };
+    const ModelClass = getDocumentClass(type) as ClientDocumentMapping[T];
+
+    return z.codec(zDocumentUUID({ embedded, type }).nullable(), zClientDocument<T, D>(type as any).nullable(), {
+        decode: async (uuid): Promise<D | null> => {
+            const doc = R.isString(uuid) ? await fromUuid(uuid) : null;
+            return doc instanceof ModelClass ? (doc as D) : null;
+        },
+        encode: (doc) => {
+            return doc?.uuid ?? null;
+        },
+    });
+}
+
+export { zForeignDocument, zForeignDocumentUUID };

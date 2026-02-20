@@ -245,6 +245,22 @@ async function consumeItem(event: Event, item: ConsumablePF2e<ActorPF2e>) {
     }
 }
 
+function simulateDropItem(item: ItemPF2e, target: ActorPF2e, fromInventory: boolean) {
+    const event = new DragEvent("dragstart", {
+        dataTransfer: new DataTransfer(),
+    });
+
+    const data = {
+        fromInventory,
+        itemType: item.type,
+        type: "Item",
+        uuid: item.uuid,
+    };
+
+    event.dataTransfer?.setData("text/plain", JSON.stringify(data));
+    target.sheet._onDrop(event);
+}
+
 function isSupressedFeat<TActor extends ActorPF2e | null>(item: ItemPF2e<TActor>): boolean {
     return item.isOfType("feat") && item.suppressed;
 }
@@ -284,6 +300,7 @@ export {
     isSF2eItem,
     isSupressedFeat,
     itemIsOfType,
+    simulateDropItem,
     usePhysicalItem,
 };
 export type { ItemOrSource };

@@ -7,6 +7,9 @@ declare function htmlQueryAll(parent: MaybeHTML, selectors: string): HTMLElement
 declare function htmlClosest<K extends keyof HTMLElementTagNameMap>(child: MaybeHTML, selectors: K): HTMLElementTagNameMap[K] | null;
 declare function htmlClosest(child: MaybeHTML, selectors: string): HTMLElement | null;
 declare function htmlClosest<E extends HTMLElement = HTMLElement>(child: MaybeHTML, selectors: string): E | null;
+declare function htmlQueryIn<K extends keyof HTMLElementTagNameMap>(child: MaybeHTML, parentSelector: string, siblingSelector: K): HTMLElementTagNameMap[K] | null;
+declare function htmlQueryIn(child: MaybeHTML, parentSelector: string, siblingSelector: string): HTMLElement | null;
+declare function htmlQueryIn<E extends HTMLElement = HTMLElement>(child: MaybeHTML, parentSelector: string, siblingSelector: string): E | null;
 declare function firstElementWithText(el: Maybe<Element>, skipEmpty?: boolean): HTMLElement | null;
 declare function createHTMLElement<K extends keyof HTMLElementTagNameMap>(nodeName: K, { classes, dataset, content, id, style }?: CreateHTMLElementOptions): HTMLElementTagNameMap[K];
 declare function createHTMLElementContent(options?: CreateHTMLElementOptions): HTMLElement;
@@ -48,5 +51,5 @@ type ListenerCallback<TElement extends HTMLElement, TEvent extends EventType> = 
 type CreateHTMLInputElementOptions = Omit<CreateHTMLElementOptions, "content" | "id"> & {
     checked?: boolean;
 };
-export { addEnterKeyListeners, addListener, addListenerAll, assignStyle, createButtonElement, createFormData, createHTMLElement, createHTMLElementContent, createInputElement, firstElementWithText, getInputValue, htmlClosest, htmlQuery, htmlQueryAll, registerCustomElement, setStyleProperties, setStyleProperty, styleValue, toggleSummary, };
+export { addEnterKeyListeners, addListener, addListenerAll, assignStyle, createButtonElement, createFormData, createHTMLElement, createHTMLElementContent, createInputElement, firstElementWithText, getInputValue, htmlClosest, htmlQuery, htmlQueryAll, htmlQueryIn, registerCustomElement, setStyleProperties, setStyleProperty, styleValue, toggleSummary, };
 export type { CreateHTMLButtonElementOptions, CreateHTMLElementOptions };

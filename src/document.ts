@@ -1,5 +1,5 @@
 import { MacroPF2e } from "@7h3laughingman/pf2e-types";
-import { ClientDocument, DocumentType, MODULE, R, Token } from ".";
+import { ClientDocument, DocumentType, DocumentUUID, MODULE, R, Token } from ".";
 
 async function getDocumentFromUUID<T extends DocumentType, D = InstanceType<DocumentTypeMap[T]>>(
     type: T,
@@ -39,4 +39,16 @@ function isValidTargetDocuments(target: unknown): target is TargetDocuments {
     return !target.token || target.token instanceof TokenDocument;
 }
 
-export { deleteInMemory, getDocumentFromUUID, getInMemory, isScriptMacro, isValidTargetDocuments, setInMemory };
+function isDocumentUUID<T extends DocumentUUID>(type: DocumentType, uuid: string): uuid is T {
+    return foundry.utils.parseUuid(uuid)?.type === type;
+}
+
+export {
+    deleteInMemory,
+    getDocumentFromUUID,
+    getInMemory,
+    isDocumentUUID,
+    isScriptMacro,
+    isValidTargetDocuments,
+    setInMemory,
+};

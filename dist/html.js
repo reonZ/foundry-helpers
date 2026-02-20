@@ -14,6 +14,10 @@ function htmlClosest(child, selectors) {
         return null;
     return child.closest(selectors);
 }
+function htmlQueryIn(child, parentSelector, siblingSelector) {
+    const parent = htmlClosest(child, parentSelector);
+    return htmlQuery(parent, siblingSelector);
+}
 function firstElementWithText(el, skipEmpty = true) {
     if (!(el instanceof HTMLElement))
         return null;
@@ -203,4 +207,4 @@ function registerCustomElement(tag, element) {
         MODULE.error(`an error occurred while registering a custom element: ${tag}`, error);
     }
 }
-export { addEnterKeyListeners, addListener, addListenerAll, assignStyle, createButtonElement, createFormData, createHTMLElement, createHTMLElementContent, createInputElement, firstElementWithText, getInputValue, htmlClosest, htmlQuery, htmlQueryAll, registerCustomElement, setStyleProperties, setStyleProperty, styleValue, toggleSummary, };
+export { addEnterKeyListeners, addListener, addListenerAll, assignStyle, createButtonElement, createFormData, createHTMLElement, createHTMLElementContent, createInputElement, firstElementWithText, getInputValue, htmlClosest, htmlQuery, htmlQueryAll, htmlQueryIn, registerCustomElement, setStyleProperties, setStyleProperty, styleValue, toggleSummary, };

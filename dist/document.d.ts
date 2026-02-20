@@ -1,9 +1,10 @@
 import { MacroPF2e } from "@7h3laughingman/pf2e-types";
-import { ClientDocument, DocumentType, Token } from ".";
+import { ClientDocument, DocumentType, DocumentUUID, Token } from ".";
 declare function getDocumentFromUUID<T extends DocumentType, D = InstanceType<DocumentTypeMap[T]>>(type: T, uuid: Maybe<string>): Promise<D | null>;
 declare function getInMemory<T>(obj: ClientDocument | Token, ...path: string[]): T | undefined;
 declare function setInMemory<T>(obj: ClientDocument | Token, ...args: [...string[], T]): boolean;
 declare function deleteInMemory(obj: ClientDocument | Token, ...path: string[]): boolean;
 declare function isScriptMacro(doc: any): doc is MacroPF2e;
 declare function isValidTargetDocuments(target: unknown): target is TargetDocuments;
-export { deleteInMemory, getDocumentFromUUID, getInMemory, isScriptMacro, isValidTargetDocuments, setInMemory };
+declare function isDocumentUUID<T extends DocumentUUID>(type: DocumentType, uuid: string): uuid is T;
+export { deleteInMemory, getDocumentFromUUID, getInMemory, isDocumentUUID, isScriptMacro, isValidTargetDocuments, setInMemory, };

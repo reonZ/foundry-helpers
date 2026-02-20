@@ -18,11 +18,12 @@ declare function usePhysicalItem(event: Event, item: EquipmentPF2e<ActorPF2e> | 
  * though stripped of scrolls & wands
  */
 declare function consumeItem(event: Event, item: ConsumablePF2e<ActorPF2e>): Promise<void>;
+declare function simulateDropItem(item: ItemPF2e, target: ActorPF2e, fromInventory: boolean): void;
 declare function isSupressedFeat<TActor extends ActorPF2e | null>(item: ItemPF2e<TActor>): boolean;
 declare function isCastConsumable(item: ConsumablePF2e): boolean;
 declare function isSF2eItem<T extends PhysicalItemPF2e>(item: T): boolean;
 declare function isAreaOrAutoFireType(type: string): type is "area-fire" | "auto-fire";
 type ActorItemInstances<TType extends ItemType, TActor extends ActorPF2e> = ItemInstances<TActor>[TType extends "weapon" | "shield" ? TType | "weapon" | "equipment" : TType];
 type ItemOrSource = PreCreate<ItemSourcePF2e> | CompendiumIndexData | ItemPF2e;
-export { consumeItem, findItemWithSlug, findItemWithSourceId, getItemSlug, getItemSource, getItemSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, usePhysicalItem, };
+export { consumeItem, findItemWithSlug, findItemWithSourceId, getItemSlug, getItemSource, getItemSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, simulateDropItem, usePhysicalItem, };
 export type { ItemOrSource };

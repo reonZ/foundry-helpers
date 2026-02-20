@@ -165,6 +165,19 @@ async function consumeItem(event, item) {
         });
     }
 }
+function simulateDropItem(item, target, fromInventory) {
+    const event = new DragEvent("dragstart", {
+        dataTransfer: new DataTransfer(),
+    });
+    const data = {
+        fromInventory,
+        itemType: item.type,
+        type: "Item",
+        uuid: item.uuid,
+    };
+    event.dataTransfer?.setData("text/plain", JSON.stringify(data));
+    target.sheet._onDrop(event);
+}
 function isSupressedFeat(item) {
     return item.isOfType("feat") && item.suppressed;
 }
@@ -177,4 +190,4 @@ function isSF2eItem(item) {
 function isAreaOrAutoFireType(type) {
     return R.isIncludedIn(type, ["area-fire", "auto-fire"]);
 }
-export { consumeItem, findItemWithSlug, findItemWithSourceId, getItemSlug, getItemSource, getItemSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, usePhysicalItem, };
+export { consumeItem, findItemWithSlug, findItemWithSourceId, getItemSlug, getItemSource, getItemSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, simulateDropItem, usePhysicalItem, };

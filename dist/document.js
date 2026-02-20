@@ -28,4 +28,7 @@ function isValidTargetDocuments(target) {
     target.token = target.token instanceof foundry.canvas.placeables.Token ? target.token.document : target.token;
     return !target.token || target.token instanceof TokenDocument;
 }
-export { deleteInMemory, getDocumentFromUUID, getInMemory, isScriptMacro, isValidTargetDocuments, setInMemory };
+function isDocumentUUID(type, uuid) {
+    return foundry.utils.parseUuid(uuid)?.type === type;
+}
+export { deleteInMemory, getDocumentFromUUID, getInMemory, isDocumentUUID, isScriptMacro, isValidTargetDocuments, setInMemory, };

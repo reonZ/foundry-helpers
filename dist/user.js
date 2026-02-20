@@ -1,5 +1,14 @@
+import { R } from ".";
 function getCurrentUser() {
     return game.user ?? game.data.users.find((x) => x._id === game.userId);
+}
+function getSelectedActor(fn = (actor) => true) {
+    const selected = R.only(canvas.tokens.controlled)?.actor;
+    if (selected && fn(selected)) {
+        return selected;
+    }
+    const assigned = game.user.character;
+    return assigned && fn(assigned) ? assigned : null;
 }
 function userIsGM(user = getCurrentUser()) {
     return user && user.role >= CONST.USER_ROLES.ASSISTANT;
@@ -26,4 +35,4 @@ function canObserveActor(actor, withParty = true) {
         game.pf2e.settings.metagame.partyStats &&
         actor.parties?.some((party) => party.testUserPermission(user, "LIMITED")));
 }
-export { canObserveActor, getCurrentUser, isPrimaryOwner, isPrimaryUpdater, primaryPlayerOwner, userIsGM };
+export { canObserveActor, getCurrentUser, getSelectedActor, isPrimaryOwner, isPrimaryUpdater, primaryPlayerOwner, userIsGM, };
