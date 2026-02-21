@@ -30,6 +30,7 @@ declare global {
                 action: boolean;
                 apply: boolean;
                 item: boolean;
+                physical: boolean;
                 spell: boolean;
                 use: boolean;
             };
@@ -60,6 +61,8 @@ declare global {
             actionable: {
                 getActionMacro: (action: AbilityItemPF2e | FeatPF2e) => Promise<Maybe<MacroPF2e>>;
                 getItemMacro: (item: ItemPF2e) => Promise<Maybe<MacroPF2e>>;
+                getVirtualAction(data: actionable.ActionableData): Promise<AbilityItemPF2e | null>;
+                getVirtualActionsData(actor: CharacterPF2e): Record<string, actionable.VirtualActionData>;
             };
             betterInventory: {
                 mergeItems: (actor: ActorPF2e, btn?: HTMLButtonElement | HTMLAnchorElement) => Promise<void>;
@@ -110,6 +113,19 @@ declare global {
                     updates: T,
                     targets: TokenDocumentUUID[],
                 ) => T;
+            };
+        }
+
+        namespace actionable {
+            type ActionableData = {
+                frequency?: number;
+                id: string;
+                sourceId: ItemUUID;
+            };
+
+            type VirtualActionData = {
+                data: ActionableData;
+                parent: PhysicalItemPF2e<CharacterPF2e>;
             };
         }
 

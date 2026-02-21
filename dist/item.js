@@ -85,6 +85,9 @@ function getItemSourceId(item) {
 function getItemSlug(item) {
     return item instanceof Item ? item.slug || SYSTEM.sluggify(item._source.name) : SYSTEM.sluggify(item.name);
 }
+function itemWithActor(actor, item) {
+    return (item.parent ? item : new (getDocumentClass("Item"))(item.toObject(), { parent: actor }));
+}
 async function usePhysicalItem(event, item) {
     const isConsumable = item.isOfType("consumable");
     if (isConsumable && isCastConsumable(item)) {
@@ -190,4 +193,4 @@ function isSF2eItem(item) {
 function isAreaOrAutoFireType(type) {
     return R.isIncludedIn(type, ["area-fire", "auto-fire"]);
 }
-export { consumeItem, findItemWithSlug, findItemWithSourceId, getItemSlug, getItemSource, getItemSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, simulateDropItem, usePhysicalItem, };
+export { consumeItem, findItemWithSlug, findItemWithSourceId, getItemSlug, getItemSource, getItemSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, simulateDropItem, usePhysicalItem, itemWithActor, };

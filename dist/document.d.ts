@@ -6,5 +6,5 @@ declare function setInMemory<T>(obj: ClientDocument | Token, ...args: [...string
 declare function deleteInMemory(obj: ClientDocument | Token, ...path: string[]): boolean;
 declare function isScriptMacro(doc: any): doc is MacroPF2e;
 declare function isValidTargetDocuments(target: unknown): target is TargetDocuments;
-declare function isDocumentUUID<T extends DocumentUUID>(type: DocumentType, uuid: string): uuid is T;
+declare function isDocumentUUID<T extends DocumentUUID>(type: DocumentType, uuid: string, embedded?: boolean): uuid is T;
 export { deleteInMemory, getDocumentFromUUID, getInMemory, isDocumentUUID, isScriptMacro, isValidTargetDocuments, setInMemory, };

@@ -28,7 +28,16 @@ function isValidTargetDocuments(target) {
     target.token = target.token instanceof foundry.canvas.placeables.Token ? target.token.document : target.token;
     return !target.token || target.token instanceof TokenDocument;
 }
-function isDocumentUUID(type, uuid) {
-    return foundry.utils.parseUuid(uuid)?.type === type;
+function isDocumentUUID(type, uuid, embedded) {
+    if (typeof uuid !== "string")
+        return false;
+    try {
+        const parseResult = foundry.utils.parseUuid(uuid);
+        const isEmbedded = !!parseResult?.embedded.length;
+        return parseResult?.type === type && (embedded === true ? isEmbedded : embedded === false ? !isEmbedded : true);
+    }
+    catch {
+        return false;
+    }
 }
 export { deleteInMemory, getDocumentFromUUID, getInMemory, isDocumentUUID, isScriptMacro, isValidTargetDocuments, setInMemory, };

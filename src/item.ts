@@ -154,6 +154,10 @@ function getItemSlug(item: ItemPF2e | CompendiumIndexData): string {
     return item instanceof Item ? item.slug || SYSTEM.sluggify(item._source.name) : SYSTEM.sluggify(item.name);
 }
 
+function itemWithActor<T extends ItemPF2e<ActorPF2e>>(actor: ActorPF2e, item: ItemPF2e): T {
+    return (item.parent ? item : new (getDocumentClass("Item"))(item.toObject(), { parent: actor })) as T;
+}
+
 async function usePhysicalItem(event: Event, item: EquipmentPF2e<ActorPF2e> | ConsumablePF2e<ActorPF2e>) {
     const isConsumable = item.isOfType("consumable");
 
@@ -302,5 +306,6 @@ export {
     itemIsOfType,
     simulateDropItem,
     usePhysicalItem,
+    itemWithActor,
 };
 export type { ItemOrSource };

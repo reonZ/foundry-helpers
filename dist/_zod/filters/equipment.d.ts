@@ -1,8 +1,8 @@
 import z from "zod";
 declare function zEquipmentFilter(): z.ZodObject<{
     checkboxes: z.ZodOptional<z.ZodRecord<z.ZodEnum<{
-        itemTypes: "itemTypes";
         rarity: "rarity";
+        itemTypes: "itemTypes";
         armorTypes: "armorTypes";
         weaponTypes: "weaponTypes";
     }> & z.core.$partial, z.ZodObject<{

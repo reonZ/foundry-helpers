@@ -11,6 +11,7 @@ declare function findItemWithSourceId<TType extends ItemType, TActor extends Act
 declare function findItemWithSlug<TType extends ItemType, TActor extends ActorPF2e>(actor: TActor, slug: string, type?: TType): ActorItemInstances<TType, TActor> | null;
 declare function getItemSourceId(item: ItemPF2e): ItemUUID;
 declare function getItemSlug(item: ItemPF2e | CompendiumIndexData): string;
+declare function itemWithActor<T extends ItemPF2e<ActorPF2e>>(actor: ActorPF2e, item: ItemPF2e): T;
 declare function usePhysicalItem(event: Event, item: EquipmentPF2e<ActorPF2e> | ConsumablePF2e<ActorPF2e>): Promise<unknown>;
 /**
  * upgraded version of
@@ -25,5 +26,5 @@ declare function isSF2eItem<T extends PhysicalItemPF2e>(item: T): boolean;
 declare function isAreaOrAutoFireType(type: string): type is "area-fire" | "auto-fire";
 type ActorItemInstances<TType extends ItemType, TActor extends ActorPF2e> = ItemInstances<TActor>[TType extends "weapon" | "shield" ? TType | "weapon" | "equipment" : TType];
 type ItemOrSource = PreCreate<ItemSourcePF2e> | CompendiumIndexData | ItemPF2e;
-export { consumeItem, findItemWithSlug, findItemWithSourceId, getItemSlug, getItemSource, getItemSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, simulateDropItem, usePhysicalItem, };
+export { consumeItem, findItemWithSlug, findItemWithSourceId, getItemSlug, getItemSource, getItemSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, simulateDropItem, usePhysicalItem, itemWithActor, };
 export type { ItemOrSource };

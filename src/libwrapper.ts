@@ -1,4 +1,4 @@
-import { ClientDocument, MODULE, R } from ".";
+import { MODULE, R } from ".";
 
 function registerWrapper(
     type: libWrapper.RegisterType,
@@ -33,7 +33,7 @@ function unregisterWrapper(id: number | number[]) {
 }
 
 function createSharedWrapper<
-    TDocument extends ClientDocument,
+    TDocument extends object,
     TWrapperCallback extends libWrapper.RegisterCallback,
     TListener extends (...args: any[]) => any,
 >(

@@ -11,6 +11,7 @@ import {
     ImageFilePath,
     RollMode,
 } from "@7h3laughingman/foundry-types/common/constants.mjs";
+import { SourceFromSchema } from "@7h3laughingman/foundry-types/common/data/fields.mjs";
 import { LootPF2e, LootSheetPF2e } from "@7h3laughingman/pf2e-types";
 
 export type * from "@7h3laughingman/foundry-types/client/_module.mjs";
@@ -49,4 +50,5 @@ export type {
     NumericTerm,
     PrimaryCanvasGroup,
     RollMode,
+    SourceFromSchema,
 };

@@ -39,8 +39,16 @@ function isValidTargetDocuments(target: unknown): target is TargetDocuments {
     return !target.token || target.token instanceof TokenDocument;
 }
 
-function isDocumentUUID<T extends DocumentUUID>(type: DocumentType, uuid: string): uuid is T {
-    return foundry.utils.parseUuid(uuid)?.type === type;
+function isDocumentUUID<T extends DocumentUUID>(type: DocumentType, uuid: string, embedded?: boolean): uuid is T {
+    if (typeof uuid !== "string") return false;
+
+    try {
+        const parseResult = foundry.utils.parseUuid(uuid);
+        const isEmbedded = !!parseResult?.embedded.length;
+        return parseResult?.type === type && (embedded === true ? isEmbedded : embedded === false ? !isEmbedded : true);
+    } catch {
+        return false;
+    }
 }
 
 export {

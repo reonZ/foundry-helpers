@@ -5,6 +5,7 @@ import NumericTerm from "@7h3laughingman/foundry-types/client/dice/terms/numeric
 import Localization from "@7h3laughingman/foundry-types/client/helpers/localization.mjs";
 import { DocumentUUID } from "@7h3laughingman/foundry-types/client/utils/_module.mjs";
 import { DocumentType, FileCategory, FilePath, ImageFilePath, RollMode } from "@7h3laughingman/foundry-types/common/constants.mjs";
+import { SourceFromSchema } from "@7h3laughingman/foundry-types/common/data/fields.mjs";
 import { LootPF2e, LootSheetPF2e } from "@7h3laughingman/pf2e-types";
 export type * from "@7h3laughingman/foundry-types/client/_module.mjs";
 export type * from "@7h3laughingman/foundry-types/client/applications/ui/scene-controls.mjs";
@@ -27,4 +28,4 @@ export type * from "@7h3laughingman/foundry-types/common/abstract/_module.mjs";
 export type * from "@7h3laughingman/foundry-types/common/documents/_module.mjs";
 export type * from "@7h3laughingman/pf2e-types/scripts/ui/user-visibility.js";
 type LootSheetDataPF2e = Awaited<ReturnType<LootSheetPF2e<LootPF2e>["getData"]>>;
-export type { Die, DocumentType, DocumentUUID, FileCategory, FilePath, ImageFilePath, Localization, LootSheetDataPF2e, MouseInteractionManager, NumericTerm, PrimaryCanvasGroup, RollMode, };
+export type { Die, DocumentType, DocumentUUID, FileCategory, FilePath, ImageFilePath, Localization, LootSheetDataPF2e, MouseInteractionManager, NumericTerm, PrimaryCanvasGroup, RollMode, SourceFromSchema, };
