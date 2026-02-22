@@ -50,7 +50,7 @@ function getActionGlyph(action) {
         .trim();
     return actionGlyphMap[sanitized]?.replace("-", "–") ?? "";
 }
-async function useAction(event, item) {
+async function useAction(event, item, virtualData) {
     const macro = game.toolbelt?.getToolSetting("actionable", "action")
         ? await game.toolbelt?.api.actionable.getActionMacro(item)
         : undefined;
@@ -60,7 +60,13 @@ async function useAction(event, item) {
         }
         if (item.system.frequency && item.system.frequency.value > 0) {
             const newValue = item.system.frequency.value - 1;
-            await item.update({ "system.frequency.value": newValue });
+            if (virtualData) {
+                const rule = virtualData.parent.rules[virtualData.ruleIndex];
+                await rule.updateData({ frequency: newValue });
+            }
+            else {
+                await item.update({ "system.frequency.value": newValue });
+            }
         }
         if (item.system.selfEffect) {
             await applySelfEffect(item);

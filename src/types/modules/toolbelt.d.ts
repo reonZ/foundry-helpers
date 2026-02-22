@@ -14,6 +14,8 @@ import {
     PhysicalItemPF2e,
     RawCoins,
     RollNoteSource,
+    RuleElement,
+    RuleElementSchema,
     SaveType,
     TokenDocumentPF2e,
 } from "@7h3laughingman/pf2e-types";
@@ -126,6 +128,20 @@ declare global {
             type VirtualActionData = {
                 data: ActionableData;
                 parent: PhysicalItemPF2e<CharacterPF2e>;
+                ruleIndex: number;
+            };
+
+            type ActionableSchema = RuleElementSchema & {
+                data: foundry.data.fields.ObjectField<ActionableData>;
+                uuid: foundry.data.fields.StringField<ItemUUID, ItemUUID, true, false, false>;
+            };
+
+            type ActionableUpdateDataArgs = {
+                frequency?: number;
+            };
+
+            type ActionableRuleElement = RuleElement & {
+                updateData(changes: ActionableUpdateDataArgs): Promise<ItemPF2e<CharacterPF2e>[]> | undefined;
             };
         }
 

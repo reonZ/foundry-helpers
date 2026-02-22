@@ -68,7 +68,11 @@ function getActionGlyph(action: string | number | null | ActionCost): string {
     return actionGlyphMap[sanitized]?.replace("-", "–") ?? "";
 }
 
-async function useAction(event: Event, item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>) {
+async function useAction(
+    event: Event,
+    item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>,
+    virtualData?: toolbelt.actionable.VirtualActionData,
+) {
     const macro = game.toolbelt?.getToolSetting("actionable", "action")
         ? await game.toolbelt?.api.actionable.getActionMacro(item)
         : undefined;
@@ -80,7 +84,15 @@ async function useAction(event: Event, item: AbilityItemPF2e<ActorPF2e> | FeatPF
 
         if (item.system.frequency && item.system.frequency.value > 0) {
             const newValue = item.system.frequency.value - 1;
-            await item.update({ "system.frequency.value": newValue });
+
+            if (virtualData) {
+                const rule = virtualData.parent.rules[
+                    virtualData.ruleIndex
+                ] as toolbelt.actionable.ActionableRuleElement;
+                await rule.updateData({ frequency: newValue });
+            } else {
+                await item.update({ "system.frequency.value": newValue });
+            }
         }
 
         if (item.system.selfEffect) {
