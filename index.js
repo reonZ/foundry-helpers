@@ -1,4 +1,4 @@
-export { DateTime } from "luxon";
+export { DateTime, Duration } from "luxon";
 export * as R from "remeda";
 export * as z from "zod";
 export * from "./dist";

@@ -141,7 +141,15 @@ declare global {
             };
 
             type ActionableRuleElement = RuleElement & {
-                updateData(changes: ActionableUpdateDataArgs): Promise<ItemPF2e<CharacterPF2e>[]> | undefined;
+                updateData(changes: ActionableUpdateDataArgs, sourceOnly: true): EmbeddedDocumentUpdateData | undefined;
+                updateData(
+                    changes: ActionableUpdateDataArgs,
+                    sourceOnly?: boolean,
+                ): Promise<ItemPF2e<CharacterPF2e>[]> | undefined;
+                updateData(
+                    changes: ActionableUpdateDataArgs,
+                    sourceOnly?: boolean,
+                ): EmbeddedDocumentUpdateData | Promise<ItemPF2e<CharacterPF2e>[]> | undefined;
             };
         }
 
