@@ -18,7 +18,7 @@ class ZodDocument {
         return foundry.utils.deepClone(this.#data);
     }
     encode(encoder) {
-        return encoder.safeEncode(this.#data)?.data;
+        return encoder.safeEncode(this.#data).data;
     }
 }
 class ZodDocumentArray extends Array {

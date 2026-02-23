@@ -8,14 +8,15 @@ import {
     zDocumentId,
     zDocumentUUID,
 } from ".";
-import { ClientDocument, DocumentUUID, R } from "..";
+import { DocumentUUID, ItemUUID, R } from "..";
+import { ActorPF2e, ItemInstances, ItemType } from "@7h3laughingman/pf2e-types";
 
 function zForeignDocument<
     T extends ClientDocumentType,
     D extends ClientDocumentInstance<T> = ClientDocumentInstance<T>,
 >(
     model: T,
-    validator: (value: ClientDocument) => boolean = () => true,
+    validator: (value: ClientDocumentInstance<T>) => boolean = () => true,
 ): z.ZodCodec<z.ZodNullable<zDocumentID>, z.ZodNullable<z.ZodCustom<D, D>>> {
     const ModelClass = getDocumentClass(model) as ClientDocumentMapping[T];
 
@@ -50,4 +51,36 @@ function zForeignDocumentUUID<
     });
 }
 
-export { zForeignDocument, zForeignDocumentUUID };
+function zForeignItem<T extends ItemType, A extends ActorPF2e>(
+    type: T,
+    embedded: true,
+): z.ZodCodec<
+    z.ZodNullable<z.ZodCustom<ItemUUID, ItemUUID>>,
+    z.ZodNullable<z.ZodCustom<ItemInstances<A>[T], ItemInstances<A>[T]>>
+>;
+function zForeignItem<T extends ItemType>(
+    type: T,
+    embedded?: boolean,
+): z.ZodCodec<
+    z.ZodNullable<z.ZodCustom<ItemUUID, ItemUUID>>,
+    z.ZodNullable<z.ZodCustom<ItemInstances<null>[T], ItemInstances<null>[T]>>
+>;
+function zForeignItem<T extends ItemType>(type: T, embedded: boolean = false) {
+    const ItemCls = getDocumentClass("Item");
+
+    return z.codec(
+        zDocumentUUID<ItemUUID>({ embedded, type: "Item" }).nullable(),
+        zClientDocument(type as any).nullable(),
+        {
+            decode: async (uuid) => {
+                const item = R.isString(uuid) ? await fromUuid(uuid) : null;
+                return item instanceof ItemCls && item.type === type ? item : null;
+            },
+            encode: (doc) => {
+                return doc?.uuid ?? null;
+            },
+        },
+    );
+}
+
+export { zForeignItem, zForeignDocument, zForeignDocumentUUID };

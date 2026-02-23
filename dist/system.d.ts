@@ -1,4 +1,5 @@
-import { DocumentUUID } from ".";
+import { GamePF2e } from "@7h3laughingman/pf2e-types";
+import { CompendiumCollection, DocumentUUID } from ".";
 declare class SYSTEM {
     static get id(): SystemId;
     static get isPF2e(): boolean;
@@ -11,7 +12,10 @@ declare class SYSTEM {
     static sluggify(text: string, options?: {
         camel?: SlugCamel;
     }): string;
+    static getPack<T extends PackContent>(name: string): CompendiumCollection<T> | undefined;
 }
 type SlugCamel = "dromedary" | "bactrian" | null;
+type PackCollection = GamePF2e["packs"] extends Collection<string, infer T> ? T : never;
+type PackContent = PackCollection extends CompendiumCollection<infer T> ? T : never;
 export { SYSTEM };
 export type { SlugCamel };

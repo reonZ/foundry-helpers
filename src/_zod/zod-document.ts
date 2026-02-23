@@ -24,7 +24,7 @@ class ZodDocument<T extends z.ZodObject = z.ZodObject> {
     }
 
     encode<TEncoder extends T>(encoder: TEncoder): z.input<T> | undefined {
-        return encoder.safeEncode(this.#data)?.data;
+        return encoder.safeEncode(this.#data).data;
     }
 }
 

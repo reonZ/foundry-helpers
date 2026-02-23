@@ -2,6 +2,7 @@ import PrimaryCanvasGroup from "@7h3laughingman/foundry-types/client/canvas/grou
 import MouseInteractionManager from "@7h3laughingman/foundry-types/client/canvas/interaction/mouse-handler.mjs";
 import Die from "@7h3laughingman/foundry-types/client/dice/terms/die.mjs";
 import NumericTerm from "@7h3laughingman/foundry-types/client/dice/terms/numeric.mjs";
+import CompendiumCollection from "@7h3laughingman/foundry-types/client/documents/collections/compendium-collection.mjs";
 import Localization from "@7h3laughingman/foundry-types/client/helpers/localization.mjs";
 import { DocumentUUID } from "@7h3laughingman/foundry-types/client/utils/_module.mjs";
 import {
@@ -38,6 +39,7 @@ export type * from "@7h3laughingman/pf2e-types/scripts/ui/user-visibility.js";
 type LootSheetDataPF2e = Awaited<ReturnType<LootSheetPF2e<LootPF2e>["getData"]>>;
 
 export type {
+    CompendiumCollection,
     Die,
     DocumentType,
     DocumentUUID,

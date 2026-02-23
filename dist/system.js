@@ -24,5 +24,8 @@ class SYSTEM {
     static sluggify(text, options) {
         return game.pf2e.system.sluggify(text, options);
     }
+    static getPack(name) {
+        return game.packs.get(`${SYSTEM.id}.${name}`);
+    }
 }
 export { SYSTEM };
