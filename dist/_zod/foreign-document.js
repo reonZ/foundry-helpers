@@ -28,7 +28,7 @@ function zForeignDocumentUUID(options) {
 }
 function zForeignItem(type, embedded = false) {
     const ItemCls = getDocumentClass("Item");
-    return z.codec(zDocumentUUID({ embedded, type: "Item" }).nullable(), zClientDocument(type).nullable(), {
+    return z.codec(zDocumentUUID({ embedded, type: "Item" }).nullable(), zClientDocument("Item").nullable(), {
         decode: async (uuid) => {
             const item = R.isString(uuid) ? await fromUuid(uuid) : null;
             return item instanceof ItemCls && item.type === type ? item : null;
@@ -38,4 +38,4 @@ function zForeignItem(type, embedded = false) {
         },
     });
 }
-export { zForeignItem, zForeignDocument, zForeignDocumentUUID };
+export { zForeignDocument, zForeignDocumentUUID, zForeignItem };
