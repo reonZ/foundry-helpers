@@ -27,6 +27,7 @@ export * from "./object";
 export * from "./pixi";
 export * from "./pf2e";
 export * from "./settings";
+export * from "./skill";
 export * from "./socket";
 export * from "./template";
 export * from "./time";

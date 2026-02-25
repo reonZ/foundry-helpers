@@ -6,16 +6,19 @@ import CompendiumCollection from "@7h3laughingman/foundry-types/client/documents
 import Localization from "@7h3laughingman/foundry-types/client/helpers/localization.mjs";
 import { DocumentUUID } from "@7h3laughingman/foundry-types/client/utils/_module.mjs";
 import {
+    DocumentOwnershipLevel,
     DocumentType,
     FileCategory,
     FilePath,
     ImageFilePath,
     RollMode,
+    VideoFilePath,
 } from "@7h3laughingman/foundry-types/common/constants.mjs";
-import { SourceFromSchema } from "@7h3laughingman/foundry-types/common/data/fields.mjs";
-import { LootPF2e, LootSheetPF2e } from "@7h3laughingman/pf2e-types";
+import { ModelPropsFromSchema, SourceFromSchema } from "@7h3laughingman/foundry-types/common/data/fields.mjs";
+import { FeatLike, FeatPF2e, FeatSlot, HeritagePF2e, LootPF2e, LootSheetPF2e } from "@7h3laughingman/pf2e-types";
 
 export type * from "@7h3laughingman/foundry-types/client/_module.mjs";
+export type * from "@7h3laughingman/foundry-types/client/applications/forms/fields.mjs";
 export type * from "@7h3laughingman/foundry-types/client/applications/ui/scene-controls.mjs";
 export type * from "@7h3laughingman/foundry-types/client/applications/ux/context-menu.mjs";
 export type * from "@7h3laughingman/foundry-types/client/applications/ux/text-editor.mjs";
@@ -37,20 +40,32 @@ export type * from "@7h3laughingman/foundry-types/common/documents/_module.mjs";
 export type * from "@7h3laughingman/pf2e-types/scripts/ui/user-visibility.js";
 
 type LootSheetDataPF2e = Awaited<ReturnType<LootSheetPF2e<LootPF2e>["getData"]>>;
+type DocumentOwnership = { [K in "default" | (string & {})]?: DocumentOwnershipLevel };
+interface FeatNotSlot<T extends FeatLike = FeatPF2e> {
+    feat: T;
+    filter?: never;
+    level?: never;
+    children: FeatSlot<FeatLike | HeritagePF2e>[];
+}
 
 export type {
     CompendiumCollection,
     Die,
+    DocumentOwnership,
+    DocumentOwnershipLevel,
     DocumentType,
     DocumentUUID,
+    FeatNotSlot,
     FileCategory,
     FilePath,
     ImageFilePath,
     Localization,
     LootSheetDataPF2e,
+    ModelPropsFromSchema,
     MouseInteractionManager,
     NumericTerm,
     PrimaryCanvasGroup,
     RollMode,
     SourceFromSchema,
+    VideoFilePath,
 };

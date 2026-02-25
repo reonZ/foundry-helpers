@@ -1,6 +1,15 @@
-import { ClientDocument, MODULE, R } from ".";
+import { ClientDocument, DatabaseUpdateOperation, MODULE, R } from ".";
 
 type Document = foundry.abstract.Document;
+
+function flagPath(...path: string[]): string {
+    return `flags.${MODULE.path(...path)}`;
+}
+
+function unsetFlagPath(...path: [string, ...string[]]): string {
+    const lastKey = path.pop();
+    return flagPath(...path, `-=${lastKey}`);
+}
 
 function getFlag<T>(doc: Document, ...path: string[]): T | undefined {
     return doc.getFlag(MODULE.id, R.join(path, ".")) as T | undefined;
@@ -15,13 +24,12 @@ function unsetFlag<D extends Document>(doc: D, ...path: string[]): Promise<D | u
     return doc.unsetFlag(MODULE.id, R.join(path, "."));
 }
 
-function flagPath(...path: string[]): string {
-    return `flags.${MODULE.path(...path)}`;
-}
-
-function unsetFlagPath(...path: [string, ...string[]]): string {
-    const lastKey = path.pop();
-    return flagPath(...path, `-=${lastKey}`);
+function updateFlag<T extends Record<string, unknown>, D extends foundry.abstract.Document>(
+    doc: D,
+    updates: T,
+    operation?: Partial<DatabaseUpdateOperation<D>>,
+) {
+    return doc.update({ flags: { [MODULE.id]: updates } }, operation);
 }
 
 function getFlagProperty<T>(obj: object, ...path: string[]): T | undefined {
@@ -64,5 +72,6 @@ export {
     setFlagProperty,
     unsetFlag,
     unsetFlagProperty,
+    updateFlag,
     updateSourceFlag,
 };

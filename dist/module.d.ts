@@ -1,4 +1,4 @@
-import { Module } from ".";
+import { ImageFilePath, Module } from ".";
 declare class CustomModule {
     #private;
     get id(): string;
@@ -13,8 +13,8 @@ declare class CustomModule {
     globalPath(...path: string[]): string;
     path(...path: string[]): string;
     relativePath(...path: string[]): string;
-    imagePath(...path: string[]): string;
-    templatePath(...path: string[]): string;
+    imagePath(...path: string[]): ImageFilePath;
+    templatePath(...path: string[]): `${string}.hbs`;
     Error(str: string): Error;
     error(str: string, error?: Error): void;
     apiExpose(key: string, toExpose: Record<string, any> | Function): void;

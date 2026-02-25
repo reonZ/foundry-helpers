@@ -15,6 +15,8 @@ declare function createHTMLElement<K extends keyof HTMLElementTagNameMap>(nodeNa
 declare function createHTMLElementContent(options?: CreateHTMLElementOptions): HTMLElement;
 declare function createButtonElement(options: CreateHTMLButtonElementOptions): HTMLButtonElement;
 declare function createInputElement(type: "text" | "number" | "radio" | "checkbox", name: string, value: string | number | boolean, options?: CreateHTMLInputElementOptions): HTMLInputElement;
+declare function createToggleEvent<TEvent extends keyof DocumentEventMap>(event: TEvent, selector: null, listener: (ev: DocumentEventMap[TEvent]) => any, options?: boolean | AddEventListenerOptions): ToggleEvent;
+declare function createToggleEvent<TEvent extends keyof HTMLElementEventMap>(event: TEvent, selector: string, listener: (ev: HTMLElementEventMap[TEvent]) => any, options?: boolean | AddEventListenerOptions): ToggleEvent;
 declare function addListener<K extends keyof HTMLElementTagNameMap, TEvent extends EventType = "click">(parent: MaybeHTML, selectors: K, ...args: ListenerCallbackArgs<HTMLElementTagNameMap[K], TEvent>): void;
 declare function addListener<TEvent extends EventType = "click">(parent: MaybeHTML, selectors: string, ...args: ListenerCallbackArgs<HTMLElement, TEvent>): void;
 declare function addListener<E extends HTMLElement, TEvent extends EventType = "click">(parent: MaybeHTML, selectors: string, ...args: ListenerCallbackArgs<E, TEvent>): void;
@@ -30,6 +32,7 @@ declare function getInputValue(el: HTMLInputElement | HTMLSelectElement): string
 declare function toggleSummary(summaryElem: HTMLElement): Promise<void>;
 declare function createFormData<T extends Record<string, unknown>>(html: HTMLFormElement, expand?: boolean): T;
 declare function createFormData<T extends Record<string, unknown>>(html: HTMLElement, expand?: boolean): T | null;
+declare function dataToDatasetString(data: DatasetData): string;
 declare function assignStyle(el: HTMLElement, style: Partial<CSSStyleDeclaration>): void;
 declare function styleValue(value: number): `${number}px`;
 declare function setStyleProperty(html: Maybe<HTMLElement>, property: string, value: number): void;
@@ -51,5 +54,12 @@ type ListenerCallback<TElement extends HTMLElement, TEvent extends EventType> = 
 type CreateHTMLInputElementOptions = Omit<CreateHTMLElementOptions, "content" | "id"> & {
     checked?: boolean;
 };
-export { addEnterKeyListeners, addListener, addListenerAll, assignStyle, createButtonElement, createFormData, createHTMLElement, createHTMLElementContent, createInputElement, firstElementWithText, getInputValue, htmlClosest, htmlQuery, htmlQueryAll, htmlQueryIn, registerCustomElement, setStyleProperties, setStyleProperty, styleValue, toggleSummary, };
+type ToggleEvent = {
+    activate(): void;
+    disable(): void;
+    toggle(enabled: boolean): void;
+};
+type DatasetValue = Maybe<string | number | boolean | object>;
+type DatasetData = Record<string, DatasetValue> | [string, DatasetValue][];
+export { addEnterKeyListeners, addListener, addListenerAll, assignStyle, createButtonElement, createFormData, createHTMLElement, createHTMLElementContent, createInputElement, createToggleEvent, dataToDatasetString, firstElementWithText, getInputValue, htmlClosest, htmlQuery, htmlQueryAll, htmlQueryIn, registerCustomElement, setStyleProperties, setStyleProperty, styleValue, toggleSummary, };
 export type { CreateHTMLButtonElementOptions, CreateHTMLElementOptions };

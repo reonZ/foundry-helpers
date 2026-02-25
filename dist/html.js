@@ -99,6 +99,34 @@ function createInputElement(type, name, value, options) {
     }
     return input;
 }
+function createToggleEvent(event, selector, listener, options) {
+    let enabled = false;
+    const getElement = () => {
+        return selector ? document.querySelector(selector) : document;
+    };
+    return {
+        activate() {
+            if (enabled)
+                return;
+            requestAnimationFrame(() => {
+                getElement()?.addEventListener(event, listener, options);
+            });
+            enabled = true;
+        },
+        disable() {
+            if (!enabled)
+                return;
+            getElement()?.removeEventListener(event, listener, options);
+            enabled = false;
+        },
+        toggle(enabled) {
+            if (enabled)
+                this.activate();
+            else
+                this.disable();
+        },
+    };
+}
 function addListener(parent, selectors, ...args) {
     if (!(parent instanceof Element || parent instanceof Document))
         return;
@@ -183,6 +211,15 @@ function createFormData(html, expand = false) {
     }
     return (expand ? foundry.utils.expandObject(data) : data);
 }
+function dataToDatasetString(data) {
+    return R.pipe(!R.isArray(data) ? R.entries(data) : data, R.map(([key, value]) => {
+        if (R.isNullish(value))
+            return;
+        const sluggifiedKey = key.replace(/\B([A-Z])/g, "-$1").toLowerCase();
+        const stringified = R.isObjectType(value) ? foundry.utils.escapeHTML(JSON.stringify(value)) : value;
+        return `data-${sluggifiedKey}='${stringified}'`;
+    }), R.filter(R.isTruthy), R.join(" "));
+}
 function assignStyle(el, style) {
     Object.assign(el.style, style);
 }
@@ -207,4 +244,4 @@ function registerCustomElement(tag, element) {
         MODULE.error(`an error occurred while registering a custom element: ${tag}`, error);
     }
 }
-export { addEnterKeyListeners, addListener, addListenerAll, assignStyle, createButtonElement, createFormData, createHTMLElement, createHTMLElementContent, createInputElement, firstElementWithText, getInputValue, htmlClosest, htmlQuery, htmlQueryAll, htmlQueryIn, registerCustomElement, setStyleProperties, setStyleProperty, styleValue, toggleSummary, };
+export { addEnterKeyListeners, addListener, addListenerAll, assignStyle, createButtonElement, createFormData, createHTMLElement, createHTMLElementContent, createInputElement, createToggleEvent, dataToDatasetString, firstElementWithText, getInputValue, htmlClosest, htmlQuery, htmlQueryAll, htmlQueryIn, registerCustomElement, setStyleProperties, setStyleProperty, styleValue, toggleSummary, };

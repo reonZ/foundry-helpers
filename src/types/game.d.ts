@@ -10,9 +10,9 @@ declare module "@7h3laughingman/pf2e-types" {
             execute: (actorOrTarget: Maybe<ActorPF2e | TargetDocuments>, values?: unknown[]) => void;
         };
 
-        // hud?: MyModule.GamePF2e<hud.Api>;
-        // dailies?: MyModule.GamePF2e<dailies.Api>;
-        // tcal?: tcal.GamePF2e;
+        hud?: MyModule.GamePF2e<hud.Api>;
+        dailies?: MyModule.GamePF2e<dailies.Api>;
+        tcal?: tcal.GamePF2e;
         toolbelt?: toolbelt.GamePF2e;
     }
 }

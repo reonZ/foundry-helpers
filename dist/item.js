@@ -1,4 +1,16 @@
-import { createHTMLElementContent, getDamageRollClass, htmlQuery, includesAny, R, setHasElement, SYSTEM, } from ".";
+import { createHTMLElementContent, getActionGlyph, getDamageRollClass, htmlQuery, includesAny, R, setHasElement, SYSTEM, traitSlugToObject, } from ".";
+/**
+ * https://github.com/foundryvtt/pf2e/blob/1465f7190b2b8454094c50fa6d06e9902e0a3c41/src/module/item/base/data/values.ts#L23-L31
+ */
+const ITEM_CARRY_TYPES = Object.freeze([
+    "attached",
+    "dropped",
+    "held",
+    "implanted",
+    "installed",
+    "stowed",
+    "worn",
+]);
 /**
  * https://github.com/foundryvtt/pf2e/blob/95e941aecaf1fa6082825b206b0ac02345d10538/src/module/item/physical/values.ts#L1
  */
@@ -30,6 +42,16 @@ function getItemSource(item, clearId) {
         delete source._id;
     }
     return source;
+}
+async function getItemFromUuid(uuid, type) {
+    if (!uuid)
+        return null;
+    const item = await fromUuid(uuid);
+    return item instanceof Item && (!type || item.isOfType(type)) ? item : null;
+}
+async function getItemSourceFromUuid(uuid, type) {
+    const item = await getItemFromUuid(uuid, type);
+    return !!item ? getItemSource(item) : null;
 }
 function* actorItems(actor, type) {
     const types = R.isArray(type) ? type : type ? [type] : R.keys(CONFIG.PF2E.Item.documentClasses);
@@ -77,6 +99,17 @@ function findItemWithSlug(actor, slug, type) {
         }
     }
     return null;
+}
+function hasAnyItemWithSourceId(actor, uuids, type) {
+    for (const item of actorItems(actor, type)) {
+        if (isSupressedFeat(item))
+            continue;
+        const sourceId = getItemSourceId(item);
+        if (sourceId && uuids.includes(sourceId)) {
+            return true;
+        }
+    }
+    return false;
 }
 function getItemSourceId(item) {
     const isCompendiumItem = item._id && item.pack && !item.isEmbedded;
@@ -168,6 +201,63 @@ async function consumeItem(event, item) {
         });
     }
 }
+function getEquipAnnotation(item) {
+    if (!item || item.isEquipped)
+        return;
+    const { type, hands = 0 } = item.system.usage;
+    const annotation = item.carryType === "dropped" ? "pick-up" : item.isStowed ? "retrieve" : "draw";
+    const fullAnnotation = `${annotation}${hands}H`;
+    const purposeKey = SYSTEM.sluggify(fullAnnotation, { camel: "bactrian" });
+    return {
+        annotation,
+        cost: annotation === "retrieve" ? 2 : 1,
+        fullAnnotation,
+        handsHeld: hands,
+        label: `PF2E.Actions.Interact.${purposeKey}.Title`,
+        carryType: type === "worn" ? "worn" : "held",
+    };
+}
+/**
+ * repurposed version of
+ * https://github.com/foundryvtt/pf2e/blob/6ff777170c93618f234929c6d483a98a37cbe363/src/module/actor/character/helpers.ts#L210
+ */
+async function equipItemToUse(actor, item, { carryType, handsHeld, fullAnnotation, cost, }) {
+    await actor.changeCarryType(item, { carryType, handsHeld });
+    if (!game.combat)
+        return;
+    const templates = {
+        flavor: SYSTEM.relativePath("templates/chat/action/flavor.hbs"),
+        content: SYSTEM.relativePath("templates/chat/action/content.hbs"),
+    };
+    const fullAnnotationKey = SYSTEM.sluggify(fullAnnotation, { camel: "bactrian" });
+    const flavorAction = {
+        title: `PF2E.Actions.Interact.Title`,
+        subtitle: fullAnnotationKey ? `PF2E.Actions.Interact.${fullAnnotationKey}.Title` : null,
+        glyph: getActionGlyph(cost),
+    };
+    const [traits, message] = [
+        [traitSlugToObject("manipulate", CONFIG.PF2E.actionTraits)],
+        `PF2E.Actions.Interact.${fullAnnotationKey}.Description`,
+    ];
+    const flavor = await foundry.applications.handlebars.renderTemplate(templates.flavor, {
+        action: flavorAction,
+        traits,
+    });
+    const content = await foundry.applications.handlebars.renderTemplate(templates.content, {
+        imgPath: item.img,
+        message: game.i18n.format(message, {
+            actor: actor.name,
+            weapon: item.name,
+        }),
+    });
+    const token = actor.getActiveTokens(false, true).shift();
+    await getDocumentClass("ChatMessage").create({
+        content,
+        speaker: ChatMessage.getSpeaker({ actor, token }),
+        flavor,
+        style: CONST.CHAT_MESSAGE_STYLES.EMOTE,
+    });
+}
 function simulateDropItem(item, target, fromInventory) {
     const event = new DragEvent("dragstart", {
         dataTransfer: new DataTransfer(),
@@ -193,4 +283,4 @@ function isSF2eItem(item) {
 function isAreaOrAutoFireType(type) {
     return R.isIncludedIn(type, ["area-fire", "auto-fire"]);
 }
-export { consumeItem, findItemWithSlug, findItemWithSourceId, getItemSlug, getItemSource, getItemSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemIsOfType, simulateDropItem, usePhysicalItem, itemWithActor, };
+export { actorItems, consumeItem, equipItemToUse, findItemWithSlug, findItemWithSourceId, getEquipAnnotation, getItemFromUuid, getItemSlug, getItemSource, getItemSourceFromUuid, getItemSourceId, hasAnyItemWithSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, ITEM_CARRY_TYPES, itemIsOfType, itemWithActor, simulateDropItem, usePhysicalItem, };

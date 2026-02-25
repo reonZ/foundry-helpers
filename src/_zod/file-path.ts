@@ -1,6 +1,6 @@
 import { FileCategory, FilePath, R, z } from "..";
 
-function zFilePath(options: zFilePathOptions | FileCategory[]): z.ZodCustom<FilePath, FilePath> {
+function zFilePath<T extends FilePath>(options: zFilePathOptions | FileCategory[]): z.ZodCustom<T, T> {
     const {
         base64 = false,
         categories = [],
@@ -16,7 +16,7 @@ function zFilePath(options: zFilePathOptions | FileCategory[]): z.ZodCustom<File
      * copied from foundry
      * @see {@link foundry.data.fields.FilePathField#_validateType}
      */
-    return z.custom<FilePath>(
+    return z.custom<T>(
         (value): boolean => {
             if (!R.isString(value)) return false;
 

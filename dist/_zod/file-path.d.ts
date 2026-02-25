@@ -1,5 +1,5 @@
 import { FileCategory, FilePath, z } from "..";
-declare function zFilePath(options: zFilePathOptions | FileCategory[]): z.ZodCustom<FilePath, FilePath>;
+declare function zFilePath<T extends FilePath>(options: zFilePathOptions | FileCategory[]): z.ZodCustom<T, T>;
 type zFilePathOptions = {
     categories?: FileCategory[];
     base64?: boolean;

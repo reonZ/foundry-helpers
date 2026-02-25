@@ -17,6 +17,7 @@ declare function getFirstActiveToken(actor: ActorPF2e, { linked, scene }?: First
 declare function getTargetToken(target: Maybe<TargetDocuments>, options?: FirstActiveTokenOptions): TokenDocumentPF2e | undefined;
 declare function getTargetsTokens(targets: TargetDocuments[], uuid: true): TokenDocumentUUID[];
 declare function getTargetsTokens(targets: TargetDocuments[], uuid?: boolean): TokenDocumentPF2e[];
+declare function getFirstTokenThatMatches<T extends TokenDocument>(actor: ActorPF2e, predicate: (token: TokenDocument) => boolean, scene?: Maybe<ScenePF2e>): T | null;
 /**
  * slightly modified core foundry version
  */
@@ -30,5 +31,5 @@ type FirstActiveTokenOptions = {
     linked?: boolean;
     scene?: ScenePF2e | null;
 };
-export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, };
+export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getFirstTokenThatMatches, getTargetsTokens, getTargetToken, getTokenDocument, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, };
 export type { FirstActiveTokenOptions };

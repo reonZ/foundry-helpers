@@ -152,6 +152,54 @@ function createInputElement(
     return input;
 }
 
+function createToggleEvent<TEvent extends keyof DocumentEventMap>(
+    event: TEvent,
+    selector: null,
+    listener: (ev: DocumentEventMap[TEvent]) => any,
+    options?: boolean | AddEventListenerOptions,
+): ToggleEvent;
+function createToggleEvent<TEvent extends keyof HTMLElementEventMap>(
+    event: TEvent,
+    selector: string,
+    listener: (ev: HTMLElementEventMap[TEvent]) => any,
+    options?: boolean | AddEventListenerOptions,
+): ToggleEvent;
+function createToggleEvent(
+    event: EventType,
+    selector: string | null,
+    listener: (ev: Event) => any,
+    options?: boolean | AddEventListenerOptions,
+) {
+    let enabled = false;
+
+    const getElement = (): Document | HTMLElement | null => {
+        return selector ? document.querySelector<HTMLElement>(selector) : document;
+    };
+
+    return {
+        activate() {
+            if (enabled) return;
+
+            requestAnimationFrame(() => {
+                getElement()?.addEventListener(event, listener, options);
+            });
+
+            enabled = true;
+        },
+        disable() {
+            if (!enabled) return;
+
+            getElement()?.removeEventListener(event, listener, options);
+
+            enabled = false;
+        },
+        toggle(enabled: boolean) {
+            if (enabled) this.activate();
+            else this.disable();
+        },
+    };
+}
+
 function addListener<K extends keyof HTMLElementTagNameMap, TEvent extends EventType = "click">(
     parent: MaybeHTML,
     selectors: K,
@@ -294,6 +342,22 @@ function createFormData<T extends Record<string, unknown>>(
     return (expand ? (foundry.utils.expandObject(data) as Record<string, unknown>) : data) as T;
 }
 
+function dataToDatasetString(data: DatasetData): string {
+    return R.pipe(
+        !R.isArray(data) ? R.entries(data) : data,
+        R.map(([key, value]): string | undefined => {
+            if (R.isNullish(value)) return;
+
+            const sluggifiedKey = key.replace(/\B([A-Z])/g, "-$1").toLowerCase();
+            const stringified = R.isObjectType(value) ? foundry.utils.escapeHTML(JSON.stringify(value)) : value;
+
+            return `data-${sluggifiedKey}='${stringified}'`;
+        }),
+        R.filter(R.isTruthy),
+        R.join(" "),
+    );
+}
+
 function assignStyle(el: HTMLElement, style: Partial<CSSStyleDeclaration>) {
     Object.assign(el.style, style);
 }
@@ -347,6 +411,15 @@ type CreateHTMLInputElementOptions = Omit<CreateHTMLElementOptions, "content" | 
     checked?: boolean;
 };
 
+type ToggleEvent = {
+    activate(): void;
+    disable(): void;
+    toggle(enabled: boolean): void;
+};
+
+type DatasetValue = Maybe<string | number | boolean | object>;
+type DatasetData = Record<string, DatasetValue> | [string, DatasetValue][];
+
 export {
     addEnterKeyListeners,
     addListener,
@@ -357,6 +430,8 @@ export {
     createHTMLElement,
     createHTMLElementContent,
     createInputElement,
+    createToggleEvent,
+    dataToDatasetString,
     firstElementWithText,
     getInputValue,
     htmlClosest,

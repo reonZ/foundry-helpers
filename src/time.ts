@@ -1,4 +1,5 @@
 import { DateTime, HourNumbers, MinuteNumbers, SecondNumbers } from "luxon";
+import { R } from ".";
 
 enum TimeChangeMode {
     ADVANCE,
@@ -53,6 +54,51 @@ class TimeOfDay {
     }
 }
 
+function createTimeout<TArgs extends any[]>(
+    callback: (...args: TArgs) => void,
+    options?: PersistentTimeoutOptions | number,
+) {
+    let timeoutId: NodeJS.Timeout | null = null;
+
+    const usedOptions = R.isNumber(options) ? { defaultDelay: options } : options;
+
+    const minDelay = Math.max(usedOptions?.minDelay ?? 0, 0);
+    const defaultDelay = Math.max(usedOptions?.defaultDelay ?? 1, minDelay);
+
+    return {
+        start(...args: TArgs) {
+            if (timeoutId !== null) {
+                this.stop();
+            }
+
+            if (defaultDelay < 1) {
+                callback(...args);
+            } else {
+                timeoutId = setTimeout(callback, defaultDelay, ...args);
+            }
+        },
+        startWithDelay(delay: number, ...args: TArgs) {
+            if (timeoutId !== null) {
+                this.stop();
+            }
+
+            const usedDelay = Math.max(delay, minDelay);
+
+            if (usedDelay < 1) {
+                callback(...args);
+            } else {
+                timeoutId = setTimeout(callback, usedDelay, ...args);
+            }
+        },
+        stop() {
+            if (timeoutId === null) return;
+
+            clearTimeout(timeoutId);
+            timeoutId = null;
+        },
+    };
+}
+
 /**
  * slightly modified (also fixed the typo)
  * https://github.com/foundryvtt/pf2e/blob/e215ebfbb287190d313fe0441e0362439766786d/src/module/apps/world-clock/app.ts#L237
@@ -79,6 +125,12 @@ function calculateTimeIncrement(interval: string, intervalMode: "+" | "-"): numb
 
 function getWorldTime(): number {
     return game.settings.get("core", "time") as number;
+}
+
+function getTimeWithSeconds(time: DateTime) {
+    return game.pf2e.worldClock.timeConvention === 24
+        ? time.toFormat("HH:mm:ss")
+        : time.toLocaleString(DateTime.TIME_WITH_SECONDS);
 }
 
 function waitTimeout(time: number = 1): Promise<void> {
@@ -126,12 +178,25 @@ function timestampToLocalTime(time: number) {
 
 type TimeInterval = "dawn" | "noon" | "dusk" | "midnight" | `${number}` | number;
 
+type PersistentTimeout<TArgs extends any[] = any[]> = {
+    start: (delay: number, ...args: TArgs) => void;
+    stop(): void;
+};
+
+type PersistentTimeoutOptions = {
+    defaultDelay?: number;
+    minDelay?: number;
+};
+
 export {
     advanceTime,
     calculateTimeIncrement,
+    createTimeout,
     getShortDateTime,
     getShortTime,
+    getTimeWithSeconds,
     getWorldTime,
     timestampToLocalTime,
     waitTimeout,
 };
+export type { PersistentTimeout };

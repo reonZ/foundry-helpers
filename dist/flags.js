@@ -1,4 +1,11 @@
 import { MODULE, R } from ".";
+function flagPath(...path) {
+    return `flags.${MODULE.path(...path)}`;
+}
+function unsetFlagPath(...path) {
+    const lastKey = path.pop();
+    return flagPath(...path, `-=${lastKey}`);
+}
 function getFlag(doc, ...path) {
     return doc.getFlag(MODULE.id, R.join(path, "."));
 }
@@ -9,12 +16,8 @@ function setFlag(doc, ...args) {
 function unsetFlag(doc, ...path) {
     return doc.unsetFlag(MODULE.id, R.join(path, "."));
 }
-function flagPath(...path) {
-    return `flags.${MODULE.path(...path)}`;
-}
-function unsetFlagPath(...path) {
-    const lastKey = path.pop();
-    return flagPath(...path, `-=${lastKey}`);
+function updateFlag(doc, updates, operation) {
+    return doc.update({ flags: { [MODULE.id]: updates } }, operation);
 }
 function getFlagProperty(obj, ...path) {
     return foundry.utils.getProperty(obj, flagPath(...path));
@@ -41,4 +44,4 @@ function updateSourceFlag(doc, ...args) {
     const value = args.pop();
     return doc.updateSource({ [flagPath(...args)]: value });
 }
-export { deleteFlagProperty, getFlag, getFlagProperty, setFlag, setFlagProperties, setFlagProperty, unsetFlag, unsetFlagProperty, updateSourceFlag, };
+export { deleteFlagProperty, getFlag, getFlagProperty, setFlag, setFlagProperties, setFlagProperty, unsetFlag, unsetFlagProperty, updateFlag, updateSourceFlag, };

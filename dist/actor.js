@@ -1,3 +1,17 @@
+const PARTY_ACTOR_ID = "xxxPF2ExPARTYxxx";
+function getDispositionColor(actor) {
+    const alliance = actor?.alliance;
+    const colorValue = !actor
+        ? CONFIG.Canvas.dispositionColors.NEUTRAL
+        : alliance === "party"
+            ? actor.hasPlayerOwner
+                ? CONFIG.Canvas.dispositionColors.PARTY
+                : CONFIG.Canvas.dispositionColors.FRIENDLY
+            : alliance === "opposition"
+                ? CONFIG.Canvas.dispositionColors.HOSTILE
+                : CONFIG.Canvas.dispositionColors.NEUTRAL;
+    return new Color(colorValue);
+}
 function actorsRespectAlliance(origin, target, alliance = "all") {
     return alliance === "allies" ? target.isAllyOf(origin) : alliance === "enemies" ? target.isEnemyOf(origin) : true;
 }
@@ -28,4 +42,4 @@ function getActorMaster(actor) {
         return null;
     return (actor.master ?? game.toolbelt?.api.shareData.getMasterInMemory(actor) ?? null);
 }
-export { actorsRespectAlliance, belongToPartyAlliance, getActorMaster, getMythicOrHeroPoints, isAllyActor, isMerchant, oppositeAlliance, };
+export { actorsRespectAlliance, belongToPartyAlliance, getActorMaster, getDispositionColor, getMythicOrHeroPoints, isAllyActor, isMerchant, oppositeAlliance, PARTY_ACTOR_ID, };

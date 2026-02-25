@@ -1,4 +1,4 @@
-import { localize, MODULE, R, SYSTEM, TemplateLocalize } from ".";
+import { htmlQuery, localize, MODULE, R, SYSTEM, TemplateLocalize } from ".";
 
 function render(...args: HandlebarsRenderArgs): Promise<string> {
     const data = args.at(-1) as unknown as RenderData;
@@ -11,11 +11,62 @@ function render(...args: HandlebarsRenderArgs): Promise<string> {
     return foundry.applications.handlebars.renderTemplate(path, data);
 }
 
+function preSyncElement(
+    newElement: HTMLElement,
+    priorElement: Maybe<HTMLElement>,
+    ...scrollable: string[]
+): SyncElementState {
+    const state: SyncElementState = { focus: undefined, scrollPositions: [] };
+
+    if (!priorElement) {
+        return state;
+    }
+
+    const focus = priorElement.querySelector<HTMLInputElement>(":focus");
+
+    if (focus?.name) {
+        state.focus = `${focus.tagName}[name="${focus.name}"]`;
+    } else if (focus?.dataset.itemId) {
+        state.focus = `${focus.tagName}[data-item-id="${focus.dataset.itemId}"]`;
+    }
+
+    if (scrollable.length === 0) {
+        scrollable.push("");
+    }
+
+    for (const selector of scrollable) {
+        const el0 = selector === "" ? priorElement : htmlQuery(priorElement, selector);
+
+        if (el0) {
+            const el1 = selector === "" ? newElement : htmlQuery(newElement, selector);
+
+            if (el1) {
+                state.scrollPositions.push([el1, el0.scrollTop]);
+            }
+        }
+    }
+
+    return state;
+}
+
+function postSyncElement(newElement: HTMLElement, state: SyncElementState) {
+    if (state.focus) {
+        const newFocus = htmlQuery(newElement, state.focus);
+        newFocus?.focus();
+    }
+
+    for (const [el, scrollTop] of state.scrollPositions) {
+        el.scrollTop = scrollTop;
+    }
+}
+
 type RenderData = {
     [k: string]: any;
     i18n: TemplateLocalize;
     isSF2e: boolean;
 };
+
+type SyncElementState = { focus?: string; scrollPositions: [HTMLElement, number][] };
 
 type HandlebarsRenderData = Omit<RenderData, "i18n" | "isSF2e"> & {
     i18n?: string;
@@ -23,5 +74,5 @@ type HandlebarsRenderData = Omit<RenderData, "i18n" | "isSF2e"> & {
 
 type HandlebarsRenderArgs = [...string[], HandlebarsRenderData];
 
-export { render };
+export { postSyncElement, preSyncElement, render };
 export type { HandlebarsRenderArgs, HandlebarsRenderData };

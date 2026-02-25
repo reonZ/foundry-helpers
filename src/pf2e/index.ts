@@ -9,3 +9,4 @@ export * from "./rules";
 export * from "./notes";
 export * from "./spell";
 export * from "./spell-consumable";
+export * from "./spellcasting";

@@ -1,4 +1,4 @@
-import { ActorPF2e, TokenDocumentPF2e } from "@7h3laughingman/pf2e-types";
+import { ActorPF2e, TokenDocumentPF2e, ValueAndMax } from "@7h3laughingman/pf2e-types";
 
 declare global {
     type Prettify<T> = { [K in keyof T]: T[K] } & {};
@@ -8,6 +8,16 @@ declare global {
     type TargetDocuments = { actor: ActorPF2e; token?: TokenDocumentPF2e | null };
 
     type MaybeHTML = Maybe<Document | Element | EventTarget>;
+
+    type IfEquals<X, Y, A = X, B = never> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2 ? A : B;
+
+    type Mutable<T> = { -readonly [K in keyof T]: T[K] };
+
+    type ReadonlyKeys<T> = {
+        [P in keyof T]-?: IfEquals<{ [Q in P]: T[P] }, { -readonly [Q in P]: T[P] }, never, P>;
+    }[keyof T];
+
+    type ExtractReadonly<T> = Mutable<Pick<T, ReadonlyKeys<T>>>;
 
     type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
         {
@@ -40,4 +50,10 @@ declare global {
     type NonEmptyArray<T> = [T, ...T[]];
 
     type MaybeFalsy<T> = Maybe<T> | false;
+
+    type ValueMinAndMax = ValueAndMax & { min: number };
+
+    type ExtractValuesOfType<T, V> = {
+        [K in keyof T]: T[K] extends V ? K : never;
+    };
 }

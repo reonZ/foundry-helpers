@@ -1,4 +1,6 @@
 import { ActorAlliance, ActorPF2e, CharacterPF2e, LootPF2e, ValueAndMax } from "@7h3laughingman/pf2e-types";
+declare const PARTY_ACTOR_ID = "xxxPF2ExPARTYxxx";
+declare function getDispositionColor(actor?: ActorPF2e | null): foundry.utils.Color;
 declare function actorsRespectAlliance(origin: ActorPF2e, target: ActorPF2e, alliance?: ActorTargetAlliance): boolean;
 declare function belongToPartyAlliance(actor: ActorPF2e): boolean;
 declare function oppositeAlliance(alliance: ActorAlliance): "party" | "opposition" | null;
@@ -11,5 +13,5 @@ type MythicOrHeroPoints = ValueAndMax & {
     name: "mythicPoints" | "heroPoints";
     slug: "mythic-points" | "hero-points";
 };
-export { actorsRespectAlliance, belongToPartyAlliance, getActorMaster, getMythicOrHeroPoints, isAllyActor, isMerchant, oppositeAlliance, };
+export { actorsRespectAlliance, belongToPartyAlliance, getActorMaster, getDispositionColor, getMythicOrHeroPoints, isAllyActor, isMerchant, oppositeAlliance, PARTY_ACTOR_ID, };
 export type { ActorTargetAlliance, MythicOrHeroPoints };

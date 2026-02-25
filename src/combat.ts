@@ -1,4 +1,4 @@
-import { ActorPF2e } from "@7h3laughingman/pf2e-types";
+import { ActorPF2e, CombatantPF2e, EncounterPF2e, RolledCombatant } from "@7h3laughingman/pf2e-types";
 import { getActorMaster } from ".";
 
 function isCurrentCombatant(actor: ActorPF2e): boolean {
@@ -12,4 +12,8 @@ function isInCombat(actor: ActorPF2e): boolean {
     return actor.inCombat || !!getActorMaster(actor)?.inCombat;
 }
 
-export { isCurrentCombatant, isInCombat };
+function hasRolledInitiative(combatant: CombatantPF2e): combatant is RolledCombatant<EncounterPF2e> {
+    return typeof combatant.initiative === "number";
+}
+
+export { hasRolledInitiative, isCurrentCombatant, isInCombat };

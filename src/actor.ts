@@ -8,6 +8,23 @@ import {
     ValueAndMax,
 } from "@7h3laughingman/pf2e-types";
 
+const PARTY_ACTOR_ID = "xxxPF2ExPARTYxxx";
+
+function getDispositionColor(actor?: ActorPF2e | null) {
+    const alliance = actor?.alliance;
+    const colorValue = !actor
+        ? CONFIG.Canvas.dispositionColors.NEUTRAL
+        : alliance === "party"
+          ? actor.hasPlayerOwner
+              ? CONFIG.Canvas.dispositionColors.PARTY
+              : CONFIG.Canvas.dispositionColors.FRIENDLY
+          : alliance === "opposition"
+            ? CONFIG.Canvas.dispositionColors.HOSTILE
+            : CONFIG.Canvas.dispositionColors.NEUTRAL;
+
+    return new Color(colorValue);
+}
+
 function actorsRespectAlliance(origin: ActorPF2e, target: ActorPF2e, alliance: ActorTargetAlliance = "all") {
     return alliance === "allies" ? target.isAllyOf(origin) : alliance === "enemies" ? target.isEnemyOf(origin) : true;
 }
@@ -59,9 +76,11 @@ export {
     actorsRespectAlliance,
     belongToPartyAlliance,
     getActorMaster,
+    getDispositionColor,
     getMythicOrHeroPoints,
     isAllyActor,
     isMerchant,
     oppositeAlliance,
+    PARTY_ACTOR_ID,
 };
 export type { ActorTargetAlliance, MythicOrHeroPoints };

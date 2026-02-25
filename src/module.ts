@@ -1,4 +1,4 @@
-import { getSetting, localize, Module, R } from ".";
+import { getSetting, ImageFilePath, localize, Module, R } from ".";
 
 class CustomModule {
     #api: Record<string, any> = {};
@@ -130,12 +130,12 @@ class CustomModule {
         return `modules/${this.id}/${tail}`;
     }
 
-    imagePath(...path: string[]) {
+    imagePath(...path: string[]): ImageFilePath {
         const root = this.relativePath("images", ...path);
         return `${root}.webp`;
     }
 
-    templatePath(...path: string[]) {
+    templatePath(...path: string[]): `${string}.hbs` {
         const root = this.relativePath("templates", ...path);
         return `${root}.hbs`;
     }

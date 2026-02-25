@@ -96,6 +96,19 @@ function isInstanceOf(obj: any, cls: keyof IsInstanceOfClasses | string) {
     return false;
 }
 
+function addToObjectIfNonNullish<T extends Record<string, any>, E extends Record<string, any>>(
+    obj: T & Partial<E>,
+    extra: E,
+): T & Partial<E> {
+    for (const [key, value] of R.entries(extra)) {
+        if (value != null) {
+            obj[key as keyof T] = value;
+        }
+    }
+
+    return obj;
+}
+
 function purgeObject(obj: any): any {
     if (R.isArray(obj)) {
         const newObj = R.pipe(obj, R.map(purgeObject), R.filter(R.isNonNullish));
@@ -133,4 +146,4 @@ type IsInstanceOfItems = {
     WeaponPF2e: WeaponPF2e;
 };
 
-export { isInstanceOf, MapOfArrays, purgeObject };
+export { addToObjectIfNonNullish, isInstanceOf, MapOfArrays, purgeObject };

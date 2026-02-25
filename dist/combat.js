@@ -8,4 +8,7 @@ function isCurrentCombatant(actor) {
 function isInCombat(actor) {
     return actor.inCombat || !!getActorMaster(actor)?.inCombat;
 }
-export { isCurrentCombatant, isInCombat };
+function hasRolledInitiative(combatant) {
+    return typeof combatant.initiative === "number";
+}
+export { hasRolledInitiative, isCurrentCombatant, isInCombat };

@@ -1,4 +1,5 @@
 import { DateTime } from "luxon";
+import { R } from ".";
 var TimeChangeMode;
 (function (TimeChangeMode) {
     TimeChangeMode[TimeChangeMode["ADVANCE"] = 0] = "ADVANCE";
@@ -49,6 +50,43 @@ class TimeOfDay {
         }
     }
 }
+function createTimeout(callback, options) {
+    let timeoutId = null;
+    const usedOptions = R.isNumber(options) ? { defaultDelay: options } : options;
+    const minDelay = Math.max(usedOptions?.minDelay ?? 0, 0);
+    const defaultDelay = Math.max(usedOptions?.defaultDelay ?? 1, minDelay);
+    return {
+        start(...args) {
+            if (timeoutId !== null) {
+                this.stop();
+            }
+            if (defaultDelay < 1) {
+                callback(...args);
+            }
+            else {
+                timeoutId = setTimeout(callback, defaultDelay, ...args);
+            }
+        },
+        startWithDelay(delay, ...args) {
+            if (timeoutId !== null) {
+                this.stop();
+            }
+            const usedDelay = Math.max(delay, minDelay);
+            if (usedDelay < 1) {
+                callback(...args);
+            }
+            else {
+                timeoutId = setTimeout(callback, usedDelay, ...args);
+            }
+        },
+        stop() {
+            if (timeoutId === null)
+                return;
+            clearTimeout(timeoutId);
+            timeoutId = null;
+        },
+    };
+}
 /**
  * slightly modified (also fixed the typo)
  * https://github.com/foundryvtt/pf2e/blob/e215ebfbb287190d313fe0441e0362439766786d/src/module/apps/world-clock/app.ts#L237
@@ -73,6 +111,11 @@ function calculateTimeIncrement(interval, intervalMode) {
 }
 function getWorldTime() {
     return game.settings.get("core", "time");
+}
+function getTimeWithSeconds(time) {
+    return game.pf2e.worldClock.timeConvention === 24
+        ? time.toFormat("HH:mm:ss")
+        : time.toLocaleString(DateTime.TIME_WITH_SECONDS);
 }
 function waitTimeout(time = 1) {
     return new Promise((resolve) => {
@@ -108,4 +151,4 @@ function getShortDateTime() {
 function timestampToLocalTime(time) {
     return new Date(time).toLocaleString();
 }
-export { advanceTime, calculateTimeIncrement, getShortDateTime, getShortTime, getWorldTime, timestampToLocalTime, waitTimeout, };
+export { advanceTime, calculateTimeIncrement, createTimeout, getShortDateTime, getShortTime, getTimeWithSeconds, getWorldTime, timestampToLocalTime, waitTimeout, };

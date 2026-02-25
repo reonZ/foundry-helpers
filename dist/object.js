@@ -59,6 +59,14 @@ function isInstanceOf(obj, cls) {
     }
     return false;
 }
+function addToObjectIfNonNullish(obj, extra) {
+    for (const [key, value] of R.entries(extra)) {
+        if (value != null) {
+            obj[key] = value;
+        }
+    }
+    return obj;
+}
 function purgeObject(obj) {
     if (R.isArray(obj)) {
         const newObj = R.pipe(obj, R.map(purgeObject), R.filter(R.isNonNullish));
@@ -72,4 +80,4 @@ function purgeObject(obj) {
         return obj === "" ? undefined : obj;
     }
 }
-export { isInstanceOf, MapOfArrays, purgeObject };
+export { addToObjectIfNonNullish, isInstanceOf, MapOfArrays, purgeObject };
