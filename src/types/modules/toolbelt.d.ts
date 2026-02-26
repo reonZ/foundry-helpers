@@ -65,6 +65,11 @@ declare global {
                 getItemMacro: (item: ItemPF2e) => Promise<Maybe<MacroPF2e>>;
                 getVirtualAction(data: actionable.ActionableData): Promise<AbilityItemPF2e | null>;
                 getVirtualActionsData(actor: ActorPF2e): Record<string, actionable.VirtualActionData>;
+                updateActionFrequency(
+                    event: Event,
+                    item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>,
+                    virtualData?: actionable.VirtualActionData,
+                ): Promise<unknown> | undefined;
                 useAction(
                     event: Event,
                     item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>,

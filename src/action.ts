@@ -72,7 +72,7 @@ function updateActionFrequency(
     event: Event,
     item: AbilityItemPF2e | FeatPF2e,
     virtualData?: toolbelt.actionable.VirtualActionData,
-) {
+): Promise<unknown> | undefined {
     const target = event.target;
     const frequency = item.frequency;
     if (!frequency || !(target instanceof HTMLInputElement)) return;
