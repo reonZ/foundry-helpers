@@ -54,7 +54,7 @@ class CustomModule {
                 },
                 getSetting: {
                     value: function (setting) {
-                        return self.current.active ? getSetting(setting) : undefined;
+                        return getSetting(setting);
                     },
                     writable: false,
                     configurable: false,
