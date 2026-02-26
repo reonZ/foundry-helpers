@@ -64,7 +64,12 @@ declare global {
                 getActionMacro: (action: AbilityItemPF2e | FeatPF2e) => Promise<Maybe<MacroPF2e>>;
                 getItemMacro: (item: ItemPF2e) => Promise<Maybe<MacroPF2e>>;
                 getVirtualAction(data: actionable.ActionableData): Promise<AbilityItemPF2e | null>;
-                getVirtualActionsData(actor: CharacterPF2e): Record<string, actionable.VirtualActionData>;
+                getVirtualActionsData(actor: ActorPF2e): Record<string, actionable.VirtualActionData>;
+                useAction(
+                    event: Event,
+                    item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>,
+                    virtualData?: actionable.VirtualActionData,
+                ): Promise<unknown>;
             };
             betterInventory: {
                 mergeItems: (actor: ActorPF2e, btn?: HTMLButtonElement | HTMLAnchorElement) => Promise<void>;

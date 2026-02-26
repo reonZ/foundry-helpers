@@ -68,6 +68,27 @@ function getActionGlyph(action: string | number | null | ActionCost): string {
     return actionGlyphMap[sanitized]?.replace("-", "–") ?? "";
 }
 
+function updateActionFrequency(
+    event: Event,
+    item: AbilityItemPF2e | FeatPF2e,
+    virtualData?: toolbelt.actionable.VirtualActionData,
+) {
+    const target = event.target;
+    const frequency = item.frequency;
+    if (!frequency || !(target instanceof HTMLInputElement)) return;
+
+    const value = Math.clamp(target.valueAsNumber, 0, frequency.max);
+    if (value === frequency.value) return;
+
+    if (virtualData) {
+        const { parent, ruleIndex } = virtualData;
+        const rule = parent.rules[ruleIndex] as toolbelt.actionable.ActionableRuleElement;
+        return rule.updateData({ frequency: value });
+    } else {
+        return item.update({ "system.frequency.value": value });
+    }
+}
+
 async function useAction(
     event: Event,
     item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>,
@@ -86,9 +107,8 @@ async function useAction(
             const newValue = item.system.frequency.value - 1;
 
             if (virtualData) {
-                const rule = virtualData.parent.rules[
-                    virtualData.ruleIndex
-                ] as toolbelt.actionable.ActionableRuleElement;
+                const { parent, ruleIndex } = virtualData;
+                const rule = parent.rules[ruleIndex] as toolbelt.actionable.ActionableRuleElement;
                 await rule.updateData({ frequency: newValue });
             } else {
                 await item.update({ "system.frequency.value": newValue });
@@ -158,5 +178,5 @@ function isDefaultActionIcon(img: string, action: string | ActionCost | null) {
 
 type ActionIconType = string | number | ActionCost | null;
 
-export { applySelfEffect, getActionGlyph, getActionIcon, isDefaultActionIcon, useAction };
+export { applySelfEffect, getActionGlyph, getActionIcon, isDefaultActionIcon, updateActionFrequency, useAction };
 export type { ActionIconType };

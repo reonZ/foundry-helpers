@@ -14,7 +14,6 @@ function zFilePath<T extends FilePath>(options: zFilePathOptions | FileCategory[
 
     /**
      * copied from foundry
-     * @see {@link foundry.data.fields.FilePathField#_validateType}
      */
     return z.custom<T>(
         (value): boolean => {

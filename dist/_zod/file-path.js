@@ -6,7 +6,6 @@ function zFilePath(options) {
     }
     /**
      * copied from foundry
-     * @see {@link foundry.data.fields.FilePathField#_validateType}
      */
     return z.custom((value) => {
         if (!R.isString(value))

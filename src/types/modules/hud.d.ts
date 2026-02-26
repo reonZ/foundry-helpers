@@ -6,7 +6,7 @@ import { ActorPF2e } from "@7h3laughingman/pf2e-types";
 declare global {
     namespace hud {
         type StanceData = {
-            effectUUID: DocumentUUID;
+            effectUUID: ItemUUID;
             img: ImageFilePath;
             item: FeatPF2e<CreaturePF2e> | AbilityItemPF2e<CreaturePF2e>;
             label: string;

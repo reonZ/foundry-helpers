@@ -10,9 +10,10 @@ declare function getActionIcon(action: ActionIconType): ImageFilePath;
  * https://github.com/foundryvtt/pf2e/blob/89892b6fafec1456a0358de8c6d7b102e3fe2da2/src/util/misc.ts#L205
  */
 declare function getActionGlyph(action: string | number | null | ActionCost): string;
+declare function updateActionFrequency(event: Event, item: AbilityItemPF2e | FeatPF2e, virtualData?: toolbelt.actionable.VirtualActionData): Promise<import("@7h3laughingman/pf2e-types").ItemPF2e<import("@7h3laughingman/pf2e-types").CharacterPF2e<import("@7h3laughingman/pf2e-types").TokenDocumentPF2e<import("@7h3laughingman/pf2e-types").ScenePF2e | null> | null>>[]> | Promise<AbilityItemPF2e<ActorPF2e<import("@7h3laughingman/pf2e-types").TokenDocumentPF2e<import("@7h3laughingman/pf2e-types").ScenePF2e | null> | null> | null> | undefined> | Promise<FeatPF2e<ActorPF2e<import("@7h3laughingman/pf2e-types").TokenDocumentPF2e<import("@7h3laughingman/pf2e-types").ScenePF2e | null> | null> | null> | undefined> | undefined;
 declare function useAction(event: Event, item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>, virtualData?: toolbelt.actionable.VirtualActionData): Promise<unknown>;
 declare function applySelfEffect(item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>): Promise<void>;
 declare function isDefaultActionIcon(img: string, action: string | ActionCost | null): boolean;
 type ActionIconType = string | number | ActionCost | null;
-export { applySelfEffect, getActionGlyph, getActionIcon, isDefaultActionIcon, useAction };
+export { applySelfEffect, getActionGlyph, getActionIcon, isDefaultActionIcon, updateActionFrequency, useAction };
 export type { ActionIconType };

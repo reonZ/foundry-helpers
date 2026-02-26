@@ -1,8 +1,6 @@
 export {};
 
 declare global {
-    type Point = { x: number; y: number };
-
     type ColorSource = PIXI.ColorSource;
 
     type TextStyleFontWeight = PIXI.ITextStyle["fontWeight"];

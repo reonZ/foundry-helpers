@@ -50,6 +50,23 @@ function getActionGlyph(action) {
         .trim();
     return actionGlyphMap[sanitized]?.replace("-", "–") ?? "";
 }
+function updateActionFrequency(event, item, virtualData) {
+    const target = event.target;
+    const frequency = item.frequency;
+    if (!frequency || !(target instanceof HTMLInputElement))
+        return;
+    const value = Math.clamp(target.valueAsNumber, 0, frequency.max);
+    if (value === frequency.value)
+        return;
+    if (virtualData) {
+        const { parent, ruleIndex } = virtualData;
+        const rule = parent.rules[ruleIndex];
+        return rule.updateData({ frequency: value });
+    }
+    else {
+        return item.update({ "system.frequency.value": value });
+    }
+}
 async function useAction(event, item, virtualData) {
     const macro = game.toolbelt?.getToolSetting("actionable", "action")
         ? await game.toolbelt?.api.actionable.getActionMacro(item)
@@ -61,7 +78,8 @@ async function useAction(event, item, virtualData) {
         if (item.system.frequency && item.system.frequency.value > 0) {
             const newValue = item.system.frequency.value - 1;
             if (virtualData) {
-                const rule = virtualData.parent.rules[virtualData.ruleIndex];
+                const { parent, ruleIndex } = virtualData;
+                const rule = parent.rules[ruleIndex];
                 await rule.updateData({ frequency: newValue });
             }
             else {
@@ -119,4 +137,4 @@ async function applySelfEffect(item) {
 function isDefaultActionIcon(img, action) {
     return img === getActionIcon(action);
 }
-export { applySelfEffect, getActionGlyph, getActionIcon, isDefaultActionIcon, useAction };
+export { applySelfEffect, getActionGlyph, getActionIcon, isDefaultActionIcon, updateActionFrequency, useAction };
