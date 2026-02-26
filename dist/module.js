@@ -47,7 +47,7 @@ class CustomModule {
                 },
                 debug: {
                     get() {
-                        return self.#debug;
+                        return self.isDebug ? self.#debug : undefined;
                     },
                     configurable: false,
                     enumerable: false,
