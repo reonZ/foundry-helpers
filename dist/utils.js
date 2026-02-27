@@ -28,4 +28,10 @@ function recordToSelectOptions(record) {
 function getDragEventData(event) {
     return foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
 }
-export { activateHooksAndWrappers, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, toggleHooksAndWrappers, };
+function stringNumber(value) {
+    return String(value);
+}
+function stringBoolean(value) {
+    return String(value);
+}
+export { activateHooksAndWrappers, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, };

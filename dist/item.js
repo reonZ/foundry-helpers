@@ -118,6 +118,12 @@ function getItemSourceId(item) {
 function getItemSlug(item) {
     return item instanceof Item ? item.slug || SYSTEM.sluggify(item._source.name) : SYSTEM.sluggify(item.name);
 }
+function getActorWeapons(actor) {
+    return [
+        ...actor.itemTypes.weapon,
+        ...actor.itemTypes.shield.flatMap((shield) => shield.subitems.filter((item) => item.isOfType("weapon"))),
+    ];
+}
 function itemWithActor(actor, item) {
     return (item.parent ? item : new (getDocumentClass("Item"))(item.toObject(), { parent: actor }));
 }
@@ -283,4 +289,4 @@ function isSF2eItem(item) {
 function isAreaOrAutoFireType(type) {
     return R.isIncludedIn(type, ["area-fire", "auto-fire"]);
 }
-export { actorItems, consumeItem, equipItemToUse, findItemWithSlug, findItemWithSourceId, getEquipAnnotation, getItemFromUuid, getItemSlug, getItemSource, getItemSourceFromUuid, getItemSourceId, hasAnyItemWithSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, ITEM_CARRY_TYPES, itemIsOfType, itemWithActor, simulateDropItem, usePhysicalItem, };
+export { actorItems, consumeItem, equipItemToUse, findItemWithSlug, findItemWithSourceId, getActorWeapons, getEquipAnnotation, getItemFromUuid, getItemSlug, getItemSource, getItemSourceFromUuid, getItemSourceId, hasAnyItemWithSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, ITEM_CARRY_TYPES, itemIsOfType, itemWithActor, PHYSICAL_ITEM_TYPES, simulateDropItem, usePhysicalItem, };

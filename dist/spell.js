@@ -1,2 +1,4 @@
-const MAGIC_TRADITIONS = new Set(["arcane", "divine", "occult", "primal"]);
-export { MAGIC_TRADITIONS };
+function getActorMaxRank(actor) {
+    return Math.max(1, Math.ceil(actor.level / 2));
+}
+export { getActorMaxRank };

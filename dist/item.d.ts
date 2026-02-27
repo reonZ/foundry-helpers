@@ -1,9 +1,13 @@
-import { ActorPF2e, CharacterPF2e, ConsumablePF2e, CreaturePF2e, EquipmentPF2e, ItemInstances, ItemPF2e, ItemSourcePF2e, ItemType, PhysicalItemPF2e, ZeroToTwo } from "@7h3laughingman/pf2e-types";
+import { ActorPF2e, CharacterPF2e, ConsumablePF2e, CreaturePF2e, EquipmentPF2e, ItemInstances, ItemPF2e, ItemSourcePF2e, ItemType, PhysicalItemPF2e, WeaponPF2e, ZeroToTwo } from "@7h3laughingman/pf2e-types";
 import { CompendiumIndexData, ItemUUID } from ".";
 /**
  * https://github.com/foundryvtt/pf2e/blob/1465f7190b2b8454094c50fa6d06e9902e0a3c41/src/module/item/base/data/values.ts#L23-L31
  */
 declare const ITEM_CARRY_TYPES: readonly ["attached", "dropped", "held", "implanted", "installed", "stowed", "worn"];
+/**
+ * https://github.com/foundryvtt/pf2e/blob/95e941aecaf1fa6082825b206b0ac02345d10538/src/module/item/physical/values.ts#L1
+ */
+declare const PHYSICAL_ITEM_TYPES: Set<"ammo" | "armor" | "backpack" | "book" | "consumable" | "equipment" | "shield" | "treasure" | "weapon">;
 declare const ATTACHABLE_TYPES: {
     readonly ammo: readonly ["weapon"];
     readonly equipment: readonly ["weapon", "armor", "shield"];
@@ -28,6 +32,7 @@ declare function findItemWithSlug<TType extends ItemType, TActor extends ActorPF
 declare function hasAnyItemWithSourceId(actor: ActorPF2e, uuids: string[], type?: ItemType): boolean;
 declare function getItemSourceId(item: ItemPF2e): ItemUUID;
 declare function getItemSlug(item: ItemPF2e | CompendiumIndexData): string;
+declare function getActorWeapons<TActor extends ActorPF2e>(actor: TActor): WeaponPF2e<TActor>[];
 declare function itemWithActor<T extends ItemPF2e<ActorPF2e>>(actor: ActorPF2e, item: ItemPF2e): T;
 declare function usePhysicalItem(event: Event, item: EquipmentPF2e<ActorPF2e> | ConsumablePF2e<ActorPF2e>): Promise<unknown>;
 /**
@@ -60,5 +65,5 @@ type EquipAnnotationData = {
     carryType: "held" | "worn";
 };
 type AuxiliaryAnnotation = "draw" | "pick-up" | "retrieve" | "sheathe";
-export { actorItems, consumeItem, equipItemToUse, findItemWithSlug, findItemWithSourceId, getEquipAnnotation, getItemFromUuid, getItemSlug, getItemSource, getItemSourceFromUuid, getItemSourceId, hasAnyItemWithSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, ITEM_CARRY_TYPES, itemIsOfType, itemWithActor, simulateDropItem, usePhysicalItem, };
+export { actorItems, consumeItem, equipItemToUse, findItemWithSlug, findItemWithSourceId, getActorWeapons, getEquipAnnotation, getItemFromUuid, getItemSlug, getItemSource, getItemSourceFromUuid, getItemSourceId, hasAnyItemWithSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, ITEM_CARRY_TYPES, itemIsOfType, itemWithActor, PHYSICAL_ITEM_TYPES, simulateDropItem, usePhysicalItem, };
 export type { EquipAnnotationData, ItemOrSource };

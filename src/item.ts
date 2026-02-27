@@ -9,6 +9,7 @@ import {
     ItemSourcePF2e,
     ItemType,
     PhysicalItemPF2e,
+    WeaponPF2e,
     ZeroToTwo,
 } from "@7h3laughingman/pf2e-types";
 import {
@@ -206,6 +207,15 @@ function getItemSourceId(item: ItemPF2e): ItemUUID {
 
 function getItemSlug(item: ItemPF2e | CompendiumIndexData): string {
     return item instanceof Item ? item.slug || SYSTEM.sluggify(item._source.name) : SYSTEM.sluggify(item.name);
+}
+
+function getActorWeapons<TActor extends ActorPF2e>(actor: TActor): WeaponPF2e<TActor>[] {
+    return [
+        ...actor.itemTypes.weapon,
+        ...actor.itemTypes.shield.flatMap((shield) =>
+            shield.subitems.filter((item): item is WeaponPF2e<TActor> => item.isOfType("weapon")),
+        ),
+    ];
 }
 
 function itemWithActor<T extends ItemPF2e<ActorPF2e>>(actor: ActorPF2e, item: ItemPF2e): T {
@@ -438,6 +448,7 @@ export {
     equipItemToUse,
     findItemWithSlug,
     findItemWithSourceId,
+    getActorWeapons,
     getEquipAnnotation,
     getItemFromUuid,
     getItemSlug,
@@ -452,6 +463,7 @@ export {
     ITEM_CARRY_TYPES,
     itemIsOfType,
     itemWithActor,
+    PHYSICAL_ITEM_TYPES,
     simulateDropItem,
     usePhysicalItem,
 };

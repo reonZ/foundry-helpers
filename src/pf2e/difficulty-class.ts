@@ -1,4 +1,11 @@
-import { DCAdjustment, DCOptions, PositiveDCAdjustment, ProficiencyRank, Rarity } from "@7h3laughingman/pf2e-types";
+import {
+    CreaturePF2e,
+    DCAdjustment,
+    DCOptions,
+    PositiveDCAdjustment,
+    ProficiencyRank,
+    Rarity,
+} from "@7h3laughingman/pf2e-types";
 
 const dcAdjustments = new Map<DCAdjustment, number>([
     ["incredibly-easy", -10],
@@ -104,4 +111,8 @@ function calculateSpellDC(spellLevel: number, { pwol = false }: DCOptions = {}):
     return calculateDC(spellLevel * 2 - 1, { pwol });
 }
 
-export { adjustDCByRarity, calculateDC, calculateSimpleDC, calculateSpellDC };
+function calculateCreatureDC(actor: CreaturePF2e, pwol?: boolean) {
+    return calculateDC(actor.level, { pwol, rarity: actor.rarity });
+}
+
+export { adjustDCByRarity, calculateCreatureDC, calculateDC, calculateSimpleDC, calculateSpellDC };

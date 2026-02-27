@@ -93,4 +93,7 @@ function calculateSimpleDC(rank, { pwol = false } = {}) {
 function calculateSpellDC(spellLevel, { pwol = false } = {}) {
     return calculateDC(spellLevel * 2 - 1, { pwol });
 }
-export { adjustDCByRarity, calculateDC, calculateSimpleDC, calculateSpellDC };
+function calculateCreatureDC(actor, pwol) {
+    return calculateDC(actor.level, { pwol, rarity: actor.rarity });
+}
+export { adjustDCByRarity, calculateCreatureDC, calculateDC, calculateSimpleDC, calculateSpellDC };

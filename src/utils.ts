@@ -42,6 +42,14 @@ function getDragEventData<T extends Record<string, JSONValue>>(event: DragEvent)
     return foundry.applications.ux.TextEditor.implementation.getDragEventData(event) as T;
 }
 
+function stringNumber(value: number | `${number}`): `${number}` {
+    return String(value) as `${number}`;
+}
+
+function stringBoolean(value: boolean | `${boolean}`): `${boolean}` {
+    return String(value) as `${boolean}`;
+}
+
 export {
     activateHooksAndWrappers,
     disableHooksAndWrappers,
@@ -49,5 +57,7 @@ export {
     localeCompare,
     recordToSelectOptions,
     sortByLocaleCompare,
+    stringBoolean,
+    stringNumber,
     toggleHooksAndWrappers,
 };
