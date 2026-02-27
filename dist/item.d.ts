@@ -7,7 +7,7 @@ declare const ITEM_CARRY_TYPES: readonly ["attached", "dropped", "held", "implan
 /**
  * https://github.com/foundryvtt/pf2e/blob/95e941aecaf1fa6082825b206b0ac02345d10538/src/module/item/physical/values.ts#L1
  */
-declare const PHYSICAL_ITEM_TYPES: Set<"ammo" | "armor" | "backpack" | "book" | "consumable" | "equipment" | "shield" | "treasure" | "weapon">;
+declare const PHYSICAL_ITEM_TYPES: Set<"ammo" | "armor" | "book" | "consumable" | "backpack" | "equipment" | "shield" | "weapon" | "treasure">;
 declare const ATTACHABLE_TYPES: {
     readonly ammo: readonly ["weapon"];
     readonly equipment: readonly ["weapon", "armor", "shield"];
