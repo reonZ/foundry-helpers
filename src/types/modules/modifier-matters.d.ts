@@ -10,7 +10,7 @@ declare global {
             appliedTo: "roll" | "dc";
             name: string;
             significance: SIGNIFICANCE;
-            sourceUuid: string;
+            sourceUuid: string | null | undefined;
             value: number;
         };
     }
