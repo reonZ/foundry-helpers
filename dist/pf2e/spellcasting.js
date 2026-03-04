@@ -1,4 +1,5 @@
 import { getSpellRankLabel, localizer } from ".";
+const SPELLCASTING_CATEGORIES = ["prepared", "spontaneous", "innate", "focus", "items", "ritual"];
 function spellSlotGroupIdToNumber(groupId) {
     if (groupId === "cantrips")
         return 0;
@@ -24,4 +25,4 @@ function warnInvalidDrop(warning, { spell, groupId }) {
         ui.notifications.warn(localize("WrongSpellType", { type }));
     }
 }
-export { spellSlotGroupIdToNumber, warnInvalidDrop };
+export { SPELLCASTING_CATEGORIES, spellSlotGroupIdToNumber, warnInvalidDrop };

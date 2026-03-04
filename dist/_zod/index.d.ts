@@ -5,4 +5,5 @@ export * from "./client-document";
 export * from "./file-path";
 export * from "./filters";
 export * from "./foreign-document";
+export * from "./range";
 export * from "./zod-document";

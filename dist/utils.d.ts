@@ -16,4 +16,5 @@ declare function recordToSelectOptions(record: Record<string, string | undefined
 declare function getDragEventData<T extends Record<string, JSONValue>>(event: DragEvent): T;
 declare function stringNumber(value: number | `${number}`): `${number}`;
 declare function stringBoolean(value: boolean | `${boolean}`): `${boolean}`;
-export { activateHooksAndWrappers, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, };
+declare function valueBetween(value: number, min: number, max: number): boolean;
+export { activateHooksAndWrappers, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, valueBetween, };

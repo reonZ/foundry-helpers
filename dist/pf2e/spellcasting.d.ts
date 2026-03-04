@@ -1,4 +1,5 @@
 import { SpellPF2e, SpellSlotGroupId, ZeroToTen } from "@7h3laughingman/pf2e-types";
+declare const SPELLCASTING_CATEGORIES: readonly ["prepared", "spontaneous", "innate", "focus", "items", "ritual"];
 /**
  * https://github.com/foundryvtt/pf2e/blob/895e512a3346ae9e7eeafbc59fdbac1b68651afa/src/module/item/spellcasting-entry/helpers.ts#L29
  */
@@ -13,4 +14,4 @@ interface WarnInvalidDropParams {
     spell: SpellPF2e;
     groupId?: Maybe<SpellSlotGroupId>;
 }
-export { spellSlotGroupIdToNumber, warnInvalidDrop };
+export { SPELLCASTING_CATEGORIES, spellSlotGroupIdToNumber, warnInvalidDrop };

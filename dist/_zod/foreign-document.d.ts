@@ -1,4 +1,4 @@
-import { ActorPF2e, ItemInstances, ItemType } from "@7h3laughingman/pf2e-types";
+import { ActorPF2e, ItemInstances, ItemType, PhysicalItemPF2e } from "@7h3laughingman/pf2e-types";
 import z from "zod";
 import { ClientDocumentInstance, ClientDocumentType, zDocumentID } from ".";
 import { DocumentUUID, ItemUUID } from "..";
@@ -7,6 +7,6 @@ declare function zForeignDocumentUUID<T extends ClientDocumentType, D extends Cl
     embedded?: boolean;
     type: T;
 } | T): z.ZodCodec<z.ZodNullable<z.ZodCustom<DocumentUUID, DocumentUUID>>, z.ZodNullable<z.ZodCustom<D, D>>>;
-declare function zForeignItem<T extends ItemType, A extends ActorPF2e>(type: T, embedded: true): z.ZodCodec<z.ZodNullable<z.ZodCustom<ItemUUID, ItemUUID>>, z.ZodNullable<z.ZodCustom<ItemInstances<A>[T], ItemInstances<A>[T]>>>;
-declare function zForeignItem<T extends ItemType>(type: T, embedded?: boolean): z.ZodCodec<z.ZodNullable<z.ZodCustom<ItemUUID, ItemUUID>>, z.ZodNullable<z.ZodCustom<ItemInstances<ActorPF2e | null>[T], ItemInstances<ActorPF2e | null>[T]>>>;
+declare function zForeignItem<A extends ActorPF2e | null>(type: "physical", embedded?: boolean): z.ZodCodec<z.ZodNullable<z.ZodCustom<ItemUUID, ItemUUID>>, z.ZodNullable<z.ZodCustom<PhysicalItemPF2e<A>, PhysicalItemPF2e<A>>>>;
+declare function zForeignItem<T extends ItemType | "physical", A extends ActorPF2e | null>(type: T | T[], embedded?: boolean): z.ZodCodec<z.ZodNullable<z.ZodCustom<ItemUUID, ItemUUID>>, z.ZodNullable<z.ZodCustom<T extends "physical" ? PhysicalItemPF2e<A> : T extends ItemType ? ItemInstances<A>[T] : never, T extends "physical" ? PhysicalItemPF2e<A> : T extends ItemType ? ItemInstances<A>[T] : never>>>;
 export { zForeignDocument, zForeignDocumentUUID, zForeignItem };

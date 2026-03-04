@@ -50,6 +50,10 @@ function stringBoolean(value: boolean | `${boolean}`): `${boolean}` {
     return String(value) as `${boolean}`;
 }
 
+function valueBetween(value: number, min: number, max: number): boolean {
+    return value >= min && value <= max;
+}
+
 export {
     activateHooksAndWrappers,
     disableHooksAndWrappers,
@@ -60,4 +64,5 @@ export {
     stringBoolean,
     stringNumber,
     toggleHooksAndWrappers,
+    valueBetween,
 };

@@ -4,6 +4,7 @@ export * from "./difficulty-class";
 export * from "./distance";
 export * from "./document";
 export * from "./identify";
+export * from "./inventory";
 export * from "./misc";
 export * from "./rules";
 export * from "./notes";

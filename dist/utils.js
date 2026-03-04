@@ -34,4 +34,7 @@ function stringNumber(value) {
 function stringBoolean(value) {
     return String(value);
 }
-export { activateHooksAndWrappers, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, };
+function valueBetween(value, min, max) {
+    return value >= min && value <= max;
+}
+export { activateHooksAndWrappers, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, valueBetween, };

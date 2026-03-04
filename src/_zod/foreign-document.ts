@@ -1,4 +1,4 @@
-import { ActorPF2e, ItemInstances, ItemType } from "@7h3laughingman/pf2e-types";
+import { ActorPF2e, ItemInstances, ItemType, PhysicalItemPF2e } from "@7h3laughingman/pf2e-types";
 import z from "zod";
 import {
     ClientDocumentInstance,
@@ -51,27 +51,33 @@ function zForeignDocumentUUID<
     });
 }
 
-function zForeignItem<T extends ItemType, A extends ActorPF2e>(
-    type: T,
-    embedded: true,
-): z.ZodCodec<
-    z.ZodNullable<z.ZodCustom<ItemUUID, ItemUUID>>,
-    z.ZodNullable<z.ZodCustom<ItemInstances<A>[T], ItemInstances<A>[T]>>
->;
-function zForeignItem<T extends ItemType>(
-    type: T,
+function zForeignItem<A extends ActorPF2e | null>(
+    type: "physical",
     embedded?: boolean,
 ): z.ZodCodec<
     z.ZodNullable<z.ZodCustom<ItemUUID, ItemUUID>>,
-    z.ZodNullable<z.ZodCustom<ItemInstances<ActorPF2e | null>[T], ItemInstances<ActorPF2e | null>[T]>>
+    z.ZodNullable<z.ZodCustom<PhysicalItemPF2e<A>, PhysicalItemPF2e<A>>>
 >;
-function zForeignItem<T extends ItemType>(type: T, embedded: boolean = false) {
+function zForeignItem<T extends ItemType | "physical", A extends ActorPF2e | null>(
+    type: T | T[],
+    embedded?: boolean,
+): z.ZodCodec<
+    z.ZodNullable<z.ZodCustom<ItemUUID, ItemUUID>>,
+    z.ZodNullable<
+        z.ZodCustom<
+            T extends "physical" ? PhysicalItemPF2e<A> : T extends ItemType ? ItemInstances<A>[T] : never,
+            T extends "physical" ? PhysicalItemPF2e<A> : T extends ItemType ? ItemInstances<A>[T] : never
+        >
+    >
+>;
+function zForeignItem<T extends ItemType | "physical">(type: T | T[], embedded: boolean = false) {
     const ItemCls = getDocumentClass("Item");
+    const types = R.isArray(type) ? type : [type];
 
     return z.codec(zDocumentUUID<ItemUUID>({ embedded, type: "Item" }).nullable(), zClientDocument("Item").nullable(), {
         decode: async (uuid) => {
             const item = R.isString(uuid) ? await fromUuid(uuid) : null;
-            return item instanceof ItemCls && item.type === type ? item : null;
+            return item instanceof ItemCls && item.isOfType(...types) ? item : null;
         },
         encode: (doc) => {
             return doc?.uuid ?? null;
