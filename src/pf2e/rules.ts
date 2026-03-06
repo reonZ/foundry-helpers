@@ -1,26 +1,13 @@
 import {
     ActorPF2e,
-    ChoiceSetSource,
     ConditionSource,
     EffectSource,
     ItemPF2e,
     ModifierAdjustment,
-    RuleElementSource,
     RuleElementSynthetics,
 } from "@7h3laughingman/pf2e-types";
 import { RollNotePF2e } from ".";
 import { R } from "..";
-
-function getChoiceSetSelection<T extends any = string>(
-    item: ItemPF2e,
-    { option, flag }: { option?: string; flag?: string } = {},
-) {
-    const rules = item._source.system.rules as RuleElementSource[];
-    const rule = rules.find((rule: ChoiceSetSource): rule is ChoiceSetSource => {
-        return rule.key === "ChoiceSet" && (!option || rule.rollOption === option) && (!flag || rule.flag === flag);
-    });
-    return rule?.selection as T | undefined;
-}
 
 /**
  * https://github.com/foundryvtt/pf2e/blob/5a1089c6aa4725c2e73f60d67a3be01115896592/src/module/rules/helpers.ts#L88
@@ -98,4 +85,4 @@ interface ExtractEphemeralEffectsParams {
     options: Set<string> | string[];
 }
 
-export { extractEphemeralEffects, extractModifierAdjustments, extractNotes, getChoiceSetSelection };
+export { extractEphemeralEffects, extractModifierAdjustments, extractNotes };

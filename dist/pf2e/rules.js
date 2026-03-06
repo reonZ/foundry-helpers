@@ -1,11 +1,4 @@
 import { R } from "..";
-function getChoiceSetSelection(item, { option, flag } = {}) {
-    const rules = item._source.system.rules;
-    const rule = rules.find((rule) => {
-        return rule.key === "ChoiceSet" && (!option || rule.rollOption === option) && (!flag || rule.flag === flag);
-    });
-    return rule?.selection;
-}
 /**
  * https://github.com/foundryvtt/pf2e/blob/5a1089c6aa4725c2e73f60d67a3be01115896592/src/module/rules/helpers.ts#L88
  */
@@ -55,4 +48,4 @@ function extractModifierAdjustments(adjustmentsRecord, selectors, slug) {
 function extractNotes(rollNotes, selectors) {
     return selectors.flatMap((s) => (rollNotes[s] ?? []).map((n) => n.clone()));
 }
-export { extractEphemeralEffects, extractModifierAdjustments, extractNotes, getChoiceSetSelection };
+export { extractEphemeralEffects, extractModifierAdjustments, extractNotes };

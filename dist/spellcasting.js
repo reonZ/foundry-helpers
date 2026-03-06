@@ -1,17 +1,7 @@
 function getActorMaxRank(actor) {
     return Math.max(1, Math.ceil(actor.level / 2));
 }
-function createSpellcastingSource({
-    name,
-    category,
-    attribute,
-    flags,
-    proficiencyRank,
-    proficiencySlug,
-    showSlotlessRanks,
-    sort,
-    tradition,
-}) {
+function createSpellcastingSource({ name, category, attribute, flags, proficiencyRank, proficiencySlug, showSlotlessRanks, sort, tradition, }) {
     return {
         type: "spellcastingEntry",
         name,

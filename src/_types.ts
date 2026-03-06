@@ -15,7 +15,15 @@ import {
     VideoFilePath,
 } from "@7h3laughingman/foundry-types/common/constants.mjs";
 import { ModelPropsFromSchema, SourceFromSchema } from "@7h3laughingman/foundry-types/common/data/fields.mjs";
-import { FeatLike, FeatPF2e, FeatSlot, HeritagePF2e, LootPF2e, LootSheetPF2e } from "@7h3laughingman/pf2e-types";
+import {
+    FeatLike,
+    FeatPF2e,
+    FeatSlot,
+    HeritagePF2e,
+    LootPF2e,
+    LootSheetPF2e,
+    SpellcastingEntrySlots,
+} from "@7h3laughingman/pf2e-types";
 
 export type * from "@7h3laughingman/foundry-types/client/_module.mjs";
 export type * from "@7h3laughingman/foundry-types/client/applications/forms/fields.mjs";
@@ -41,6 +49,8 @@ export type * from "@7h3laughingman/pf2e-types/scripts/ui/user-visibility.js";
 
 type LootSheetDataPF2e = Awaited<ReturnType<LootSheetPF2e<LootPF2e>["getData"]>>;
 type DocumentOwnership = { [K in "default" | (string & {})]?: DocumentOwnershipLevel };
+type SpellSlotData = ValueOf<SpellcastingEntrySlots>;
+
 interface FeatNotSlot<T extends FeatLike = FeatPF2e> {
     feat: T;
     filter?: never;
@@ -67,5 +77,6 @@ export type {
     PrimaryCanvasGroup,
     RollMode,
     SourceFromSchema,
+    SpellSlotData,
     VideoFilePath,
 };
