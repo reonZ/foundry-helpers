@@ -27,9 +27,15 @@ class SYSTEM {
         return () => this.relativePath(...path);
     }
 
-    static uuid<P extends DocumentUUID, S extends DocumentUUID = P>(pf2e: P, sf2e: S): () => P | S {
+    static uuid<P extends DocumentUUID, S extends DocumentUUID = P>(pf2e: P, sf2e?: S): () => P | S {
         return (): P | S => {
-            return this.isSF2e ? sf2e : pf2e;
+            return (this.isSF2e && sf2e) || pf2e;
+        };
+    }
+
+    static pack<T extends PackContent>(pf2e: string, sf2e?: string): () => CompendiumCollection<T> | undefined {
+        return () => {
+            return this.getPack((this.isSF2e && sf2e) || pf2e);
         };
     }
 

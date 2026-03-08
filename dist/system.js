@@ -18,7 +18,12 @@ class SYSTEM {
     }
     static uuid(pf2e, sf2e) {
         return () => {
-            return this.isSF2e ? sf2e : pf2e;
+            return (this.isSF2e && sf2e) || pf2e;
+        };
+    }
+    static pack(pf2e, sf2e) {
+        return () => {
+            return this.getPack((this.isSF2e && sf2e) || pf2e);
         };
     }
     static sluggify(text, options) {

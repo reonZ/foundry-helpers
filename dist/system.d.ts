@@ -8,7 +8,8 @@ declare class SYSTEM {
     static relativePath(...path: string[]): string;
     static path<T extends string>(tail: T): () => `systems/${string}/${T}`;
     static path(...path: string[]): () => string;
-    static uuid<P extends DocumentUUID, S extends DocumentUUID = P>(pf2e: P, sf2e: S): () => P | S;
+    static uuid<P extends DocumentUUID, S extends DocumentUUID = P>(pf2e: P, sf2e?: S): () => P | S;
+    static pack<T extends PackContent>(pf2e: string, sf2e?: string): () => CompendiumCollection<T> | undefined;
     static sluggify(text: string, options?: {
         camel?: SlugCamel;
     }): string;
