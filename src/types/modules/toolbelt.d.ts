@@ -106,12 +106,12 @@ declare global {
                 injectDamageMessage: (
                     targetMessage: ChatMessagePF2e,
                     originMessage: ChatMessagePF2e,
-                    options?: { updateMessages?: boolean },
+                    options?: Omit<mergeDamage.MergeOptions, "targetMerge">,
                 ) => Promise<{ rolls: RollJSON[] } | undefined>;
                 mergeDamageMessages: (
                     targetMessage: ChatMessagePF2e,
                     originMessage: ChatMessagePF2e,
-                    options?: { updateMessages?: boolean },
+                    options?: mergeDamage.MergeOptions,
                 ) => Promise<ChatMessagePF2e | undefined>;
             };
             shareData: {
@@ -189,6 +189,16 @@ declare global {
                 canUse: boolean;
                 canTrade: boolean | 0;
                 diff: number;
+            };
+        }
+
+        namespace mergeDamage {
+            type MergeType = "full" | "half" | "double";
+
+            type MergeOptions = {
+                originMerge?: MergeType;
+                targetMerge?: MergeType;
+                updateMessages?: boolean;
             };
         }
 
