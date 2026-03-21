@@ -33,6 +33,10 @@ declare global {
 
     type PartialExcept<T extends Record<string, any>, K extends keyof T> = Partial<Omit<T, K>> & Pick<T, K>;
 
+    type DeepRequired<T> = Required<{
+        [K in keyof T]: T[K] extends Required<T[K]> ? T[K] : DeepRequired<T[K]>;
+    }>;
+
     type FromPrimitive<T> = T extends string
         ? StringConstructor
         : T extends number

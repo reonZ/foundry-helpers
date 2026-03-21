@@ -1,5 +1,7 @@
 import { GamePF2e } from "@7h3laughingman/pf2e-types";
-import { CompendiumCollection, DocumentUUID } from ".";
+import { ClientDocument, CompendiumCollection, DocumentUUID } from ".";
+import { CompendiumUUID } from "@7h3laughingman/foundry-types/client/utils/_module.mjs";
+import { ActorUUID, CompendiumDocument, ItemUUID, TokenDocumentUUID } from "@7h3laughingman/foundry-types/client/documents/_module.mjs";
 declare class SYSTEM {
     static get id(): SystemId;
     static get isPF2e(): boolean;
@@ -9,6 +11,11 @@ declare class SYSTEM {
     static path<T extends string>(tail: T): () => `systems/${string}/${T}`;
     static path(...path: string[]): () => string;
     static uuid<P extends DocumentUUID>(pf2e: P, sf2e?: P): () => P;
+    static fromUuid(uuid: () => CompendiumUUID): Promise<CompendiumDocument | null>;
+    static fromUuid(uuid: () => ActorUUID): Promise<Actor | null>;
+    static fromUuid(uuid: () => ItemUUID): Promise<Item | null>;
+    static fromUuid(uuid: () => TokenDocumentUUID): Promise<TokenDocument | null>;
+    static fromUuid<TDocument extends ClientDocument>(uuid: () => DocumentUUID): Promise<TDocument | null>;
     static pack<T extends PackContent>(pf2e: string, sf2e?: string): () => CompendiumCollection<T> | undefined;
     static sluggify(text: string, options?: {
         camel?: SlugCamel;

@@ -21,6 +21,10 @@ class SYSTEM {
             return (this.isSF2e && sf2e) || pf2e;
         };
     }
+    static fromUuid(uuid) {
+        const singleUuid = uuid();
+        return fromUuid(singleUuid);
+    }
     static pack(pf2e, sf2e) {
         return () => {
             return this.getPack((this.isSF2e && sf2e) || pf2e);

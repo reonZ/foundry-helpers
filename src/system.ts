@@ -1,5 +1,12 @@
 import { GamePF2e } from "@7h3laughingman/pf2e-types";
-import { CompendiumCollection, DocumentUUID, R } from ".";
+import { ClientDocument, CompendiumCollection, DocumentUUID, R } from ".";
+import { CompendiumUUID } from "@7h3laughingman/foundry-types/client/utils/_module.mjs";
+import {
+    ActorUUID,
+    CompendiumDocument,
+    ItemUUID,
+    TokenDocumentUUID,
+} from "@7h3laughingman/foundry-types/client/documents/_module.mjs";
 
 class SYSTEM {
     static get id(): SystemId {
@@ -31,6 +38,16 @@ class SYSTEM {
         return (): P => {
             return (this.isSF2e && sf2e) || pf2e;
         };
+    }
+
+    static fromUuid(uuid: () => CompendiumUUID): Promise<CompendiumDocument | null>;
+    static fromUuid(uuid: () => ActorUUID): Promise<Actor | null>;
+    static fromUuid(uuid: () => ItemUUID): Promise<Item | null>;
+    static fromUuid(uuid: () => TokenDocumentUUID): Promise<TokenDocument | null>;
+    static fromUuid<TDocument extends ClientDocument>(uuid: () => DocumentUUID): Promise<TDocument | null>;
+    static fromUuid(uuid: () => DocumentUUID): Promise<any | null> {
+        const singleUuid = uuid();
+        return fromUuid(singleUuid);
     }
 
     static pack<T extends PackContent>(pf2e: string, sf2e?: string): () => CompendiumCollection<T> | undefined {
