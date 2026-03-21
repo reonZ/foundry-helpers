@@ -27,8 +27,8 @@ class SYSTEM {
         return () => this.relativePath(...path);
     }
 
-    static uuid<P extends DocumentUUID, S extends DocumentUUID = P>(pf2e: P, sf2e?: S): () => P | S {
-        return (): P | S => {
+    static uuid<P extends DocumentUUID>(pf2e: P, sf2e?: P): () => P {
+        return (): P => {
             return (this.isSF2e && sf2e) || pf2e;
         };
     }
