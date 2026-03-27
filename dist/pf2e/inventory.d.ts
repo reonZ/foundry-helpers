@@ -5,5 +5,5 @@ declare const COIN_COMPENDIUM_UUIDS: {
     sp: () => "Compendium.pf2e.equipment-srd.Item.5Ew82vBF9YfaiY9f";
     cp: () => "Compendium.pf2e.equipment-srd.Item.lzJ8AVhRcbFul5fh";
 };
-declare function getPhysicalItemTypes(): ("ammo" | "armor" | "book" | "consumable" | "backpack" | "equipment" | "shield" | "weapon" | "treasure")[];
+declare function getPhysicalItemTypes(): ("equipment" | "consumable" | "ammo" | "armor" | "book" | "backpack" | "shield" | "weapon" | "treasure")[];
 export { COIN_COMPENDIUM_UUIDS, COIN_DENOMINATIONS, getPhysicalItemTypes };

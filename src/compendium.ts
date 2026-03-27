@@ -1,4 +1,5 @@
-import { TraitData } from "@7h3laughingman/pf2e-types";
+import { BrowserFilter, TabName, TraitData } from "@7h3laughingman/pf2e-types";
+import { createHTMLElement, htmlQuery } from ".";
 
 /**
  * old system method that no longer exist
@@ -17,4 +18,49 @@ function filterTraits(traits: string[], selected: TraitData["selected"], conditi
     return true;
 }
 
-export { filterTraits };
+async function openBrowserTab(tab: TabName, data: BrowserData | null, filters?: BrowserFilter) {
+    const browser = game.pf2e.compendiumBrowser;
+
+    if (browser.rendered) {
+        await browser.close();
+    }
+
+    if (data) {
+        Hooks.once("renderCompendiumBrowser", (_tab: TabName, html: HTMLElement) => {
+            const controls = htmlQuery(html, ".window-header [data-action='toggleControls']");
+
+            const btn = createHTMLElement("button", {
+                content: data.label,
+            });
+
+            btn.addEventListener(
+                "click",
+                async (event) => {
+                    data.callback(event);
+                    browser.close();
+                },
+                { once: true },
+            );
+
+            requestAnimationFrame(() => {
+                data.onRender?.(html);
+            });
+
+            controls?.replaceWith(btn);
+        });
+    }
+
+    browser.openTab(tab, {
+        filter: filters ?? (await browser.tabs[tab].getFilterData()),
+        hideNavigation: true,
+    });
+}
+
+type BrowserData = {
+    callback: (event: MouseEvent) => Promise<void>;
+    label: string;
+    onRender?: (html: HTMLElement) => void;
+};
+
+export { filterTraits, openBrowserTab };
+export type { BrowserData };

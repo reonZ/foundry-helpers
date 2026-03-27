@@ -34,8 +34,8 @@ declare function zEquipmentFilter(): z.ZodObject<{
     }, z.core.$strip>>;
     traits: z.ZodOptional<z.ZodObject<{
         conjunction: z.ZodDefault<z.ZodEnum<{
-            or: "or";
             and: "and";
+            or: "or";
         }>>;
         selected: z.ZodDefault<z.ZodArray<z.ZodObject<{
             label: z.ZodString;
