@@ -1,3 +1,4 @@
+import { ImageFileExtension } from "@7h3laughingman/foundry-types/common/constants.mjs";
 import { getSetting, ImageFilePath, localize, Module, R } from ".";
 
 class CustomModule {
@@ -130,9 +131,10 @@ class CustomModule {
         return `modules/${this.id}/${tail}`;
     }
 
-    imagePath(...path: string[]): ImageFilePath {
+    imagePath(...path: [...string[], ImageFileExtension]): ImageFilePath {
+        const ext = path.pop() as ImageFileExtension;
         const root = this.relativePath("images", ...path);
-        return `${root}.webp`;
+        return `${root}.${ext}`;
     }
 
     templatePath(...path: string[]): `${string}.hbs` {

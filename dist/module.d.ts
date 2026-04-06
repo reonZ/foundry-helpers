@@ -1,3 +1,4 @@
+import { ImageFileExtension } from "@7h3laughingman/foundry-types/common/constants.mjs";
 import { ImageFilePath, Module } from ".";
 declare class CustomModule {
     #private;
@@ -13,7 +14,7 @@ declare class CustomModule {
     globalPath(...path: string[]): string;
     path(...path: string[]): string;
     relativePath(...path: string[]): string;
-    imagePath(...path: string[]): ImageFilePath;
+    imagePath(...path: [...string[], ImageFileExtension]): ImageFilePath;
     templatePath(...path: string[]): `${string}.hbs`;
     Error(str: string): Error;
     error(str: string, error?: Error): void;

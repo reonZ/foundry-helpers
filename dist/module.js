@@ -113,8 +113,9 @@ class CustomModule {
         return `modules/${this.id}/${tail}`;
     }
     imagePath(...path) {
+        const ext = path.pop();
         const root = this.relativePath("images", ...path);
-        return `${root}.webp`;
+        return `${root}.${ext}`;
     }
     templatePath(...path) {
         const root = this.relativePath("templates", ...path);

@@ -1,8 +1,8 @@
 import z from "zod";
 declare function zEquipmentFilter(): z.ZodObject<{
     checkboxes: z.ZodOptional<z.ZodRecord<z.ZodEnum<{
-        rarity: "rarity";
         itemTypes: "itemTypes";
+        rarity: "rarity";
         armorTypes: "armorTypes";
         weaponTypes: "weaponTypes";
     }> & z.core.$partial, z.ZodObject<{
@@ -34,8 +34,8 @@ declare function zEquipmentFilter(): z.ZodObject<{
     }, z.core.$strip>>;
     traits: z.ZodOptional<z.ZodObject<{
         conjunction: z.ZodDefault<z.ZodEnum<{
-            and: "and";
             or: "or";
+            and: "and";
         }>>;
         selected: z.ZodDefault<z.ZodArray<z.ZodObject<{
             label: z.ZodString;
