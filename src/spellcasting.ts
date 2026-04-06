@@ -9,6 +9,8 @@ import {
     ZeroToFour,
 } from "@7h3laughingman/pf2e-types";
 
+const ROMAN_RANKS = ["", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ", "Ⅵ", "Ⅶ", "Ⅷ", "Ⅸ", "Ⅹ"] as const;
+
 function getActorMaxRank(actor: CreaturePF2e): OneToTen {
     return Math.max(1, Math.ceil(actor.level / 2)) as OneToTen;
 }
@@ -66,5 +68,7 @@ type CreateSpellcastingSource = {
     flags?: Record<string, any>;
 };
 
-export { createSpellcastingSource, getActorMaxRank };
-export type { CreatedSpellcastingEntrySource, CreateSpellcastingSource };
+type RomanRank = (typeof ROMAN_RANKS)[number];
+
+export { createSpellcastingSource, getActorMaxRank, ROMAN_RANKS };
+export type { CreatedSpellcastingEntrySource, CreateSpellcastingSource, RomanRank };

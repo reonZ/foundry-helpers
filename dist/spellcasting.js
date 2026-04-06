@@ -1,3 +1,4 @@
+const ROMAN_RANKS = ["", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ", "Ⅵ", "Ⅶ", "Ⅷ", "Ⅸ", "Ⅹ"];
 function getActorMaxRank(actor) {
     return Math.max(1, Math.ceil(actor.level / 2));
 }
@@ -27,4 +28,4 @@ function createSpellcastingSource({ name, category, attribute, flags, proficienc
         flags: flags ?? {},
     };
 }
-export { createSpellcastingSource, getActorMaxRank };
+export { createSpellcastingSource, getActorMaxRank, ROMAN_RANKS };
