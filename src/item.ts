@@ -409,7 +409,7 @@ function isSupressedFeat<TActor extends ActorPF2e | null>(item: ItemPF2e<TActor>
 }
 
 function isCastConsumable(item: ConsumablePF2e): boolean {
-    return R.isIncludedIn(item.category, ["wand", "scroll"]) && !!item.system.spell;
+    return R.isIncludedIn(item.category, ["scroll", "spell-gem", "wand"]) && !!item.system.spell;
 }
 
 function isSF2eItem<T extends PhysicalItemPF2e>(item: T): boolean {

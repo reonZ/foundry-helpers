@@ -281,7 +281,7 @@ function isSupressedFeat(item) {
     return item.isOfType("feat") && item.suppressed;
 }
 function isCastConsumable(item) {
-    return R.isIncludedIn(item.category, ["wand", "scroll"]) && !!item.system.spell;
+    return R.isIncludedIn(item.category, ["scroll", "spell-gem", "wand"]) && !!item.system.spell;
 }
 function isSF2eItem(item) {
     return includesAny(item._source.system.traits.value, ["tech", "analog"]);
