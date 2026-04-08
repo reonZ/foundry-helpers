@@ -1,5 +1,13 @@
-import { SpellPF2e, SpellSlotGroupId, ZeroToTen } from "@7h3laughingman/pf2e-types";
+import {
+    CreaturePF2e,
+    SpellcastingEntry,
+    SpellPF2e,
+    SpellSlotGroupId,
+    Statistic,
+    ZeroToTen,
+} from "@7h3laughingman/pf2e-types";
 import { getSpellRankLabel, localizer } from ".";
+import { R } from "..";
 
 const SPELLCASTING_CATEGORIES = ["prepared", "spontaneous", "innate", "focus", "items", "ritual"] as const;
 
@@ -32,6 +40,27 @@ function warnInvalidDrop(warning: DropWarningType, { spell, groupId }: WarnInval
     }
 }
 
+/**
+ * https://github.com/foundryvtt/pf2e/blob/49dc6d70c7e7bb26d8039c97361e638bdef6a3bd/src/module/item/spellcasting-entry/helpers.ts#L10
+ */
+function createCounteractStatistic<TActor extends CreaturePF2e>(ability: SpellcastingEntry<TActor>): Statistic<TActor> {
+    const actor = ability.actor;
+
+    // NPCs have neither a proficiency bonus nor specified attribute modifier: use their base attack roll modifier
+    const baseModifier = actor.isOfType("npc")
+        ? ability.statistic.check.modifiers.find((m) => m.type === "untyped" && m.slug === "base")?.clone()
+        : null;
+
+    const StatisticCls = actor.skills.acrobatics.constructor as typeof Statistic;
+    return new StatisticCls(actor, {
+        slug: "counteract",
+        label: "PF2E.Item.Spell.Counteract.Label",
+        attribute: ability.statistic.attribute,
+        rank: ability.statistic.rank || 1,
+        check: { type: "check", modifiers: [baseModifier].filter(R.isTruthy) },
+    });
+}
+
 type DropWarningType = "invalid-rank" | "cantrip-mismatch" | "invalid-spell";
 
 interface WarnInvalidDropParams {
@@ -39,4 +68,4 @@ interface WarnInvalidDropParams {
     groupId?: Maybe<SpellSlotGroupId>;
 }
 
-export { SPELLCASTING_CATEGORIES, spellSlotGroupIdToNumber, warnInvalidDrop };
+export { createCounteractStatistic, SPELLCASTING_CATEGORIES, spellSlotGroupIdToNumber, warnInvalidDrop };
