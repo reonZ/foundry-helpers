@@ -1,6 +1,7 @@
-import { CheckRoll } from "@7h3laughingman/pf2e-types";
+import { CheckRoll, CreaturePF2e, Statistic } from "@7h3laughingman/pf2e-types";
 declare const SAVE_TYPES: readonly ["fortitude", "reflex", "will"];
 declare function getCheckRollClass(): typeof CheckRoll;
+declare function getStatisticClass(actor: CreaturePF2e): typeof Statistic;
 /**
  * modified version of
  * https://github.com/foundryvtt/pf2e/blob/d179b37b0389a1d6b238f3dd2ad125a04b958184/src/scripts/ui/inline-roll-links.ts#L176
@@ -11,4 +12,4 @@ declare function getExtraRollOptions({ traits, options }?: {
     traits?: string[] | string;
     options?: string[] | string;
 }, isBasic?: boolean): string[];
-export { getCheckRollClass, getExtraRollOptions, SAVE_TYPES };
+export { getCheckRollClass, getExtraRollOptions, getStatisticClass, SAVE_TYPES };

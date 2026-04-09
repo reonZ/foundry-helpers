@@ -5,6 +5,9 @@ const SAVE_TYPES = ["fortitude", "reflex", "will"];
 function getCheckRollClass() {
     return (_cached.checkRoll ??= CONFIG.Dice.rolls.find((Roll) => Roll.name === "CheckRoll"));
 }
+function getStatisticClass(actor) {
+    return actor.skills.acrobatics.constructor;
+}
 /**
  * modified version of
  * https://github.com/foundryvtt/pf2e/blob/d179b37b0389a1d6b238f3dd2ad125a04b958184/src/scripts/ui/inline-roll-links.ts#L176
@@ -20,4 +23,4 @@ function getExtraRollOptions({ traits, options } = {}, isBasic) {
     }
     return R.unique([maybeTraits, additionalTraits.map((t) => `item:trait:${t}`), allOptions].flat());
 }
-export { getCheckRollClass, getExtraRollOptions, SAVE_TYPES };
+export { getCheckRollClass, getExtraRollOptions, getStatisticClass, SAVE_TYPES };

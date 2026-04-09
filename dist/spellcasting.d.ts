@@ -1,5 +1,6 @@
-import { AttributeString, CreaturePF2e, MagicTradition, OneToTen, SpellcastingCategory, SpellcastingEntrySource, SpellcastingEntrySystemSource, ZeroToFour } from "@7h3laughingman/pf2e-types";
+import { AttributeString, CreaturePF2e, MagicTradition, OneToTen, SpellcastingCategory, SpellcastingEntrySource, SpellcastingEntrySystemSource, SpellCollection, ZeroToFour } from "@7h3laughingman/pf2e-types";
 declare const ROMAN_RANKS: readonly ["", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ", "Ⅵ", "Ⅶ", "Ⅷ", "Ⅸ", "Ⅹ"];
+declare function getSpellCollectionCls<T extends CreaturePF2e>(actor: T): typeof SpellCollection<T>;
 declare function getActorMaxRank(actor: CreaturePF2e): OneToTen;
 declare function createSpellcastingSource({ name, category, attribute, flags, proficiencyRank, proficiencySlug, showSlotlessRanks, sort, tradition, }: CreateSpellcastingSource): CreatedSpellcastingEntrySource;
 type CreatedSpellcastingEntrySource = Omit<PreCreate<SpellcastingEntrySource>, "system"> & {
@@ -17,5 +18,5 @@ type CreateSpellcastingSource = {
     flags?: Record<string, any>;
 };
 type RomanRank = (typeof ROMAN_RANKS)[number];
-export { createSpellcastingSource, getActorMaxRank, ROMAN_RANKS };
+export { getSpellCollectionCls, createSpellcastingSource, getActorMaxRank, ROMAN_RANKS };
 export type { CreatedSpellcastingEntrySource, CreateSpellcastingSource, RomanRank };
