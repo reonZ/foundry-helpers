@@ -331,6 +331,12 @@ function getEquipAnnotation(item: Maybe<PhysicalItemPF2e>): EquipAnnotationData 
     };
 }
 
+function itemIsEquipped(item: PhysicalItemPF2e<ActorPF2e>): boolean {
+    const equipableItem = item.parentItem ?? item;
+    const isInvested = equipableItem.isInvested;
+    return isInvested === true || (isInvested === null && equipableItem.isEquipped);
+}
+
 /**
  * repurposed version of
  * https://github.com/foundryvtt/pf2e/blob/6ff777170c93618f234929c6d483a98a37cbe363/src/module/actor/character/helpers.ts#L210
@@ -461,6 +467,7 @@ export {
     isSF2eItem,
     isSupressedFeat,
     ITEM_CARRY_TYPES,
+    itemIsEquipped,
     itemIsOfType,
     itemWithActor,
     PHYSICAL_ITEM_TYPES,
