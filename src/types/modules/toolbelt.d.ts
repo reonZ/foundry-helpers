@@ -65,25 +65,25 @@ declare global {
 
         interface Api {
             actionable: {
-                generateItemCastRuleSource: (
+                generateItemCastRuleSource(
                     spell: SpellPF2e,
                     data: actionable.ItemCastRuleSourceData,
-                ) => RuleElementSource;
-                getActionMacro: (action: AbilityItemPF2e | FeatPF2e) => Promise<Maybe<MacroPF2e>>;
-                getItemMacro: (item: ItemPF2e) => Promise<Maybe<MacroPF2e>>;
+                ): RuleElementSource;
+                getActionMacro(action: AbilityItemPF2e | FeatPF2e): Promise<Maybe<MacroPF2e>>;
+                getItemMacro(item: ItemPF2e): Promise<Maybe<MacroPF2e>>;
                 getVirtualAction(data: actionable.ActionableData): Promise<AbilityItemPF2e | null>;
                 getVirtualActionsData(actor: ActorPF2e): Record<string, actionable.VirtualActionData>;
                 getVirtualSpellData(actor: ActorPF2e, id: string): actionable.VirtualSpellData | undefined;
                 getVirtualSpellcastingData(actor: ActorPF2e, id: string): actionable.VirtualSpellData | undefined;
-                rechargeVirtualSpell: (
+                rechargeVirtualSpell(
                     parent: PhysicalItemPF2e<CharacterPF2e>,
                     ruleIndex: number,
-                ) => Promise<ItemPF2e<CharacterPF2e>[]> | undefined;
-                updateVirtualSpellValue: (
+                ): Promise<ItemPF2e<CharacterPF2e>[]> | undefined;
+                updateVirtualSpellValue(
                     parent: PhysicalItemPF2e<CharacterPF2e>,
                     ruleIndex: number,
                     value: number,
-                ) => Promise<ItemPF2e<CharacterPF2e>[]> | undefined;
+                ): Promise<ItemPF2e<CharacterPF2e>[]> | undefined;
                 updateActionFrequency(
                     event: Event,
                     item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>,
@@ -96,50 +96,50 @@ declare global {
                 ): Promise<unknown>;
             };
             betterInventory: {
-                mergeItems: (actor: ActorPF2e, btn?: HTMLButtonElement | HTMLAnchorElement) => Promise<void>;
-                splitItem: (item: Maybe<ItemPF2e>) => Promise<void>;
+                mergeItems(actor: ActorPF2e, btn?: HTMLButtonElement | HTMLAnchorElement): Promise<void>;
+                splitItem(item: Maybe<ItemPF2e>): Promise<void>;
             };
             betterMerchant: {
-                testItemsForMerchant: (merchant: ActorPF2e, items: ItemPF2e[]) => betterMerchant.TestItemData[];
+                testItemsForMerchant(merchant: ActorPF2e, items: ItemPF2e[]): betterMerchant.TestItemData[];
             };
             heroActions: {
-                canTrade: () => boolean;
-                discardHeroActions: (actor: CharacterPF2e, uuids: string[] | string) => void;
-                drawHeroActions: (actor: CharacterPF2e) => Promise<void>;
-                getDeckTable: () => Promise<RollTable | undefined>;
-                getHeroActionDetails: (uuid: string) => Promise<heroActions.HeroActionDetails | undefined>;
-                getHeroActions: (actor: CharacterPF2e) => heroActions.HeroAction[];
-                getHeroActionsTemplateData: (actor: CharacterPF2e) => heroActions.HeroActionsTemplateData | undefined;
-                giveHeroActions: (actor: CharacterPF2e) => Promise<void>;
-                removeHeroActions: () => Promise<void>;
-                sendActionToChat: (actor: CharacterPF2e, uuid: string) => Promise<void>;
-                tradeHeroAction: (actor: CharacterPF2e) => Promise<void>;
-                useHeroAction: (actor: CharacterPF2e, uuid: string) => Promise<void>;
-                usesCountVariant: () => boolean;
+                canTrade(): boolean;
+                discardHeroActions(actor: CharacterPF2e, uuids: string[] | string): void;
+                drawHeroActions(actor: CharacterPF2e): Promise<void>;
+                getDeckTable(): Promise<RollTable | undefined>;
+                getHeroActionDetails(uuid: string): Promise<heroActions.HeroActionDetails | undefined>;
+                getHeroActions(actor: CharacterPF2e): heroActions.HeroAction[];
+                getHeroActionsTemplateData(actor: CharacterPF2e): heroActions.HeroActionsTemplateData | undefined;
+                giveHeroActions(actor: CharacterPF2e): Promise<void>;
+                removeHeroActions(): Promise<void>;
+                sendActionToChat(actor: CharacterPF2e, uuid: string): Promise<void>;
+                tradeHeroAction(actor: CharacterPF2e): Promise<void>;
+                useHeroAction(actor: CharacterPF2e, uuid: string): Promise<void>;
+                usesCountVariant(): boolean;
             };
             identify: {
-                openTracker: (item?: ItemPF2e) => void;
-                requestIdentify: (item: Maybe<ItemPF2e>, skipNotify?: boolean) => void;
+                openTracker(item?: ItemPF2e): void;
+                requestIdentify(item: Maybe<ItemPF2e>, skipNotify?: boolean): void;
             };
             mergeDamage: {
-                injectDamageMessage: (
+                injectDamageMessage(
                     targetMessage: ChatMessagePF2e,
                     originMessage: ChatMessagePF2e,
                     options?: Omit<mergeDamage.MergeOptions, "targetMerge">,
-                ) => Promise<{ rolls: RollJSON[] } | undefined>;
-                mergeDamageMessages: (
+                ): Promise<{ rolls: RollJSON[] } | undefined>;
+                mergeDamageMessages(
                     targetMessage: ChatMessagePF2e,
                     originMessage: ChatMessagePF2e,
                     options?: mergeDamage.MergeOptions,
-                ) => Promise<ChatMessagePF2e | undefined>;
+                ): Promise<ChatMessagePF2e | undefined>;
             };
             shareData: {
-                getMasterInMemory: (actor: CreaturePF2e) => CreaturePF2e | undefined;
+                getMasterInMemory(actor: CreaturePF2e): CreaturePF2e | undefined;
                 getSlavesInMemory(actor: CreaturePF2e, idOnly: false): CreaturePF2e[];
                 getSlavesInMemory(actor: CreaturePF2e, idOnly?: true): Set<ActorUUID> | undefined;
             };
             targetHelper: {
-                getMessageTargets: (message: ChatMessagePF2e) => TokenDocumentPF2e[] | undefined;
+                getMessageTargets(message: ChatMessagePF2e): TokenDocumentPF2e[] | undefined;
                 setMessageFlagTargets: <T extends Record<string, unknown>>(
                     updates: T,
                     targets: TokenDocumentUUID[],
