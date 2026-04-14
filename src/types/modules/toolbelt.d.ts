@@ -4,6 +4,7 @@ import {
     CharacterPF2e,
     ChatMessagePF2e,
     CheckRoll,
+    ConsumablePF2e,
     CreaturePF2e,
     DegreeAdjustmentsRecord,
     DegreeOfSuccessString,
@@ -11,12 +12,15 @@ import {
     ItemPF2e,
     MacroPF2e,
     NPCPF2e,
+    OneToTen,
     PhysicalItemPF2e,
     RawCoins,
     RollNoteSource,
     RuleElement,
     RuleElementSchema,
+    RuleElementSource,
     SaveType,
+    SpellPF2e,
     TokenDocumentPF2e,
 } from "@7h3laughingman/pf2e-types";
 import { ActorUUID, DocumentUUID, ItemUUID, Rolled, RollJSON, TokenDocumentUUID } from "../../_types";
@@ -61,10 +65,25 @@ declare global {
 
         interface Api {
             actionable: {
+                generateItemCastRuleSource: (
+                    spell: SpellPF2e,
+                    data: actionable.ItemCastRuleSourceData,
+                ) => RuleElementSource;
                 getActionMacro: (action: AbilityItemPF2e | FeatPF2e) => Promise<Maybe<MacroPF2e>>;
                 getItemMacro: (item: ItemPF2e) => Promise<Maybe<MacroPF2e>>;
                 getVirtualAction(data: actionable.ActionableData): Promise<AbilityItemPF2e | null>;
                 getVirtualActionsData(actor: ActorPF2e): Record<string, actionable.VirtualActionData>;
+                getVirtualSpellData(actor: ActorPF2e, id: string): actionable.VirtualSpellData | undefined;
+                getVirtualSpellcastingData(actor: ActorPF2e, id: string): actionable.VirtualSpellData | undefined;
+                rechargeVirtualSpell: (
+                    parent: PhysicalItemPF2e<CharacterPF2e>,
+                    ruleIndex: number,
+                ) => Promise<ItemPF2e<CharacterPF2e>[]> | undefined;
+                updateVirtualSpellValue: (
+                    parent: PhysicalItemPF2e<CharacterPF2e>,
+                    ruleIndex: number,
+                    value: number,
+                ) => Promise<ItemPF2e<CharacterPF2e>[]> | undefined;
                 updateActionFrequency(
                     event: Event,
                     item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>,
@@ -139,6 +158,29 @@ declare global {
                 data: ActionableData;
                 parent: PhysicalItemPF2e<CharacterPF2e>;
                 ruleIndex: number;
+            };
+
+            type VirtualSpellData = {
+                attribute: "str" | "dex" | "con" | "int" | "wis" | "cha" | null | undefined;
+                dc: number | null | undefined;
+                max: number | null | undefined;
+                statistic: string | null | undefined;
+                tradition: "arcane" | "divine" | "occult" | "primal" | null | undefined;
+                entryId: string;
+                item: ConsumablePF2e<CharacterPF2e>;
+                parent: PhysicalItemPF2e<CharacterPF2e>;
+                ruleIndex: number;
+                spellId: string;
+                value: number | undefined;
+            };
+
+            type ItemCastRuleSourceData = {
+                attribute?: "str" | "dex" | "con" | "int" | "wis" | "cha" | null;
+                dc?: number | null;
+                max?: number | null;
+                rank?: OneToTen | null;
+                statistic?: string | null;
+                tradition?: "arcane" | "divine" | "occult" | "primal" | null;
             };
 
             type ActionableSchema = RuleElementSchema & {
