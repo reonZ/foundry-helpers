@@ -32,7 +32,7 @@ function resolveActorAndItemFromHTML(html) {
     const sheetItem = isInstanceOf(sheetDocument, "ItemPF2e") ? sheetDocument : null;
     const item = (() => {
         if (isItemUUID(html.dataset.itemUuid)) {
-            const document = fromUuidSync(html.dataset.itemUuid);
+            const document = fromUuidSync(html.dataset.itemUuid, { strict: false });
             if (isInstanceOf(document, "ItemPF2e"))
                 return document;
         }
