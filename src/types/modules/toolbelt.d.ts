@@ -35,6 +35,7 @@ declare global {
             actionable: {
                 action: boolean;
                 apply: boolean;
+                cast: boolean;
                 item: boolean;
                 physical: boolean;
                 spell: boolean;
