@@ -11,6 +11,7 @@ declare class SYSTEM {
     static path<T extends string>(tail: T): () => `systems/${string}/${T}`;
     static path(...path: string[]): () => string;
     static uuid<P extends DocumentUUID>(pf2e: P, sf2e?: P): () => P;
+    static uuids<P extends DocumentUUID>(entries: [pf2e: P, sf2e: P][]): () => P[];
     static fromUuid(uuid: () => CompendiumUUID): Promise<CompendiumDocument | null>;
     static fromUuid(uuid: () => ActorUUID): Promise<Actor | null>;
     static fromUuid(uuid: () => ItemUUID): Promise<Item | null>;

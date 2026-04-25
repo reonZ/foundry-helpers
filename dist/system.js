@@ -21,6 +21,12 @@ class SYSTEM {
             return (this.isSF2e && sf2e) || pf2e;
         };
     }
+    static uuids(entries) {
+        return () => {
+            const index = this.isSF2e ? 1 : 0;
+            return entries.map((entry) => entry[index]);
+        };
+    }
     static fromUuid(uuid) {
         const singleUuid = uuid();
         return fromUuid(singleUuid);

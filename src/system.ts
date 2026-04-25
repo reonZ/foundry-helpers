@@ -40,6 +40,13 @@ class SYSTEM {
         };
     }
 
+    static uuids<P extends DocumentUUID>(entries: [pf2e: P, sf2e: P][]): () => P[] {
+        return (): P[] => {
+            const index = this.isSF2e ? 1 : 0;
+            return entries.map((entry) => entry[index]);
+        };
+    }
+
     static fromUuid(uuid: () => CompendiumUUID): Promise<CompendiumDocument | null>;
     static fromUuid(uuid: () => ActorUUID): Promise<Actor | null>;
     static fromUuid(uuid: () => ItemUUID): Promise<Item | null>;
