@@ -35,7 +35,6 @@ export * from "./settings";
 export * from "./skill";
 export * from "./socket";
 export * from "./spellcasting";
-export * from "./template";
 export * from "./time";
 export * from "./token";
 export * from "./user";

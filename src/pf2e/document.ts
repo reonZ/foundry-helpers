@@ -56,7 +56,7 @@ function resolveActorAndItemFromHTML(html: HTMLElement): {
 
     const item = (() => {
         if (isItemUUID(html.dataset.itemUuid)) {
-            const document = fromUuidSync(html.dataset.itemUuid);
+            const document = fromUuidSync(html.dataset.itemUuid, { strict: false });
             if (isInstanceOf(document, "ItemPF2e")) return document;
         }
 

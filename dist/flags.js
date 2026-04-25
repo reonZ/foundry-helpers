@@ -2,10 +2,6 @@ import { MODULE, R } from ".";
 function flagPath(...path) {
     return `flags.${MODULE.path(...path)}`;
 }
-function unsetFlagPath(...path) {
-    const lastKey = path.pop();
-    return flagPath(...path, `-=${lastKey}`);
-}
 function getFlag(doc, ...path) {
     return doc.getFlag(MODULE.id, R.join(path, "."));
 }
@@ -33,7 +29,7 @@ function setFlagProperties(obj, ...args) {
     return obj;
 }
 function unsetFlagProperty(obj, ...path) {
-    foundry.utils.setProperty(obj, unsetFlagPath(...path), null);
+    foundry.utils.setProperty(obj, flagPath(...path), _del);
     return obj;
 }
 function deleteFlagProperty(obj, ...path) {
