@@ -179,10 +179,6 @@ declare global {
                 attribute?: "str" | "dex" | "con" | "int" | "wis" | "cha" | null;
                 dc?: number | null;
                 max?: number | null;
-<<<<<<< HEAD
-=======
-                predicate?: JSONValue;
->>>>>>> v14
                 rank?: OneToTen | null;
                 statistic?: string | null;
                 tradition?: "arcane" | "divine" | "occult" | "primal" | null;
