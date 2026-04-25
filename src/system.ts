@@ -40,6 +40,12 @@ class SYSTEM {
         };
     }
 
+    static itemUuid(pf2e: ItemUUID, sf2e?: ItemUUID): () => ItemUUID {
+        return (): ItemUUID => {
+            return (this.isSF2e && sf2e) || pf2e;
+        };
+    }
+
     static uuids<P extends DocumentUUID>(entries: [pf2e: P, sf2e: P][]): () => P[] {
         return (): P[] => {
             const index = this.isSF2e ? 1 : 0;
@@ -59,7 +65,7 @@ class SYSTEM {
 
     static pack<T extends PackContent>(pf2e: string, sf2e?: string): () => CompendiumCollection<T> | undefined {
         return () => {
-            return this.getPack((this.isSF2e && sf2e) || pf2e);
+            return this.getPack(pf2e, sf2e);
         };
     }
 
@@ -67,8 +73,9 @@ class SYSTEM {
         return game.pf2e.system.sluggify(text, options);
     }
 
-    static getPack<T extends PackContent>(name: string): CompendiumCollection<T> | undefined {
-        return game.packs.get(`${SYSTEM.id}.${name}`);
+    static getPack<T extends PackContent>(pf2e: string, sf2e?: string): CompendiumCollection<T> | undefined {
+        const name = (this.isSF2e && sf2e) || pf2e;
+        return game.packs.get(name);
     }
 }
 

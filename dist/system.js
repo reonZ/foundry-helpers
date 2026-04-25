@@ -21,6 +21,11 @@ class SYSTEM {
             return (this.isSF2e && sf2e) || pf2e;
         };
     }
+    static itemUuid(pf2e, sf2e) {
+        return () => {
+            return (this.isSF2e && sf2e) || pf2e;
+        };
+    }
     static uuids(entries) {
         return () => {
             const index = this.isSF2e ? 1 : 0;
@@ -33,14 +38,15 @@ class SYSTEM {
     }
     static pack(pf2e, sf2e) {
         return () => {
-            return this.getPack((this.isSF2e && sf2e) || pf2e);
+            return this.getPack(pf2e, sf2e);
         };
     }
     static sluggify(text, options) {
         return game.pf2e.system.sluggify(text, options);
     }
-    static getPack(name) {
-        return game.packs.get(`${SYSTEM.id}.${name}`);
+    static getPack(pf2e, sf2e) {
+        const name = (this.isSF2e && sf2e) || pf2e;
+        return game.packs.get(name);
     }
 }
 export { SYSTEM };
