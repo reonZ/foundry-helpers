@@ -54,8 +54,17 @@ function valueBetween(value: number, min: number, max: number): boolean {
     return value >= min && value <= max;
 }
 
+function createDuplicateMap<K extends string, T>(raw: [K[] | K, T][]): Map<K, T> {
+    const duplicated = raw.flatMap(([_keys, entry]) => {
+        const keys = R.isArray(_keys) ? _keys : [_keys];
+        return keys.map((key) => [key, entry] as const);
+    });
+    return new Map(duplicated);
+}
+
 export {
     activateHooksAndWrappers,
+    createDuplicateMap,
     disableHooksAndWrappers,
     getDragEventData,
     localeCompare,

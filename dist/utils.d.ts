@@ -17,4 +17,5 @@ declare function getDragEventData<T extends Record<string, JSONValue>>(event: Dr
 declare function stringNumber(value: number | `${number}`): `${number}`;
 declare function stringBoolean(value: boolean | `${boolean}`): `${boolean}`;
 declare function valueBetween(value: number, min: number, max: number): boolean;
-export { activateHooksAndWrappers, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, valueBetween, };
+declare function createDuplicateMap<K extends string, T>(raw: [K[] | K, T][]): Map<K, T>;
+export { activateHooksAndWrappers, createDuplicateMap, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, valueBetween, };

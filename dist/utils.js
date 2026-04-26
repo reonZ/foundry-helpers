@@ -37,4 +37,11 @@ function stringBoolean(value) {
 function valueBetween(value, min, max) {
     return value >= min && value <= max;
 }
-export { activateHooksAndWrappers, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, valueBetween, };
+function createDuplicateMap(raw) {
+    const duplicated = raw.flatMap(([_keys, entry]) => {
+        const keys = R.isArray(_keys) ? _keys : [_keys];
+        return keys.map((key) => [key, entry]);
+    });
+    return new Map(duplicated);
+}
+export { activateHooksAndWrappers, createDuplicateMap, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, valueBetween, };
