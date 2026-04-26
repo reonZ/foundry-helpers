@@ -18,12 +18,12 @@ class SYSTEM {
     }
     static uuid(pf2e, sf2e) {
         return () => {
-            return (this.isSF2e && sf2e) || pf2e;
+            return this.isSF2e ? sf2e : pf2e;
         };
     }
     static itemUuid(pf2e, sf2e) {
         return () => {
-            return (this.isSF2e && sf2e) || pf2e;
+            return this.isSF2e ? sf2e : pf2e;
         };
     }
     static uuids(entries) {
@@ -45,7 +45,7 @@ class SYSTEM {
         return game.pf2e.system.sluggify(text, options);
     }
     static getPack(pf2e, sf2e) {
-        const name = (this.isSF2e && sf2e) || pf2e;
+        const name = this.isSF2e ? sf2e : pf2e;
         return game.packs.get(name);
     }
 }
