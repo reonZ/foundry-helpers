@@ -1,8 +1,11 @@
 import { ConsumableSource, ItemPF2e, SpellConsumableItemType, SpellPF2e } from "@7h3laughingman/pf2e-types";
 import { ErrorPF2e, MAGIC_TRADITIONS, objectHasKey, setHasElement } from ".";
-import { ImageFilePath, R } from "..";
+import { ImageFilePath, R, SYSTEM } from "..";
 
-const CANTRIP_DECK_UUID = "Compendium.pf2e.equipment-srd.Item.tLa4bewBhyqzi6Ow";
+const CANTRIP_DECK_UUID = SYSTEM.itemUuid(
+    "Compendium.pf2e.equipment-srd.Item.tLa4bewBhyqzi6Ow",
+    "Compendium.pf2e-anachronism.equipment.Item.tLa4bewBhyqzi6Ow",
+);
 
 /**
  * slightly modified version of
@@ -29,7 +32,7 @@ async function createConsumableFromSpell(
 ): Promise<ConsumableSource> {
     const data = objectHasKey(CONFIG.PF2E.spellcastingItems, type) ? CONFIG.PF2E.spellcastingItems[type] : null;
     const uuids: Record<number, string | null | undefined> = data?.compendiumUuids ?? [];
-    const uuid = uuids?.[rank] ?? (type === "cantripDeck5" ? CANTRIP_DECK_UUID : null);
+    const uuid = uuids?.[rank] ?? (type === "cantripDeck5" ? CANTRIP_DECK_UUID() : null);
     const consumable = uuid ? await fromUuid<ItemPF2e>(uuid) : null;
     if (!consumable?.isOfType("consumable")) {
         throw ErrorPF2e("Failed to retrieve consumable item");
