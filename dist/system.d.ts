@@ -4,6 +4,8 @@ import { CompendiumUUID } from "@7h3laughingman/foundry-types/client/utils/_modu
 import { ActorUUID, CompendiumDocument, ItemUUID, TokenDocumentUUID } from "@7h3laughingman/foundry-types/client/documents/_module.mjs";
 declare class SYSTEM {
     static get id(): SystemId;
+    static get oppositeId(): SystemId;
+    static get anachronismId(): `${SystemId}-anachronism`;
     static get isPF2e(): boolean;
     static get isSF2e(): boolean;
     static relativePath<T extends string>(tail: T): `systems/${string}/${T}`;
@@ -23,6 +25,8 @@ declare class SYSTEM {
         camel?: SlugCamel;
     }): string;
     static getPack<T extends PackContent>(pf2e: string, sf2e: string): CompendiumCollection<T> | undefined;
+    static getSystemPack<T extends PackContent>(name: string): CompendiumCollection<T> | undefined;
+    static getAnachronismPack<T extends PackContent>(name: string): CompendiumCollection<T> | undefined;
 }
 type SlugCamel = "dromedary" | "bactrian" | null;
 type PackCollection = GamePF2e["packs"] extends Collection<string, infer T> ? T : never;

@@ -13,6 +13,14 @@ class SYSTEM {
         return game.system.id as SystemId;
     }
 
+    static get oppositeId(): SystemId {
+        return this.id === "pf2e" ? "sf2e" : "pf2e";
+    }
+
+    static get anachronismId(): `${SystemId}-anachronism` {
+        return `${this.oppositeId}-anachronism`;
+    }
+
     static get isPF2e(): boolean {
         return this.id === "pf2e";
     }
@@ -76,6 +84,14 @@ class SYSTEM {
     static getPack<T extends PackContent>(pf2e: string, sf2e: string): CompendiumCollection<T> | undefined {
         const name = this.isSF2e ? sf2e : pf2e;
         return game.packs.get(name);
+    }
+
+    static getSystemPack<T extends PackContent>(name: string): CompendiumCollection<T> | undefined {
+        return game.packs.get(`${this.id}.${name}`);
+    }
+
+    static getAnachronismPack<T extends PackContent>(name: string): CompendiumCollection<T> | undefined {
+        return game.packs.get(`${this.anachronismId}.${name}`);
     }
 }
 

@@ -3,6 +3,12 @@ class SYSTEM {
     static get id() {
         return game.system.id;
     }
+    static get oppositeId() {
+        return this.id === "pf2e" ? "sf2e" : "pf2e";
+    }
+    static get anachronismId() {
+        return `${this.oppositeId}-anachronism`;
+    }
     static get isPF2e() {
         return this.id === "pf2e";
     }
@@ -47,6 +53,12 @@ class SYSTEM {
     static getPack(pf2e, sf2e) {
         const name = this.isSF2e ? sf2e : pf2e;
         return game.packs.get(name);
+    }
+    static getSystemPack(name) {
+        return game.packs.get(`${this.id}.${name}`);
+    }
+    static getAnachronismPack(name) {
+        return game.packs.get(`${this.anachronismId}.${name}`);
     }
 }
 export { SYSTEM };
