@@ -1,14 +1,14 @@
-import { assignStyle, isValidTargetDocuments, localize, MODULE, R, userIsGM } from ".";
+import { createHTMLElement, isValidTargetDocuments, localize, MODULE, R, userIsGM } from ".";
 const EMITING_STYLE = {
     alignItems: "center",
     background: "linear-gradient(90deg, #00000000 0%, #0000001a 20%, #00000066 50%, #0000001a 80%, #00000000 100%)",
     color: "#efe6d8c9",
     display: "flex",
-    fontSize: "4em",
-    gap: "0.3em",
+    fontSize: "3.6rem",
+    gap: "0.8rem",
     justifyContent: "center",
     left: "0",
-    paddingBlock: "0.1em",
+    paddingBlock: "0.2rem",
     position: "absolute",
     right: "0",
     textShadow: "#000000 0px 0px 6px",
@@ -28,10 +28,11 @@ let _emitingElement;
 function displayEmiting() {
     const emitingElement = (_emitingElement ??= (() => {
         const label = localize.shared("emiting.label");
-        const el = document.createElement("div");
-        el.innerHTML = `${label}<i class="fa-solid fa-wifi"></i>`;
-        assignStyle(el, EMITING_STYLE);
-        return el;
+        return createHTMLElement("div", {
+            classes: ["lvk-emitter"],
+            content: `${label}<i class="fa-solid fa-wifi" style="font-size: .9em;"></i>`,
+            style: EMITING_STYLE,
+        });
     })());
     document.body.append(emitingElement);
     setTimeout(() => {
