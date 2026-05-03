@@ -1,4 +1,5 @@
 export * from "./check";
+export * from "./combat";
 export * from "./degree-of-success";
 export * from "./difficulty-class";
 export * from "./distance";
