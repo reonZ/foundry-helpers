@@ -40,7 +40,7 @@ function createChatLink(docOrUuid, { label, html } = {}) {
 }
 function isActionMessage(message) {
     const type = message.flags[SYSTEM.id].origin?.type;
-    return R.isIncludedIn(type, ["feat", "action"]);
+    return R.isIncludedIn(type, ["feat", "action"]) && !message.isCheckRoll;
 }
 function isSpellMessage(message) {
     return R.isString(message.flags[SYSTEM.id].casting?.id);
