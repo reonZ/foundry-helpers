@@ -1,4 +1,30 @@
-import { ChoiceSetSource, ItemPF2e, RuleElementSource } from "@7h3laughingman/pf2e-types";
+import { DataFieldOptions } from "@7h3laughingman/foundry-types/common/data/_types.mjs";
+import {
+    BaseSpeedRuleElement,
+    ChoiceSetSource,
+    ItemPF2e,
+    ResolvableValueField,
+    RuleElement,
+    RuleElementSource,
+    RuleValue,
+} from "@7h3laughingman/pf2e-types";
+
+function getRuleElementCls(): typeof RuleElement {
+    return game.pf2e.RuleElement;
+}
+
+function ruleElementResolveField<
+    TRequired extends boolean,
+    TNullable extends boolean,
+    THasInitial extends boolean = false,
+>(
+    options?: DataFieldOptions<RuleValue, TRequired, TNullable, THasInitial> | undefined,
+    context?: foundry.data.DataFieldContext,
+): ResolvableValueField<TRequired, TNullable, THasInitial> {
+    const BaseSpeedCls = game.pf2e.RuleElements.builtin.BaseSpeed as typeof BaseSpeedRuleElement;
+    const ResolveFieldCls = BaseSpeedCls.defineSchema().value.constructor as typeof ResolvableValueField;
+    return new ResolveFieldCls(options, context);
+}
 
 function getChoiceSetSelection<T extends any = string>(
     item: ItemPF2e,
@@ -11,4 +37,4 @@ function getChoiceSetSelection<T extends any = string>(
     return rule?.selection as T | undefined;
 }
 
-export { getChoiceSetSelection };
+export { getChoiceSetSelection, getRuleElementCls, ruleElementResolveField };
