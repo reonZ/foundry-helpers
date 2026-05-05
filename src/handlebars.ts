@@ -68,11 +68,12 @@ type RenderData = {
 
 type SyncElementState = { focus?: string; scrollPositions: [HTMLElement, number][] };
 
-type HandlebarsRenderData = Omit<RenderData, "i18n" | "isSF2e"> & {
+type HandlebarsRenderData = {
+    [k: string]: any;
     i18n?: string;
 };
 
-type HandlebarsRenderArgs = [...string[], HandlebarsRenderData];
+type HandlebarsRenderArgs = [string, ...string[], HandlebarsRenderData];
 
 export { postSyncElement, preSyncElement, render };
 export type { HandlebarsRenderArgs, HandlebarsRenderData };
