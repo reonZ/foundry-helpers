@@ -79,12 +79,12 @@ declare global {
                 rechargeVirtualSpell(
                     parent: PhysicalItemPF2e<CharacterPF2e>,
                     ruleIndex: number,
-                ): Promise<ItemPF2e<CharacterPF2e>[]> | undefined;
+                ): Promise<ItemPF2e<CharacterPF2e> | undefined> | undefined;
                 updateVirtualSpellValue(
                     parent: PhysicalItemPF2e<CharacterPF2e>,
                     ruleIndex: number,
                     value: number,
-                ): Promise<ItemPF2e<CharacterPF2e>[]> | undefined;
+                ): Promise<ItemPF2e<CharacterPF2e> | undefined> | undefined;
                 updateActionFrequency(
                     event: Event,
                     item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>,
@@ -172,7 +172,6 @@ declare global {
                 parent: PhysicalItemPF2e<CharacterPF2e>;
                 ruleIndex: number;
                 spellId: string;
-                value: number | undefined;
             };
 
             type ItemCastRuleSourceData = {
