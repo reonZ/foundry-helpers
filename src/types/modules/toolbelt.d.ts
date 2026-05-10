@@ -165,7 +165,7 @@ declare global {
                 attribute: "str" | "dex" | "con" | "int" | "wis" | "cha" | null | undefined;
                 dc: number | null | undefined;
                 max: number | null | undefined;
-                statistic: string | null | undefined;
+                statistic: string[] | null | undefined;
                 tradition: "arcane" | "divine" | "occult" | "primal" | null | undefined;
                 entryId: string;
                 item: ConsumablePF2e<CharacterPF2e>;
@@ -178,6 +178,7 @@ declare global {
                 attribute?: "str" | "dex" | "con" | "int" | "wis" | "cha" | null;
                 dc?: number | null;
                 max?: number | null;
+                predicate?: any;
                 rank?: OneToTen | null;
                 statistic?: string | null;
                 tradition?: "arcane" | "divine" | "occult" | "primal" | null;
