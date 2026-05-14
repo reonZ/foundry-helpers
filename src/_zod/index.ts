@@ -6,5 +6,6 @@ export * from "./file-path";
 export * from "./filters";
 export * from "./foreign-document";
 export * from "./range";
+export * from "./safe-array";
 export * from "./spellcasting";
 export * from "./zod-document";
