@@ -39,8 +39,10 @@ function zCheckboxData() {
 function zRangeData() {
     return z.object({
         values: z.object({
-            min: z.number().min(0).multipleOf(1),
-            max: z.number().min(0).multipleOf(1),
+            inputMin: z.string().nonempty().optional(),
+            inputMax: z.string().nonempty().optional(),
+            min: z.number().min(0).multipleOf(1).optional(),
+            max: z.number().min(0).multipleOf(1).optional(),
         }),
     });
 }

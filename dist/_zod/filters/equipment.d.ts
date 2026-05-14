@@ -1,8 +1,8 @@
 import z from "zod";
 declare function zEquipmentFilter(): z.ZodObject<{
     checkboxes: z.ZodOptional<z.ZodRecord<z.ZodEnum<{
-        rarity: "rarity";
         itemTypes: "itemTypes";
+        rarity: "rarity";
         armorTypes: "armorTypes";
         weaponTypes: "weaponTypes";
     }> & z.core.$partial, z.ZodObject<{
@@ -19,8 +19,10 @@ declare function zEquipmentFilter(): z.ZodObject<{
         price: "price";
     }> & z.core.$partial, z.ZodObject<{
         values: z.ZodObject<{
-            min: z.ZodNumber;
-            max: z.ZodNumber;
+            inputMin: z.ZodOptional<z.ZodString>;
+            inputMax: z.ZodOptional<z.ZodString>;
+            min: z.ZodOptional<z.ZodNumber>;
+            max: z.ZodOptional<z.ZodNumber>;
         }, z.core.$strip>;
     }, z.core.$strip>>>;
     search: z.ZodOptional<z.ZodObject<{
