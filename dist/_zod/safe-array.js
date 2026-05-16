@@ -1,7 +1,7 @@
 import z from "zod";
 import { R } from "..";
 function zSafeArray(schema, unique = false) {
-    return z.preprocess((arr) => {
+    return z.custom((arr) => {
         const result = [];
         if (!R.isArray(arr)) {
             return result;
@@ -13,6 +13,6 @@ function zSafeArray(schema, unique = false) {
             }
         }
         return unique ? R.unique(result) : result;
-    }, z.array(schema));
+    });
 }
 export { zSafeArray };

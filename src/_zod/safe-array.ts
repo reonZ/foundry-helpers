@@ -1,8 +1,8 @@
 import z from "zod";
 import { R } from "..";
 
-function zSafeArray<T extends z.ZodTypeAny>(schema: T, unique: boolean = false) {
-    return z.preprocess((arr): z.output<T>[] => {
+function zSafeArray<T extends z.ZodTypeAny>(schema: T, unique: boolean = false): z.ZodArray<T> {
+    return z.custom<z.output<T>[]>((arr): z.output<T>[] => {
         const result: z.output<T>[] = [];
 
         if (!R.isArray(arr)) {
@@ -18,7 +18,7 @@ function zSafeArray<T extends z.ZodTypeAny>(schema: T, unique: boolean = false) 
         }
 
         return unique ? R.unique(result) : result;
-    }, z.array(schema));
+    }) as any;
 }
 
 export { zSafeArray };
