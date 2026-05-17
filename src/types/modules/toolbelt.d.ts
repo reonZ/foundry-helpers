@@ -96,6 +96,18 @@ declare global {
                     virtualData?: actionable.VirtualActionData,
                 ): Promise<unknown>;
             };
+            betterChat: {
+                injectDamageMessage(
+                    targetMessage: ChatMessagePF2e,
+                    originMessage: ChatMessagePF2e,
+                    options?: Omit<betterChat.mergeDamage.MergeOptions, "targetMerge">,
+                ): Promise<{ rolls: RollJSON[] } | undefined>;
+                mergeDamageMessages(
+                    targetMessage: ChatMessagePF2e,
+                    originMessage: ChatMessagePF2e,
+                    options?: betterChat.mergeDamage.MergeOptions,
+                ): Promise<ChatMessagePF2e | undefined>;
+            };
             betterInventory: {
                 mergeItems(actor: ActorPF2e, btn?: HTMLButtonElement | HTMLAnchorElement): Promise<void>;
                 splitItem(item: Maybe<ItemPF2e>): Promise<void>;
@@ -121,18 +133,6 @@ declare global {
             identify: {
                 openTracker(item?: ItemPF2e): void;
                 requestIdentify(item: Maybe<ItemPF2e>, skipNotify?: boolean): void;
-            };
-            mergeDamage: {
-                injectDamageMessage(
-                    targetMessage: ChatMessagePF2e,
-                    originMessage: ChatMessagePF2e,
-                    options?: Omit<mergeDamage.MergeOptions, "targetMerge">,
-                ): Promise<{ rolls: RollJSON[] } | undefined>;
-                mergeDamageMessages(
-                    targetMessage: ChatMessagePF2e,
-                    originMessage: ChatMessagePF2e,
-                    options?: mergeDamage.MergeOptions,
-                ): Promise<ChatMessagePF2e | undefined>;
             };
             shareData: {
                 getMasterInMemory(actor: CreaturePF2e): CreaturePF2e | undefined;
@@ -206,6 +206,18 @@ declare global {
             };
         }
 
+        namespace betterChat {
+            namespace mergeDamage {
+                type MergeType = "full" | "half" | "double";
+
+                type MergeOptions = {
+                    originMerge?: MergeType;
+                    targetMerge?: MergeType;
+                    updateMessages?: boolean;
+                };
+            }
+        }
+
         namespace betterMerchant {
             type TestItemData = {
                 buyPrice: RawCoins;
@@ -232,16 +244,6 @@ declare global {
                 canUse: boolean;
                 canTrade: boolean | 0;
                 diff: number;
-            };
-        }
-
-        namespace mergeDamage {
-            type MergeType = "full" | "half" | "double";
-
-            type MergeOptions = {
-                originMerge?: MergeType;
-                targetMerge?: MergeType;
-                updateMessages?: boolean;
             };
         }
 
