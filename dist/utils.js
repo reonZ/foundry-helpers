@@ -44,4 +44,11 @@ function createDuplicateMap(raw) {
     });
     return new Map(duplicated);
 }
-export { activateHooksAndWrappers, createDuplicateMap, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, valueBetween, };
+function createTargetDocuments(source) {
+    const actor = source.actor ?? source.token?.actor;
+    if (!actor)
+        return;
+    const token = source.token instanceof TokenDocument ? source.token : source.token?.document;
+    return { actor, token };
+}
+export { activateHooksAndWrappers, createDuplicateMap, createTargetDocuments, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, valueBetween, };

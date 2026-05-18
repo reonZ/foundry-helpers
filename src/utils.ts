@@ -1,3 +1,4 @@
+import { ActorPF2e, TokenDocumentPF2e, TokenPF2e } from "@7h3laughingman/pf2e-types";
 import { R } from ".";
 
 function activateHooksAndWrappers(entries: { activate: () => void }[]) {
@@ -62,9 +63,21 @@ function createDuplicateMap<K extends string, T>(raw: [K[] | K, T][]): Map<K, T>
     return new Map(duplicated);
 }
 
+function createTargetDocuments(source: {
+    actor?: ActorPF2e;
+    token?: TokenDocumentPF2e | TokenPF2e | null;
+}): TargetDocuments | undefined {
+    const actor = source.actor ?? source.token?.actor;
+    if (!actor) return;
+
+    const token = source.token instanceof TokenDocument ? source.token : source.token?.document;
+    return { actor, token };
+}
+
 export {
     activateHooksAndWrappers,
     createDuplicateMap,
+    createTargetDocuments,
     disableHooksAndWrappers,
     getDragEventData,
     localeCompare,

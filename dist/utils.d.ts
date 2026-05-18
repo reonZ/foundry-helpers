@@ -1,3 +1,4 @@
+import { ActorPF2e, TokenDocumentPF2e, TokenPF2e } from "@7h3laughingman/pf2e-types";
 declare function activateHooksAndWrappers(entries: {
     activate: () => void;
 }[]): void;
@@ -18,4 +19,8 @@ declare function stringNumber(value: number | `${number}`): `${number}`;
 declare function stringBoolean(value: boolean | `${boolean}`): `${boolean}`;
 declare function valueBetween(value: number, min: number, max: number): boolean;
 declare function createDuplicateMap<K extends string, T>(raw: [K[] | K, T][]): Map<K, T>;
-export { activateHooksAndWrappers, createDuplicateMap, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, valueBetween, };
+declare function createTargetDocuments(source: {
+    actor?: ActorPF2e;
+    token?: TokenDocumentPF2e | TokenPF2e | null;
+}): TargetDocuments | undefined;
+export { activateHooksAndWrappers, createDuplicateMap, createTargetDocuments, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, valueBetween, };
