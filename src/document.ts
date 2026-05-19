@@ -13,6 +13,18 @@ async function getDocumentFromUUID<T extends DocumentType, D = InstanceType<Docu
     return doc instanceof DocumentCls ? (doc as D) : null;
 }
 
+function getDocumentFromUUIDSync<T extends DocumentType, D = InstanceType<DocumentTypeMap[T]>>(
+    type: T,
+    uuid: Maybe<string>,
+): D | null {
+    if (!uuid) return null;
+
+    const DocumentCls = getDocumentClass(type);
+    const doc = fromUuidSync(uuid);
+
+    return doc instanceof DocumentCls ? (doc as any) : null;
+}
+
 function getInMemory<T>(obj: ClientDocument | Token, ...path: string[]): T | undefined {
     return foundry.utils.getProperty(obj, `modules.${MODULE.id}.${path.join(".")}`) as T | undefined;
 }
@@ -54,6 +66,7 @@ function isDocumentUUID<T extends DocumentUUID>(type: DocumentType, uuid: string
 export {
     deleteInMemory,
     getDocumentFromUUID,
+    getDocumentFromUUIDSync,
     getInMemory,
     isDocumentUUID,
     isScriptMacro,

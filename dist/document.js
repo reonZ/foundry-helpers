@@ -6,6 +6,13 @@ async function getDocumentFromUUID(type, uuid) {
     const doc = await fromUuid(uuid);
     return doc instanceof DocumentCls ? doc : null;
 }
+function getDocumentFromUUIDSync(type, uuid) {
+    if (!uuid)
+        return null;
+    const DocumentCls = getDocumentClass(type);
+    const doc = fromUuidSync(uuid);
+    return doc instanceof DocumentCls ? doc : null;
+}
 function getInMemory(obj, ...path) {
     return foundry.utils.getProperty(obj, `modules.${MODULE.id}.${path.join(".")}`);
 }
@@ -40,4 +47,4 @@ function isDocumentUUID(type, uuid, embedded) {
         return false;
     }
 }
-export { deleteInMemory, getDocumentFromUUID, getInMemory, isDocumentUUID, isScriptMacro, isValidTargetDocuments, setInMemory, };
+export { deleteInMemory, getDocumentFromUUID, getDocumentFromUUIDSync, getInMemory, isDocumentUUID, isScriptMacro, isValidTargetDocuments, setInMemory, };
