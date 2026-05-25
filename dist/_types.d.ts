@@ -29,6 +29,7 @@ export type * from "@7h3laughingman/foundry-types/client/packages/_module.mjs";
 export type * from "@7h3laughingman/foundry-types/common/abstract/_module.mjs";
 export type * from "@7h3laughingman/foundry-types/common/documents/_module.mjs";
 export type * from "@7h3laughingman/pf2e-types/scripts/ui/user-visibility.js";
+export type * from "@7h3laughingman/foundry-types/common/grid/_types.mjs";
 type LootSheetDataPF2e = Awaited<ReturnType<LootSheetPF2e<LootPF2e>["getData"]>>;
 type DocumentOwnership = {
     [K in "default" | (string & {})]?: DocumentOwnershipLevel;

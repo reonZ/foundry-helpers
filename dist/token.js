@@ -29,9 +29,18 @@ function positionTokenFromCoords({ x, y }, token, snapped = true) {
     }
     return position;
 }
-function getFirstActiveToken(actor, { linked, scene } = {}) {
-    const predicate = (token) => !linked || token.actorLink;
-    return actor.token ?? getFirstTokenThatMatches(actor, predicate, scene);
+function getFirstActiveToken(actor, { linked, scene = canvas.scene } = {}) {
+    if (actor.token) {
+        return actor.token;
+    }
+    if (!canvas.ready || !scene)
+        return null;
+    for (const token of actor.getDependentTokens({ linked, scenes: scene })) {
+        if (token === scene.tokens.get(token.id)) {
+            return token;
+        }
+    }
+    return null;
 }
 function getTargetToken(target, options) {
     if (!target)
@@ -43,16 +52,6 @@ function getTargetsTokens(targets, uuid) {
         const token = getTargetToken(target);
         return uuid ? token?.uuid : token;
     }), R.filter(R.isTruthy));
-}
-function getFirstTokenThatMatches(actor, predicate, scene = game.scenes.current) {
-    if (!scene)
-        return null;
-    for (const token of actor._dependentTokens.get(scene) ?? []) {
-        if (predicate(token)) {
-            return token;
-        }
-    }
-    return null;
 }
 /**
  * slightly modified core foundry version
@@ -106,4 +105,4 @@ function panToToken(token, control) {
     }
     canvas.animatePan(token.center);
 }
-export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getFirstTokenThatMatches, getTargetsTokens, getTargetToken, getTokenDocument, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, };
+export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, };

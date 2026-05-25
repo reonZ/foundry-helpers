@@ -55,10 +55,21 @@ function positionTokenFromCoords({ x, y }: Point, token: TokenPF2e, snapped = tr
 
 function getFirstActiveToken(
     actor: ActorPF2e,
-    { linked, scene }: FirstActiveTokenOptions = {},
+    { linked, scene = canvas.scene }: FirstActiveTokenOptions = {},
 ): TokenDocumentPF2e | null {
-    const predicate = (token: TokenDocument) => !linked || token.actorLink;
-    return actor.token ?? getFirstTokenThatMatches(actor, predicate, scene);
+    if (actor.token) {
+        return actor.token;
+    }
+
+    if (!canvas.ready || !scene) return null;
+
+    for (const token of actor.getDependentTokens({ linked, scenes: scene })) {
+        if (token === scene.tokens.get(token.id)) {
+            return token;
+        }
+    }
+
+    return null;
 }
 
 function getTargetToken(
@@ -80,22 +91,6 @@ function getTargetsTokens(targets: TargetDocuments[], uuid?: boolean) {
         }),
         R.filter(R.isTruthy),
     );
-}
-
-function getFirstTokenThatMatches<T extends TokenDocument>(
-    actor: ActorPF2e,
-    predicate: (token: TokenDocument) => boolean,
-    scene: Maybe<ScenePF2e> = game.scenes.current,
-): T | null {
-    if (!scene) return null;
-
-    for (const token of actor._dependentTokens.get(scene) ?? []) {
-        if (predicate(token)) {
-            return token as T;
-        }
-    }
-
-    return null;
 }
 
 /**
@@ -162,7 +157,6 @@ export {
     emitTokenHover,
     getCurrentTargets,
     getFirstActiveToken,
-    getFirstTokenThatMatches,
     getTargetsTokens,
     getTargetToken,
     getTokenDocument,
