@@ -1,4 +1,4 @@
-function createCustomEffect({ badge, duration, img, itemSlug, name, rules, show, unidentified, }) {
+function createCustomEffect({ badge, duration, img, itemSlug, level, name, rules, show, unidentified, }) {
     const system = {
         unidentified,
         duration,
@@ -12,6 +12,9 @@ function createCustomEffect({ badge, duration, img, itemSlug, name, rules, show,
     }
     if (badge) {
         system.badge = badge;
+    }
+    if (level) {
+        system.level = { value: level };
     }
     if (duration?.origin) {
         const { actor, token } = duration.origin;

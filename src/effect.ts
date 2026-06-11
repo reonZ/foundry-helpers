@@ -15,6 +15,7 @@ function createCustomEffect({
     duration,
     img,
     itemSlug,
+    level,
     name,
     rules,
     show,
@@ -36,6 +37,10 @@ function createCustomEffect({
 
     if (badge) {
         system.badge = badge;
+    }
+
+    if (level) {
+        system.level = { value: level };
     }
 
     if (duration?.origin) {
@@ -105,14 +110,15 @@ type CustomEffectOptions = {
     badge?: DeepPartial<EffectBadgeSource>;
     duration?: CustomEffectDuration;
     img?: ImageFilePath;
+    itemSlug?: string;
+    level?: number;
     name: string;
     rules?: RuleElementSource[];
     show?: boolean;
-    itemSlug?: string;
     unidentified?: boolean;
 };
 
-type CustomConditionOptions = Omit<WithPartial<CustomEffectOptions, "name">, "badge" | "rules" | "show"> & {
+type CustomConditionOptions = Omit<WithPartial<CustomEffectOptions, "name">, "badge" | "rules" | "show" | "level"> & {
     slug: ConditionSlug;
     counter?: number;
     alterations?: Record<string, JSONValue>[];

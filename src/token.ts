@@ -1,8 +1,12 @@
 import { ActorPF2e, ActorType, ScenePF2e, TokenDocumentPF2e, TokenPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
 import { ActivityData, isInstanceOf, PingOptions, R, TokenDocumentUUID } from ".";
 
+function isTokenObject(token: any): token is TokenPF2e {
+    return token instanceof foundry.canvas.placeables.Token;
+}
+
 function getTokenDocument(token: unknown): TokenDocumentPF2e | undefined {
-    return token instanceof foundry.canvas.placeables.Token
+    return isTokenObject(token)
         ? token.document
         : token instanceof TokenDocument
           ? (token as TokenDocumentPF2e)
@@ -160,6 +164,7 @@ export {
     getTargetsTokens,
     getTargetToken,
     getTokenDocument,
+    isTokenObject,
     panToToken,
     ping,
     pingToken,

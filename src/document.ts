@@ -1,5 +1,5 @@
 import { MacroPF2e } from "@7h3laughingman/pf2e-types";
-import { ClientDocument, DocumentType, DocumentUUID, MODULE, R, Token } from ".";
+import { ClientDocument, DocumentType, DocumentUUID, isTokenObject, MODULE, R, Token } from ".";
 
 async function getDocumentFromUUID<T extends DocumentType, D = InstanceType<DocumentTypeMap[T]>>(
     type: T,
@@ -47,7 +47,7 @@ function isValidTargetDocuments(target: unknown): target is TargetDocuments {
     if (!R.isPlainObject(target)) return false;
     if (!(target.actor instanceof Actor)) return false;
 
-    target.token = target.token instanceof foundry.canvas.placeables.Token ? target.token.document : target.token;
+    target.token = isTokenObject(target.token) ? target.token.document : target.token;
     return !target.token || target.token instanceof TokenDocument;
 }
 

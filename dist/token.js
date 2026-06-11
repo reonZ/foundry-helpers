@@ -1,6 +1,9 @@
 import { isInstanceOf, R } from ".";
+function isTokenObject(token) {
+    return token instanceof foundry.canvas.placeables.Token;
+}
 function getTokenDocument(token) {
-    return token instanceof foundry.canvas.placeables.Token
+    return isTokenObject(token)
         ? token.document
         : token instanceof TokenDocument
             ? token
@@ -105,4 +108,4 @@ function panToToken(token, control) {
     }
     canvas.animatePan(token.center);
 }
-export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, };
+export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, isTokenObject, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, };

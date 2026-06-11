@@ -1,5 +1,6 @@
 import { ActorPF2e, ActorType, ScenePF2e, TokenDocumentPF2e, TokenPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
 import { PingOptions, TokenDocumentUUID } from ".";
+declare function isTokenObject(token: any): token is TokenPF2e;
 declare function getTokenDocument(token: unknown): TokenDocumentPF2e | undefined;
 declare function getCurrentTargets(options: {
     types?: ("creature" | ActorType)[];
@@ -30,5 +31,5 @@ type FirstActiveTokenOptions = {
     linked?: boolean;
     scene?: ScenePF2e | null;
 };
-export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, };
+export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, isTokenObject, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, };
 export type { FirstActiveTokenOptions };

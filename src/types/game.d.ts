@@ -19,4 +19,6 @@ declare module "@7h3laughingman/pf2e-types" {
 
 declare global {
     type ChatMessageData = DeepPartial<Omit<ChatMessageSourcePF2e, "rolls">> & { rolls?: (string | RollJSON)[] };
+
+    class Level {}
 }

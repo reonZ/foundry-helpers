@@ -1,5 +1,5 @@
 import { ActorPF2e, TokenDocumentPF2e } from "@7h3laughingman/pf2e-types";
-import { createHTMLElement, isValidTargetDocuments, localize, MODULE, R, userIsGM } from ".";
+import { createHTMLElement, isTokenObject, isValidTargetDocuments, localize, MODULE, R, userIsGM } from ".";
 
 const EMITING_STYLE: Partial<CSSStyleDeclaration> = {
     alignItems: "center",
@@ -176,7 +176,7 @@ function convertToEmitOptions<T extends EmitableOptions>(options: T): EmitablePa
             return value.uuid;
         }
 
-        if (value instanceof foundry.canvas.placeables.Token) {
+        if (isTokenObject(value)) {
             __converter__[key] = "token";
             return value.document.uuid;
         }

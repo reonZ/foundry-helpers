@@ -1,5 +1,7 @@
 import PrimaryCanvasGroup from "@7h3laughingman/foundry-types/client/canvas/groups/primary.mjs";
 import MouseInteractionManager from "@7h3laughingman/foundry-types/client/canvas/interaction/mouse-handler.mjs";
+import DetectionMode, { TokenDetectionMode } from "@7h3laughingman/foundry-types/client/canvas/perception/detection-mode.mjs";
+import PointVisionSource from "@7h3laughingman/foundry-types/client/canvas/sources/point-vision-source.mjs";
 import Die from "@7h3laughingman/foundry-types/client/dice/terms/die.mjs";
 import NumericTerm from "@7h3laughingman/foundry-types/client/dice/terms/numeric.mjs";
 import CompendiumCollection from "@7h3laughingman/foundry-types/client/documents/collections/compendium-collection.mjs";
@@ -41,4 +43,4 @@ interface FeatNotSlot<T extends FeatLike = FeatPF2e> {
     level?: never;
     children: FeatSlot<FeatLike | HeritagePF2e>[];
 }
-export type { CompendiumCollection, Die, DocumentOwnership, DocumentOwnershipLevel, DocumentType, DocumentUUID, FeatNotSlot, FileCategory, FilePath, ImageFilePath, Localization, LootSheetDataPF2e, ModelPropsFromSchema, MouseInteractionManager, NumericTerm, PrimaryCanvasGroup, RollMode, SourceFromSchema, SpellSlotData, VideoFilePath, };
+export type { CompendiumCollection, DetectionMode, Die, DocumentOwnership, DocumentOwnershipLevel, DocumentType, DocumentUUID, FeatNotSlot, FileCategory, FilePath, ImageFilePath, Localization, LootSheetDataPF2e, ModelPropsFromSchema, MouseInteractionManager, NumericTerm, PointVisionSource, PrimaryCanvasGroup, RollMode, SourceFromSchema, SpellSlotData, TokenDetectionMode, VideoFilePath, };

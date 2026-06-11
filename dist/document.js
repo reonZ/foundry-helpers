@@ -1,4 +1,4 @@
-import { MODULE, R } from ".";
+import { isTokenObject, MODULE, R } from ".";
 async function getDocumentFromUUID(type, uuid) {
     if (!uuid)
         return null;
@@ -32,7 +32,7 @@ function isValidTargetDocuments(target) {
         return false;
     if (!(target.actor instanceof Actor))
         return false;
-    target.token = target.token instanceof foundry.canvas.placeables.Token ? target.token.document : target.token;
+    target.token = isTokenObject(target.token) ? target.token.document : target.token;
     return !target.token || target.token instanceof TokenDocument;
 }
 function isDocumentUUID(type, uuid, embedded) {

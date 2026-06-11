@@ -1,4 +1,4 @@
-import { createHTMLElement, isValidTargetDocuments, localize, MODULE, R, userIsGM } from ".";
+import { createHTMLElement, isTokenObject, isValidTargetDocuments, localize, MODULE, R, userIsGM } from ".";
 const EMITING_STYLE = {
     alignItems: "center",
     background: "linear-gradient(90deg, #00000000 0%, #0000001a 20%, #00000066 50%, #0000001a 80%, #00000000 100%)",
@@ -144,7 +144,7 @@ function convertToEmitOptions(options) {
             __converter__[key] = "document";
             return value.uuid;
         }
-        if (value instanceof foundry.canvas.placeables.Token) {
+        if (isTokenObject(value)) {
             __converter__[key] = "token";
             return value.document.uuid;
         }
