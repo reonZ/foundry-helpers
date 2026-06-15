@@ -84,13 +84,21 @@ function getTargetToken(
     return target.token ?? target.actor.token ?? getFirstActiveToken(target.actor, options) ?? undefined;
 }
 
-function getTargetsTokens(targets: TargetDocuments[], uuid: true): TokenDocumentUUID[];
-function getTargetsTokens(targets: TargetDocuments[], uuid?: boolean): TokenDocumentPF2e[];
-function getTargetsTokens(targets: TargetDocuments[], uuid?: boolean) {
+function getTargetsTokens(
+    targets: TargetDocuments[],
+    uuid: true,
+    options?: FirstActiveTokenOptions,
+): TokenDocumentUUID[];
+function getTargetsTokens(
+    targets: TargetDocuments[],
+    uuid?: boolean,
+    options?: FirstActiveTokenOptions,
+): TokenDocumentPF2e[];
+function getTargetsTokens(targets: TargetDocuments[], uuid?: boolean, options?: FirstActiveTokenOptions) {
     return R.pipe(
         targets,
         R.map((target) => {
-            const token = getTargetToken(target);
+            const token = getTargetToken(target, options);
             return uuid ? token?.uuid : token;
         }),
         R.filter(R.isTruthy),

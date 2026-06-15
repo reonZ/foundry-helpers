@@ -164,14 +164,15 @@ declare global {
             type VirtualSpellData = {
                 attribute: "str" | "dex" | "con" | "int" | "wis" | "cha" | null | undefined;
                 dc: number | null | undefined;
-                max: number | null | undefined;
-                statistic: string[] | null | undefined;
-                tradition: "arcane" | "divine" | "occult" | "primal" | null | undefined;
                 entryId: string;
                 item: ConsumablePF2e<CharacterPF2e>;
+                max: number | null | undefined;
                 parent: PhysicalItemPF2e<CharacterPF2e>;
+                recharge: boolean;
                 ruleIndex: number;
                 spellId: string;
+                statistic: string[] | null | undefined;
+                tradition: "arcane" | "divine" | "occult" | "primal" | null | undefined;
             };
 
             type ItemCastRuleSourceData = {
@@ -180,6 +181,7 @@ declare global {
                 max?: number | null;
                 predicate?: any;
                 rank?: OneToTen | null;
+                recharge?: boolean;
                 statistic?: string | null;
                 tradition?: "arcane" | "divine" | "occult" | "primal" | null;
             };

@@ -50,9 +50,9 @@ function getTargetToken(target, options) {
         return undefined;
     return target.token ?? target.actor.token ?? getFirstActiveToken(target.actor, options) ?? undefined;
 }
-function getTargetsTokens(targets, uuid) {
+function getTargetsTokens(targets, uuid, options) {
     return R.pipe(targets, R.map((target) => {
-        const token = getTargetToken(target);
+        const token = getTargetToken(target, options);
         return uuid ? token?.uuid : token;
     }), R.filter(R.isTruthy));
 }
