@@ -48,6 +48,8 @@ function arraysEqual(arr1, arr2) {
     return arr1.length === arr2.length && arr1.every((entry) => arr2.includes(entry));
 }
 function includesAny(haystack, needles) {
+    if (!needles)
+        return false;
     for (const entry of needles) {
         if (haystack.includes(entry)) {
             return true;
