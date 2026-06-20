@@ -3,4 +3,7 @@ function roundToStep(value, step) {
     const half = step / 2;
     return value + half - ((value + half) % step);
 }
-export { roundToStep };
+function valueBetween(value, min, max) {
+    return value >= min && value <= max;
+}
+export { roundToStep, valueBetween };

@@ -17,10 +17,9 @@ declare function recordToSelectOptions(record: Record<string, string | undefined
 declare function getDragEventData<T extends Record<string, JSONValue>>(event: DragEvent): T;
 declare function stringNumber(value: number | `${number}`): `${number}`;
 declare function stringBoolean(value: boolean | `${boolean}`): `${boolean}`;
-declare function valueBetween(value: number, min: number, max: number): boolean;
 declare function createDuplicateMap<K extends string, T>(raw: [K[] | K, T][]): Map<K, T>;
 declare function createTargetDocuments(source: {
     actor?: ActorPF2e | null;
     token?: TokenDocumentPF2e | TokenPF2e | null;
 }): TargetDocuments | undefined;
-export { activateHooksAndWrappers, createDuplicateMap, createTargetDocuments, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, valueBetween, };
+export { activateHooksAndWrappers, createDuplicateMap, createTargetDocuments, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, };

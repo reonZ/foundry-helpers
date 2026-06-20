@@ -51,10 +51,6 @@ function stringBoolean(value: boolean | `${boolean}`): `${boolean}` {
     return String(value) as `${boolean}`;
 }
 
-function valueBetween(value: number, min: number, max: number): boolean {
-    return value >= min && value <= max;
-}
-
 function createDuplicateMap<K extends string, T>(raw: [K[] | K, T][]): Map<K, T> {
     const duplicated = raw.flatMap(([_keys, entry]) => {
         const keys = R.isArray(_keys) ? _keys : [_keys];
@@ -86,5 +82,4 @@ export {
     stringBoolean,
     stringNumber,
     toggleHooksAndWrappers,
-    valueBetween,
 };

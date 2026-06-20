@@ -4,4 +4,8 @@ function roundToStep(value: number, step: number): number {
     return value + half - ((value + half) % step);
 }
 
-export { roundToStep };
+function valueBetween(value: number, min: number, max: number): boolean {
+    return value >= min && value <= max;
+}
+
+export { roundToStep, valueBetween };
