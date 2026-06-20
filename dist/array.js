@@ -47,9 +47,9 @@ function arraysEqual(arr1, arr2) {
     arr2 = R.unique(arr2);
     return arr1.length === arr2.length && arr1.every((entry) => arr2.includes(entry));
 }
-function includesAny(arr, entries) {
-    for (const entry of entries) {
-        if (arr.includes(entry)) {
+function includesAny(haystack, needles) {
+    for (const entry of needles) {
+        if (haystack.includes(entry)) {
             return true;
         }
     }
