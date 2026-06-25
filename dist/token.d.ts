@@ -14,7 +14,7 @@ declare function getCurrentTargets(options?: {
 }): TokenPF2e<TokenDocumentPF2e<ScenePF2e>>[];
 declare function selectTokens(tokens: (TokenPF2e | TokenDocumentPF2e)[]): void;
 declare function positionTokenFromCoords({ x, y }: Point, token: TokenPF2e, snapped?: boolean): Point;
-declare function getFirstActiveToken(actor: ActorPF2e, { linked, scene }?: FirstActiveTokenOptions): TokenDocumentPF2e | null;
+declare function getFirstActiveToken(actor: ActorPF2e, { linked, match, scene }?: FirstActiveTokenOptions): TokenDocumentPF2e | null;
 declare function getTargetToken(target: Maybe<TargetDocuments>, options?: FirstActiveTokenOptions): TokenDocumentPF2e | undefined;
 declare function getTargetsTokens(targets: TargetDocuments[], uuid: true, options?: FirstActiveTokenOptions): TokenDocumentUUID[];
 declare function getTargetsTokens(targets: TargetDocuments[], uuid?: boolean, options?: FirstActiveTokenOptions): TokenDocumentPF2e[];
@@ -29,6 +29,7 @@ declare function emitTokenHover(event: MouseEvent, token: TokenPF2e | TokenDocum
 declare function panToToken(token: TokenPF2e | TokenDocumentPF2e, control?: boolean): void;
 type FirstActiveTokenOptions = {
     linked?: boolean;
+    match?: (token: TokenDocumentPF2e) => boolean;
     scene?: ScenePF2e | null;
 };
 export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, isTokenObject, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, };

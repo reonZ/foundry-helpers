@@ -32,14 +32,15 @@ function positionTokenFromCoords({ x, y }, token, snapped = true) {
     }
     return position;
 }
-function getFirstActiveToken(actor, { linked, scene = canvas.scene } = {}) {
-    if (actor.token) {
-        return actor.token;
+function getFirstActiveToken(actor, { linked, match = () => true, scene = canvas.scene } = {}) {
+    const actorToken = actor.token;
+    if (actorToken && match(actorToken)) {
+        return actorToken;
     }
     if (!canvas.ready || !scene)
         return null;
     for (const token of actor.getDependentTokens({ linked, scenes: scene })) {
-        if (token === scene.tokens.get(token.id)) {
+        if (token === scene.tokens.get(token.id) && match(token)) {
             return token;
         }
     }

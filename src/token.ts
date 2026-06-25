@@ -59,16 +59,17 @@ function positionTokenFromCoords({ x, y }: Point, token: TokenPF2e, snapped = tr
 
 function getFirstActiveToken(
     actor: ActorPF2e,
-    { linked, scene = canvas.scene }: FirstActiveTokenOptions = {},
+    { linked, match = () => true, scene = canvas.scene }: FirstActiveTokenOptions = {},
 ): TokenDocumentPF2e | null {
-    if (actor.token) {
-        return actor.token;
+    const actorToken = actor.token;
+    if (actorToken && match(actorToken)) {
+        return actorToken;
     }
 
     if (!canvas.ready || !scene) return null;
 
     for (const token of actor.getDependentTokens({ linked, scenes: scene })) {
-        if (token === scene.tokens.get(token.id)) {
+        if (token === scene.tokens.get(token.id) && match(token)) {
             return token;
         }
     }
@@ -162,6 +163,7 @@ function panToToken(token: TokenPF2e | TokenDocumentPF2e, control?: boolean) {
 
 type FirstActiveTokenOptions = {
     linked?: boolean;
+    match?: (token: TokenDocumentPF2e) => boolean;
     scene?: ScenePF2e | null;
 };
 
