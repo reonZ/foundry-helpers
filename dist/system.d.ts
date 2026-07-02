@@ -8,9 +8,9 @@ declare class SYSTEM {
     static get anachronismId(): `${SystemId}-anachronism`;
     static get isPF2e(): boolean;
     static get isSF2e(): boolean;
-    static relativePath<T extends string>(tail: T): `systems/${string}/${T}`;
+    static relativePath<T extends string>(tail: T): `systems/${SystemId}/${T}`;
     static relativePath(...path: string[]): string;
-    static path<T extends string>(tail: T): () => `systems/${string}/${T}`;
+    static path<T extends string>(tail: T): () => `systems/${SystemId}/${T}`;
     static path(...path: string[]): () => string;
     static uuid<P extends DocumentUUID>(pf2e: P, sf2e: P): () => P;
     static itemUuid(pf2e: ItemUUID, sf2e: ItemUUID): () => ItemUUID;

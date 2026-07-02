@@ -29,14 +29,14 @@ class SYSTEM {
         return this.id === "sf2e";
     }
 
-    static relativePath<T extends string>(tail: T): `systems/${string}/${T}`;
+    static relativePath<T extends string>(tail: T): `systems/${SystemId}/${T}`;
     static relativePath(...path: string[]): string;
     static relativePath(...path: string[]) {
         const tail = R.join(path, "/");
         return `systems/${this.id}/${tail}`;
     }
 
-    static path<T extends string>(tail: T): () => `systems/${string}/${T}`;
+    static path<T extends string>(tail: T): () => `systems/${SystemId}/${T}`;
     static path(...path: string[]): () => string;
     static path(...path: string[]) {
         return () => this.relativePath(...path);
