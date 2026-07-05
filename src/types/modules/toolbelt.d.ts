@@ -277,7 +277,9 @@ declare global {
 
             type MessageFlag = {
                 author?: ActorUUID;
+                area?: "area-fire" | "auto-fire";
                 applied?: Record<string, AppliedDamages>;
+                expended?: number;
                 isRegen?: boolean;
                 item?: ItemUUID;
                 options?: string[];
