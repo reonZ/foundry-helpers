@@ -1,4 +1,4 @@
-import { getTargetToken, R } from ".";
+import { getTargetToken, R, SYSTEM } from ".";
 const _cached = {};
 function getDamageRollClass() {
     return (_cached.damageRoll ??= CONFIG.Dice.rolls.find((Roll) => Roll.name === "DamageRoll"));
@@ -31,7 +31,7 @@ async function rollDamageFromFormula(formula, { actionName, extraRollOptions = [
     const traitDescriptions = CONFIG.PF2E.traitsDescriptions;
     const flags = {
         core: {},
-        pf2e: {
+        [SYSTEM.id]: {
             context,
             origin: item?.getOriginData(),
         },

@@ -8,7 +8,7 @@ import {
     RollNotePF2e,
     RollNoteSource,
 } from "@7h3laughingman/pf2e-types";
-import { getTargetToken, R } from ".";
+import { getTargetToken, R, SYSTEM } from ".";
 
 const _cached: {
     damageRoll?: typeof DamageRoll;
@@ -74,7 +74,7 @@ async function rollDamageFromFormula(
 
     const flags: ChatMessageFlagsPF2e = {
         core: {},
-        pf2e: {
+        [SYSTEM.id]: {
             context,
             origin: item?.getOriginData(),
         },
