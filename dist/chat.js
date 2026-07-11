@@ -39,8 +39,8 @@ function createChatLink(docOrUuid, { label, html } = {}) {
     return html ? enrichHTML(link) : link;
 }
 function isActionMessage(message) {
-    const type = message.flags[SYSTEM.id].origin?.type;
-    return R.isIncludedIn(type, ["feat", "action"]) && !message.isCheckRoll;
+    const { origin, context } = message.flags[SYSTEM.id];
+    return R.isIncludedIn(origin?.type, ["feat", "action"]) && !message.isCheckRoll && context?.type !== "damage-taken";
 }
 function isSpellMessage(message) {
     return R.isString(message.flags[SYSTEM.id].casting?.id);

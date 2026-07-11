@@ -62,8 +62,8 @@ function createChatLink(
 }
 
 function isActionMessage(message: ChatMessagePF2e): boolean {
-    const type = message.flags[SYSTEM.id].origin?.type;
-    return R.isIncludedIn(type, ["feat", "action"]) && !message.isCheckRoll;
+    const { origin, context } = message.flags[SYSTEM.id];
+    return R.isIncludedIn(origin?.type, ["feat", "action"]) && !message.isCheckRoll && context?.type !== "damage-taken";
 }
 
 function isSpellMessage(message: ChatMessagePF2e): boolean {
