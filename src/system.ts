@@ -29,6 +29,10 @@ class SYSTEM {
         return this.id === "sf2e";
     }
 
+    static get isPathfinder(): boolean {
+        return R.isIncludedIn(this.id, ["pf2e", "sf2e"]);
+    }
+
     static relativePath<T extends string>(tail: T): `systems/${SystemId}/${T}`;
     static relativePath(...path: string[]): string;
     static relativePath(...path: string[]) {

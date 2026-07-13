@@ -8,6 +8,7 @@ declare class SYSTEM {
     static get anachronismId(): `${SystemId}-anachronism`;
     static get isPF2e(): boolean;
     static get isSF2e(): boolean;
+    static get isPathfinder(): boolean;
     static relativePath<T extends string>(tail: T): `systems/${SystemId}/${T}`;
     static relativePath(...path: string[]): string;
     static path<T extends string>(tail: T): () => `systems/${SystemId}/${T}`;

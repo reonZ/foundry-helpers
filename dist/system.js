@@ -15,6 +15,9 @@ class SYSTEM {
     static get isSF2e() {
         return this.id === "sf2e";
     }
+    static get isPathfinder() {
+        return R.isIncludedIn(this.id, ["pf2e", "sf2e"]);
+    }
     static relativePath(...path) {
         const tail = R.join(path, "/");
         return `systems/${this.id}/${tail}`;
