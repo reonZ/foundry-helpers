@@ -137,4 +137,4 @@ type ConfirmDialogOption = DeepPartial<fa.api.DialogV2Configuration & fa.api.Dia
 };
 
 export { confirmDialog, generateDialogContent, waitDialog };
-export type { CustomWaitDialogOptions };
+export type { CustomWaitDialogOptions, WaitDialogOptions };

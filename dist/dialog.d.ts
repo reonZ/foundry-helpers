@@ -32,5 +32,10 @@ type CustomConfirmDialogOptions = BaseDialogOptions & {
         default?: true;
     };
 };
+type WaitDialogOptions = DeepPartial<fa.api.DialogV2Configuration> & {
+    rejectClose?: boolean;
+    close?: fa.api.DialogV2CloseCallback;
+    render?: fa.api.DialogV2RenderCallback;
+};
 export { confirmDialog, generateDialogContent, waitDialog };
-export type { CustomWaitDialogOptions };
+export type { CustomWaitDialogOptions, WaitDialogOptions };
