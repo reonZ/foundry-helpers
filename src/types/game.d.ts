@@ -14,6 +14,7 @@ declare module "@7h3laughingman/pf2e-types" {
         dailies?: MyModule.GamePF2e<dailies.Api>;
         tcal?: tcal.GamePF2e;
         toolbelt?: toolbelt.GamePF2e;
+        triggerEngine?: triggerEngine.GamePF2e;
     }
 }
 
