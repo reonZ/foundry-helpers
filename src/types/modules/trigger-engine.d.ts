@@ -4,8 +4,22 @@ declare global {
     namespace triggerEngine {
         interface GamePF2e extends MyModule.GamePF2e<Api> {
             test(): void;
-            execute(path: `${string}:${string}:${string}`, values: { type: string; value: any }[]): void;
+            execute(
+                path: `${string}:${string}:${string}`,
+                values: UserValue[],
+                options?: ExecuteEventCallOptions,
+            ): void;
         }
+
+        type UserValue = {
+            type: string;
+            value: any;
+        };
+
+        type ExecuteEventCallOptions = {
+            sceneContext?: Scene | string;
+            userContext?: User | string;
+        };
 
         interface Api {
             openBlueprintMenu(
