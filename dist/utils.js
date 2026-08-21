@@ -48,4 +48,7 @@ function createTargetDocuments(source) {
     const token = source.token instanceof TokenDocument ? source.token : source.token?.document;
     return { actor, token };
 }
-export { activateHooksAndWrappers, createDuplicateMap, createTargetDocuments, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, };
+function joinListString(arr, delimiter = ",") {
+    return R.pipe(arr, R.filter(R.isTruthy), R.join(delimiter));
+}
+export { activateHooksAndWrappers, createDuplicateMap, createTargetDocuments, disableHooksAndWrappers, getDragEventData, joinListString, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, };

@@ -70,12 +70,17 @@ function createTargetDocuments(source: {
     return { actor, token };
 }
 
+function joinListString(arr: (string | undefined | null | false)[], delimiter: string = ","): string {
+    return R.pipe(arr, R.filter(R.isTruthy), R.join(delimiter));
+}
+
 export {
     activateHooksAndWrappers,
     createDuplicateMap,
     createTargetDocuments,
     disableHooksAndWrappers,
     getDragEventData,
+    joinListString,
     localeCompare,
     recordToSelectOptions,
     sortByLocaleCompare,

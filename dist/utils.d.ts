@@ -22,4 +22,5 @@ declare function createTargetDocuments(source: {
     actor?: ActorPF2e | null;
     token?: TokenDocumentPF2e | TokenPF2e | null;
 }): TargetDocuments | undefined;
-export { activateHooksAndWrappers, createDuplicateMap, createTargetDocuments, disableHooksAndWrappers, getDragEventData, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, };
+declare function joinListString(arr: (string | undefined | null | false)[], delimiter?: string): string;
+export { activateHooksAndWrappers, createDuplicateMap, createTargetDocuments, disableHooksAndWrappers, getDragEventData, joinListString, localeCompare, recordToSelectOptions, sortByLocaleCompare, stringBoolean, stringNumber, toggleHooksAndWrappers, };
