@@ -1,5 +1,6 @@
 import { ActorPF2e, ChatMessageSourcePF2e } from "@7h3laughingman/pf2e-types";
 import { RollJSON } from "..";
+import { DatabaseWriteOperation } from "@7h3laughingman/foundry-types/client/documents/_module.mjs";
 
 declare module "@7h3laughingman/pf2e-types" {
     interface GamePF2e {
@@ -20,6 +21,8 @@ declare module "@7h3laughingman/pf2e-types" {
 
 declare global {
     type ChatMessageData = DeepPartial<Omit<ChatMessageSourcePF2e, "rolls">> & { rolls?: (string | RollJSON)[] };
+
+    type ModifyBatchOperation = DatabaseWriteOperation;
 
     class Level {}
 }

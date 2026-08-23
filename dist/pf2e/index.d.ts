@@ -1,3 +1,4 @@
+export * from "./actor";
 export * from "./check";
 export * from "./combat";
 export * from "./degree-of-success";
