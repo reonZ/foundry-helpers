@@ -1,5 +1,6 @@
 import { ordinalString } from ".";
 
+const CAST_A_SPELL_OPTION = "origin:action:slug:cast-a-spell";
 const MAGIC_TRADITIONS = new Set(["arcane", "divine", "occult", "primal"] as const);
 
 /**
@@ -11,4 +12,4 @@ function getSpellRankLabel(group: "cantrips" | number): string {
         : game.i18n.format("PF2E.Item.Spell.Rank.Ordinal", { rank: ordinalString(group) });
 }
 
-export { getSpellRankLabel, MAGIC_TRADITIONS };
+export { CAST_A_SPELL_OPTION, getSpellRankLabel, MAGIC_TRADITIONS };

@@ -1,4 +1,4 @@
-import { enrichHTML, R, SYSTEM } from ".";
+import { CAST_A_SPELL_OPTION, enrichHTML, R, SYSTEM } from ".";
 function* latestChatMessages(nb, fromMessage) {
     if (!ui.chat)
         return;
@@ -42,7 +42,8 @@ function isActionMessage(message) {
     const { origin, context } = message.flags[SYSTEM.id];
     return R.isIncludedIn(origin?.type, ["feat", "action"]) && !message.isCheckRoll && context?.type !== "damage-taken";
 }
-function isSpellMessage(message) {
-    return message.flags[SYSTEM.id]?.origin?.type === "spell";
+function isSpellMessage(message, actualCast = false) {
+    const origin = message.flags[SYSTEM.id]?.origin;
+    return origin?.type === "spell" && (!actualCast || !!origin.rollOptions?.includes(CAST_A_SPELL_OPTION));
 }
 export { createChatLink, isActionMessage, isSpellMessage, latestChatMessages, refreshLatestMessages };

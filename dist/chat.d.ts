@@ -15,7 +15,7 @@ declare function createChatLink(docOrUuid: (ClientDocument & {
     html?: false;
 }): string;
 declare function isActionMessage(message: ChatMessagePF2e): boolean;
-declare function isSpellMessage(message: ChatMessagePF2e): boolean;
+declare function isSpellMessage(message: ChatMessagePF2e, actualCast?: boolean): boolean;
 type DamageMessage = ChatMessagePF2e & {
     rolls: Rolled<DamageRoll>[];
 };

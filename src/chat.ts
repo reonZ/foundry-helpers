@@ -1,5 +1,5 @@
 import { ChatMessagePF2e, DamageRoll } from "@7h3laughingman/pf2e-types";
-import { ClientDocument, enrichHTML, R, Rolled, SYSTEM } from ".";
+import { CAST_A_SPELL_OPTION, ClientDocument, enrichHTML, R, Rolled, SYSTEM } from ".";
 
 function* latestChatMessages(nb: number, fromMessage?: ChatMessagePF2e): Generator<ChatMessagePF2e, void, undefined> {
     if (!ui.chat) return;
@@ -66,8 +66,9 @@ function isActionMessage(message: ChatMessagePF2e): boolean {
     return R.isIncludedIn(origin?.type, ["feat", "action"]) && !message.isCheckRoll && context?.type !== "damage-taken";
 }
 
-function isSpellMessage(message: ChatMessagePF2e): boolean {
-    return message.flags[SYSTEM.id]?.origin?.type === "spell";
+function isSpellMessage(message: ChatMessagePF2e, actualCast: boolean = false): boolean {
+    const origin = message.flags[SYSTEM.id]?.origin;
+    return origin?.type === "spell" && (!actualCast || !!origin.rollOptions?.includes(CAST_A_SPELL_OPTION));
 }
 
 type DamageMessage = ChatMessagePF2e & {
