@@ -67,7 +67,7 @@ function isActionMessage(message: ChatMessagePF2e): boolean {
 }
 
 function isSpellMessage(message: ChatMessagePF2e): boolean {
-    return R.isString(message.flags[SYSTEM.id].casting?.id);
+    return message.flags[SYSTEM.id]?.origin?.type === "spell";
 }
 
 type DamageMessage = ChatMessagePF2e & {

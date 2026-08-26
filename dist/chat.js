@@ -43,6 +43,6 @@ function isActionMessage(message) {
     return R.isIncludedIn(origin?.type, ["feat", "action"]) && !message.isCheckRoll && context?.type !== "damage-taken";
 }
 function isSpellMessage(message) {
-    return R.isString(message.flags[SYSTEM.id].casting?.id);
+    return message.flags[SYSTEM.id]?.origin?.type === "spell";
 }
 export { createChatLink, isActionMessage, isSpellMessage, latestChatMessages, refreshLatestMessages };
