@@ -13,4 +13,5 @@ declare function removeIndexFromArray<T extends any[]>(array: T, index: number, 
 declare function arraysEqual<T extends any[]>(arr1: T, arr2: any[]): arr2 is T;
 declare function includesAny(haystack: any[] | ReadonlyArray<any>, needles: Maybe<any[] | Set<any>>): boolean;
 declare function includesAll(arr: any[], entries: any[]): boolean;
-export { arraysEqual, CycleArray, includesAll, includesAny, removeIndexFromArray };
+declare function reverseIncludes<T>(arr: Maybe<T[]>, value: unknown): value is unknown;
+export { arraysEqual, CycleArray, includesAll, includesAny, removeIndexFromArray, reverseIncludes };

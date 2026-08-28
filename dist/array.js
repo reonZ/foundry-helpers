@@ -65,4 +65,14 @@ function includesAll(arr, entries) {
     }
     return true;
 }
-export { arraysEqual, CycleArray, includesAll, includesAny, removeIndexFromArray };
+function reverseIncludes(arr, value) {
+    if (!arr)
+        return false;
+    for (let i = arr.length - 1; i >= 0; i--) {
+        const entry = arr[i];
+        if (entry === value)
+            return true;
+    }
+    return false;
+}
+export { arraysEqual, CycleArray, includesAll, includesAny, removeIndexFromArray, reverseIncludes };

@@ -84,4 +84,13 @@ function includesAll(arr: any[], entries: any[]): boolean {
     return true;
 }
 
-export { arraysEqual, CycleArray, includesAll, includesAny, removeIndexFromArray };
+function reverseIncludes<T>(arr: Maybe<T[]>, value: unknown): value is unknown {
+    if (!arr) return false;
+    for (let i = arr.length - 1; i >= 0; i--) {
+        const entry = arr[i];
+        if (entry === value) return true;
+    }
+    return false;
+}
+
+export { arraysEqual, CycleArray, includesAll, includesAny, removeIndexFromArray, reverseIncludes };
