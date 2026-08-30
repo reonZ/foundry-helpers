@@ -1,4 +1,5 @@
 import { R, SYSTEM } from ".";
+const USE_ACTION_OPTION = "origin:action:slug:use-action";
 /**
  * https://github.com/foundryvtt/pf2e/blob/37b0dcab08141b3e9e4e0f44e51df9f4dfd52a71/src/util/misc.ts#L160C1-L171C3
  */
@@ -89,7 +90,7 @@ async function useAction(event, item, virtualData) {
         if (item.system.selfEffect) {
             await applySelfEffect(item);
         }
-        return item.toMessage(event);
+        return item.toMessage(event, { actualUse: true });
     };
     if (!macro) {
         return use();
@@ -137,4 +138,4 @@ async function applySelfEffect(item) {
 function isDefaultActionIcon(img, action) {
     return img === getActionIcon(action);
 }
-export { applySelfEffect, getActionGlyph, getActionIcon, isDefaultActionIcon, updateActionFrequency, useAction };
+export { applySelfEffect, getActionGlyph, getActionIcon, isDefaultActionIcon, updateActionFrequency, USE_ACTION_OPTION, useAction, };

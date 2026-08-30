@@ -1,5 +1,6 @@
 import { AbilityItemPF2e, ActionCost, ActorPF2e, FeatPF2e } from "@7h3laughingman/pf2e-types";
 import { ImageFilePath } from ".";
+declare const USE_ACTION_OPTION = "origin:action:slug:use-action";
 /**
  * https://github.com/foundryvtt/pf2e/blob/6e5481af7bb1e1b9d28d35fb3ad324511c5170d1/src/module/sheet/helpers.ts#L304
  */
@@ -15,5 +16,5 @@ declare function useAction(event: Event, item: AbilityItemPF2e<ActorPF2e> | Feat
 declare function applySelfEffect(item: AbilityItemPF2e<ActorPF2e> | FeatPF2e<ActorPF2e>): Promise<void>;
 declare function isDefaultActionIcon(img: string, action: string | ActionCost | null): boolean;
 type ActionIconType = string | number | ActionCost | null;
-export { applySelfEffect, getActionGlyph, getActionIcon, isDefaultActionIcon, updateActionFrequency, useAction };
+export { applySelfEffect, getActionGlyph, getActionIcon, isDefaultActionIcon, updateActionFrequency, USE_ACTION_OPTION, useAction, };
 export type { ActionIconType };

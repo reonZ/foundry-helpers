@@ -33,6 +33,7 @@ declare global {
 
         interface Settings {
             actionable: {
+                actionable: boolean;
                 action: boolean;
                 apply: boolean;
                 cast: boolean;

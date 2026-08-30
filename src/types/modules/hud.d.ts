@@ -21,7 +21,7 @@ declare global {
                 useResolve: (actor: Maybe<ActorPF2e>) => Promise<void>;
             };
             utils: {
-                addStance: (actor: CreaturePF2e, sourceUUID: DocumentUUID, createMessage?: boolean) => Promise<void>;
+                addStance: (actor: CreaturePF2e, sourceUUID: DocumentUUID) => Promise<void>;
                 canUseStances: (actor: ActorPF2e) => boolean;
                 editAvatar: (actor: ActorPF2e) => void;
                 getNpcStrikeImage: (strike: { item: WeaponPF2e | MeleePF2e; slug: string }) => ImageFilePath;

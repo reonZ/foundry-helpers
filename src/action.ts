@@ -1,6 +1,8 @@
 import { AbilityItemPF2e, ActionCost, ActorPF2e, EffectPF2e, EffectSource, FeatPF2e } from "@7h3laughingman/pf2e-types";
 import { ImageFilePath, R, SYSTEM } from ".";
 
+const USE_ACTION_OPTION = "origin:action:slug:use-action";
+
 /**
  * https://github.com/foundryvtt/pf2e/blob/37b0dcab08141b3e9e4e0f44e51df9f4dfd52a71/src/util/misc.ts#L160C1-L171C3
  */
@@ -119,7 +121,7 @@ async function useAction(
             await applySelfEffect(item);
         }
 
-        return item.toMessage(event);
+        return item.toMessage(event, { actualUse: true });
     };
 
     if (!macro) {
@@ -178,5 +180,13 @@ function isDefaultActionIcon(img: string, action: string | ActionCost | null) {
 
 type ActionIconType = string | number | ActionCost | null;
 
-export { applySelfEffect, getActionGlyph, getActionIcon, isDefaultActionIcon, updateActionFrequency, useAction };
+export {
+    applySelfEffect,
+    getActionGlyph,
+    getActionIcon,
+    isDefaultActionIcon,
+    updateActionFrequency,
+    USE_ACTION_OPTION,
+    useAction,
+};
 export type { ActionIconType };
