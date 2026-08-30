@@ -19,8 +19,9 @@ import {
     VideoFilePath,
 } from "@7h3laughingman/foundry-types/common/constants.mjs";
 import { ModelPropsFromSchema, SourceFromSchema } from "@7h3laughingman/foundry-types/common/data/fields.mjs";
-
 import {
+    FamiliarPF2e,
+    FamiliarSheetPF2e,
     FeatLike,
     FeatPF2e,
     FeatSlot,
@@ -28,6 +29,7 @@ import {
     LootPF2e,
     LootSheetPF2e,
     SpellcastingEntrySlots,
+    VehicleSheetPF2e,
 } from "@7h3laughingman/pf2e-types";
 
 export type * from "@7h3laughingman/foundry-types/client/_module.mjs";
@@ -42,6 +44,7 @@ export type * from "@7h3laughingman/foundry-types/client/canvas/placeables/_modu
 export type * from "@7h3laughingman/foundry-types/client/dice/roll.mjs";
 export type * from "@7h3laughingman/foundry-types/client/dice/terms/_types.mjs";
 export type * from "@7h3laughingman/foundry-types/client/documents/abstract/_module.mjs";
+export type * from "@7h3laughingman/foundry-types/client/documents/chat-message.mjs";
 export type * from "@7h3laughingman/foundry-types/client/documents/collections/compendium-collection.mjs";
 export type * from "@7h3laughingman/foundry-types/client/documents/user.mjs";
 export type * from "@7h3laughingman/foundry-types/client/helpers/hooks.mjs";
@@ -50,12 +53,14 @@ export type * from "@7h3laughingman/foundry-types/client/helpers/localization.mj
 export type * from "@7h3laughingman/foundry-types/client/packages/_module.mjs";
 export type * from "@7h3laughingman/foundry-types/common/abstract/_module.mjs";
 export type * from "@7h3laughingman/foundry-types/common/documents/_module.mjs";
-export type * from "@7h3laughingman/pf2e-types/scripts/ui/user-visibility.js";
 export type * from "@7h3laughingman/foundry-types/common/grid/_types.mjs";
+export type * from "@7h3laughingman/pf2e-types/scripts/ui/user-visibility.js";
 
+type FamiliarSheetData = Awaited<ReturnType<FamiliarSheetPF2e<FamiliarPF2e>["getData"]>>;
 type LootSheetDataPF2e = Awaited<ReturnType<LootSheetPF2e<LootPF2e>["getData"]>>;
 type DocumentOwnership = { [K in "default" | (string & {})]?: DocumentOwnershipLevel };
 type SpellSlotData = ValueOf<SpellcastingEntrySlots>;
+type VehicleSheetData = Awaited<ReturnType<VehicleSheetPF2e["getData"]>>;
 
 interface FeatNotSlot<T extends FeatLike = FeatPF2e> {
     feat: T;
@@ -72,6 +77,7 @@ export type {
     DocumentOwnershipLevel,
     DocumentType,
     DocumentUUID,
+    FamiliarSheetData,
     FeatNotSlot,
     FileCategory,
     FilePath,
@@ -87,5 +93,6 @@ export type {
     SourceFromSchema,
     SpellSlotData,
     TokenDetectionMode,
+    VehicleSheetData,
     VideoFilePath,
 };
