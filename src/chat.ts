@@ -67,8 +67,11 @@ function isActionMessage(message: ChatMessagePF2e): boolean {
 }
 
 function isSpellMessage(message: ChatMessagePF2e, actualCast: boolean = false): boolean {
-    const origin = message.flags[SYSTEM.id]?.origin;
-    return origin?.type === "spell" && (!actualCast || reverseIncludes(origin.rollOptions, CAST_A_SPELL_OPTION));
+    const flags = message.flags[SYSTEM.id];
+    return (
+        R.isString(flags.casting?.id) &&
+        (!actualCast || reverseIncludes(flags.origin?.rollOptions, CAST_A_SPELL_OPTION))
+    );
 }
 
 type DamageMessage = ChatMessagePF2e & {
