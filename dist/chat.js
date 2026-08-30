@@ -1,4 +1,4 @@
-import { CAST_A_SPELL_OPTION, enrichHTML, R, reverseIncludes, SYSTEM } from ".";
+import { CAST_A_SPELL_OPTION, enrichHTML, R, reverseIncludes, SYSTEM, USE_ACTION_OPTION, } from ".";
 function* latestChatMessages(nb, fromMessage) {
     if (!ui.chat)
         return;
@@ -38,13 +38,17 @@ function createChatLink(docOrUuid, { label, html } = {}) {
     }
     return html ? enrichHTML(link) : link;
 }
+function messageHasCastSpellOption(message) {
+    return reverseIncludes(message.flags[SYSTEM.id].origin?.rollOptions, CAST_A_SPELL_OPTION);
+}
+function messageHasUseActionOption(message) {
+    return reverseIncludes(message.flags[SYSTEM.id].origin?.rollOptions, USE_ACTION_OPTION);
+}
 function isActionMessage(message) {
     const { origin, context } = message.flags[SYSTEM.id];
     return R.isIncludedIn(origin?.type, ["feat", "action"]) && !message.isCheckRoll && context?.type !== "damage-taken";
 }
-function isSpellMessage(message, actualCast = false) {
-    const flags = message.flags[SYSTEM.id];
-    return (R.isString(flags.casting?.id) &&
-        (!actualCast || reverseIncludes(flags.origin?.rollOptions, CAST_A_SPELL_OPTION)));
+function isSpellMessage(message) {
+    return R.isString(message.flags[SYSTEM.id].casting?.id);
 }
-export { createChatLink, isActionMessage, isSpellMessage, latestChatMessages, refreshLatestMessages };
+export { createChatLink, isActionMessage, isSpellMessage, latestChatMessages, messageHasCastSpellOption, messageHasUseActionOption, refreshLatestMessages, };

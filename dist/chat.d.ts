@@ -14,10 +14,12 @@ declare function createChatLink(docOrUuid: (ClientDocument & {
     label?: string;
     html?: false;
 }): string;
+declare function messageHasCastSpellOption(message: ChatMessagePF2e): boolean;
+declare function messageHasUseActionOption(message: ChatMessagePF2e): boolean;
 declare function isActionMessage(message: ChatMessagePF2e): boolean;
-declare function isSpellMessage(message: ChatMessagePF2e, actualCast?: boolean): boolean;
+declare function isSpellMessage(message: ChatMessagePF2e): boolean;
 type DamageMessage = ChatMessagePF2e & {
     rolls: Rolled<DamageRoll>[];
 };
-export { createChatLink, isActionMessage, isSpellMessage, latestChatMessages, refreshLatestMessages };
+export { createChatLink, isActionMessage, isSpellMessage, latestChatMessages, messageHasCastSpellOption, messageHasUseActionOption, refreshLatestMessages, };
 export type { DamageMessage };

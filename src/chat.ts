@@ -1,5 +1,14 @@
 import { ChatMessagePF2e, DamageRoll } from "@7h3laughingman/pf2e-types";
-import { CAST_A_SPELL_OPTION, ClientDocument, enrichHTML, R, reverseIncludes, Rolled, SYSTEM } from ".";
+import {
+    CAST_A_SPELL_OPTION,
+    ClientDocument,
+    enrichHTML,
+    R,
+    reverseIncludes,
+    Rolled,
+    SYSTEM,
+    USE_ACTION_OPTION,
+} from ".";
 
 function* latestChatMessages(nb: number, fromMessage?: ChatMessagePF2e): Generator<ChatMessagePF2e, void, undefined> {
     if (!ui.chat) return;
@@ -61,22 +70,34 @@ function createChatLink(
     return html ? enrichHTML(link) : link;
 }
 
+function messageHasCastSpellOption(message: ChatMessagePF2e): boolean {
+    return reverseIncludes(message.flags[SYSTEM.id].origin?.rollOptions, CAST_A_SPELL_OPTION);
+}
+
+function messageHasUseActionOption(message: ChatMessagePF2e): boolean {
+    return reverseIncludes(message.flags[SYSTEM.id].origin?.rollOptions, USE_ACTION_OPTION);
+}
+
 function isActionMessage(message: ChatMessagePF2e): boolean {
     const { origin, context } = message.flags[SYSTEM.id];
     return R.isIncludedIn(origin?.type, ["feat", "action"]) && !message.isCheckRoll && context?.type !== "damage-taken";
 }
 
-function isSpellMessage(message: ChatMessagePF2e, actualCast: boolean = false): boolean {
-    const flags = message.flags[SYSTEM.id];
-    return (
-        R.isString(flags.casting?.id) &&
-        (!actualCast || reverseIncludes(flags.origin?.rollOptions, CAST_A_SPELL_OPTION))
-    );
+function isSpellMessage(message: ChatMessagePF2e): boolean {
+    return R.isString(message.flags[SYSTEM.id].casting?.id);
 }
 
 type DamageMessage = ChatMessagePF2e & {
     rolls: Rolled<DamageRoll>[];
 };
 
-export { createChatLink, isActionMessage, isSpellMessage, latestChatMessages, refreshLatestMessages };
+export {
+    createChatLink,
+    isActionMessage,
+    isSpellMessage,
+    latestChatMessages,
+    messageHasCastSpellOption,
+    messageHasUseActionOption,
+    refreshLatestMessages,
+};
 export type { DamageMessage };
