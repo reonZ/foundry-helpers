@@ -77,6 +77,7 @@ declare global {
                 getVirtualActionsData(actor: ActorPF2e): Record<string, actionable.VirtualActionData>;
                 getVirtualSpellData(actor: ActorPF2e, id: string): actionable.VirtualSpellData | undefined;
                 getVirtualSpellcastingData(actor: ActorPF2e, id: string): actionable.VirtualSpellData | undefined;
+                messageHasUseActionOption(message: ChatMessagePF2e, withSettingCheck?: boolean): boolean;
                 rechargeVirtualSpell(
                     parent: PhysicalItemPF2e<CharacterPF2e>,
                     ruleIndex: number,
