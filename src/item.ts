@@ -156,7 +156,7 @@ function* actorItems<TType extends ItemType, TActor extends ActorPF2e>(
 function findItemWithSourceId<TType extends ItemType, TActor extends ActorPF2e>(
     actor: TActor,
     uuid: string,
-    type?: TType,
+    type?: TType | TType[],
 ): ActorItemInstances<TType, TActor> | null {
     for (const item of actorItems(actor, type)) {
         if (isSupressedFeat(item)) continue;
@@ -173,7 +173,7 @@ function findItemWithSourceId<TType extends ItemType, TActor extends ActorPF2e>(
 function findItemWithSlug<TType extends ItemType, TActor extends ActorPF2e>(
     actor: TActor,
     slug: string,
-    type?: TType,
+    type?: TType | TType[],
 ): ActorItemInstances<TType, TActor> | null {
     for (const item of actorItems(actor, type)) {
         if (isSupressedFeat(item)) continue;
@@ -430,8 +430,7 @@ type AttachableType = keyof typeof ATTACHABLE_TYPES;
 type AttachToType<T extends AttachableType> = (typeof ATTACHABLE_TYPES)[T][number];
 
 type ActorItemInstances<TType extends ItemType, TActor extends ActorPF2e> = ItemInstances<TActor>[TType extends
-    | "weapon"
-    | "shield"
+    "weapon" | "shield"
     ? TType | "weapon" | "equipment"
     : TType];
 
