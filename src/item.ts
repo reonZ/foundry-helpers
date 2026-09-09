@@ -429,10 +429,10 @@ function isAreaOrAutoFireType(type: string): type is "area-fire" | "auto-fire" {
 type AttachableType = keyof typeof ATTACHABLE_TYPES;
 type AttachToType<T extends AttachableType> = (typeof ATTACHABLE_TYPES)[T][number];
 
-type ActorItemInstances<TType extends ItemType, TActor extends ActorPF2e> = ItemInstances<TActor>[TType extends
-    "weapon" | "shield"
-    ? TType | "weapon" | "equipment"
-    : TType];
+type ActorItemInstances<
+    TType extends ItemType,
+    TActor extends ActorPF2e = ActorPF2e,
+> = ItemInstances<TActor>[TType extends "weapon" | "shield" ? TType | "weapon" | "equipment" : TType];
 
 type ItemOrSource = PreCreate<ItemSourcePF2e> | CompendiumIndexData | ItemPF2e;
 
@@ -473,4 +473,4 @@ export {
     simulateDropItem,
     usePhysicalItem,
 };
-export type { EquipAnnotationData, ItemOrSource };
+export type { ActorItemInstances, EquipAnnotationData, ItemOrSource };
