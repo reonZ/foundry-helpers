@@ -1,5 +1,15 @@
 import { ActorPF2e, TokenDocumentPF2e } from "@7h3laughingman/pf2e-types";
-import { createHTMLElement, isTokenObject, isValidTargetDocuments, localize, MODULE, R, userIsGM } from ".";
+import {
+    ActorUUID,
+    createHTMLElement,
+    isTokenObject,
+    isValidTargetDocuments,
+    localize,
+    MODULE,
+    R,
+    TokenDocumentUUID,
+    userIsGM,
+} from ".";
 
 const EMITING_STYLE: Partial<CSSStyleDeclaration> = {
     alignItems: "center",
@@ -167,6 +177,10 @@ async function convertTargetFromPacket(target: {
     };
 }
 
+function convertTargetToPacket({ actor, token }: TargetDocuments): { actor: ActorUUID; token?: TokenDocumentUUID } {
+    return { actor: actor.uuid, token: token?.uuid };
+}
+
 function convertToEmitOptions<T extends EmitableOptions>(options: T): EmitablePacket<T> {
     const __converter__: EmitableConverters = {};
 
@@ -183,11 +197,7 @@ function convertToEmitOptions<T extends EmitableOptions>(options: T): EmitablePa
 
         if (isValidTargetDocuments(value)) {
             __converter__[key] = "target";
-
-            return {
-                actor: value.actor.uuid,
-                token: value.token?.uuid,
-            };
+            return convertTargetToPacket(value);
         }
 
         return value;
@@ -226,6 +236,7 @@ type SocketCallback<T = any> = (packet: T, senderId: string) => void;
 
 export {
     convertTargetFromPacket,
+    convertTargetToPacket,
     convertToCallOptions,
     convertToEmitOptions,
     createEmitable,

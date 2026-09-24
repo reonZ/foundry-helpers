@@ -1,4 +1,4 @@
-import { createHTMLElement, isTokenObject, isValidTargetDocuments, localize, MODULE, R, userIsGM } from ".";
+import { createHTMLElement, isTokenObject, isValidTargetDocuments, localize, MODULE, R, userIsGM, } from ".";
 const EMITING_STYLE = {
     alignItems: "center",
     background: "linear-gradient(90deg, #00000000 0%, #0000001a 20%, #00000066 50%, #0000001a 80%, #00000000 100%)",
@@ -137,6 +137,9 @@ async function convertTargetFromPacket(target) {
         token: (target.token && (await fromUuid(target.token))) || undefined,
     };
 }
+function convertTargetToPacket({ actor, token }) {
+    return { actor: actor.uuid, token: token?.uuid };
+}
 function convertToEmitOptions(options) {
     const __converter__ = {};
     const convertedOptions = R.mapValues(options, (value, key) => {
@@ -150,10 +153,7 @@ function convertToEmitOptions(options) {
         }
         if (isValidTargetDocuments(value)) {
             __converter__[key] = "target";
-            return {
-                actor: value.actor.uuid,
-                token: value.token?.uuid,
-            };
+            return convertTargetToPacket(value);
         }
         return value;
     });
@@ -161,4 +161,4 @@ function convertToEmitOptions(options) {
     convertedOptions.__source__ = R.isArray(options) ? "array" : "object";
     return convertedOptions;
 }
-export { convertTargetFromPacket, convertToCallOptions, convertToEmitOptions, createEmitable, displayEmiting, socketEmit, socketOff, socketOn, };
+export { convertTargetFromPacket, convertTargetToPacket, convertToCallOptions, convertToEmitOptions, createEmitable, displayEmiting, socketEmit, socketOff, socketOn, };

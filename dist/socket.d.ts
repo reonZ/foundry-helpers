@@ -1,3 +1,4 @@
+import { ActorUUID, TokenDocumentUUID } from ".";
 declare function socketOn<T extends object = object>(callback: SocketCallback<T>): void;
 declare function socketOff<T extends object = object>(callback: SocketCallback<T>): void;
 declare function socketEmit<T extends object = object>(packet: T): void;
@@ -8,6 +9,10 @@ declare function convertTargetFromPacket(target: {
     actor: string;
     token?: string;
 }): Promise<TargetDocuments | undefined>;
+declare function convertTargetToPacket({ actor, token }: TargetDocuments): {
+    actor: ActorUUID;
+    token?: TokenDocumentUUID;
+};
 declare function convertToEmitOptions<T extends EmitableOptions>(options: T): EmitablePacket<T>;
 type Emitable<T> = {
     get enabled(): boolean;
@@ -27,5 +32,5 @@ type EmitableConverters = Record<string, EmitableConverter>;
 type EmitableOptions = Record<string, any> | any[];
 type EmitablePacketOptions<T extends EmitableOptions> = T extends Array<infer V> ? Record<string, V> : T;
 type SocketCallback<T = any> = (packet: T, senderId: string) => void;
-export { convertTargetFromPacket, convertToCallOptions, convertToEmitOptions, createEmitable, displayEmiting, socketEmit, socketOff, socketOn, };
+export { convertTargetFromPacket, convertTargetToPacket, convertToCallOptions, convertToEmitOptions, createEmitable, displayEmiting, socketEmit, socketOff, socketOn, };
 export type { EmitableConverters, EmitablePacket };
