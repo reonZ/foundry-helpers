@@ -22,7 +22,6 @@ import {
     SaveType,
     SpellPF2e,
     TokenDocumentPF2e,
-    UserPF2e,
 } from "@7h3laughingman/pf2e-types";
 import { ActorUUID, DocumentUUID, ItemUUID, Rolled, RollJSON, TokenDocumentUUID } from "../../_types";
 
@@ -303,7 +302,6 @@ declare global {
                 roll: Rolled<CheckRoll>;
                 rollMessage: ChatMessagePF2e;
                 target: TokenDocumentPF2e;
-                user: UserPF2e;
             };
 
             type RerollSaveHook = {
@@ -313,7 +311,6 @@ declare global {
                 message: ChatMessagePF2e;
                 target: TokenDocumentPF2e;
                 data: TargetSaveInstance;
-                user: UserPF2e;
             };
         }
     }
