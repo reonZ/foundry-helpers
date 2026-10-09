@@ -71,7 +71,7 @@ class CustomModule {
                     enumerable: false,
                 },
                 localize: {
-                    value: localize.sub(id),
+                    value: localize,
                     configurable: false,
                     enumerable: false,
                     writable: false,
