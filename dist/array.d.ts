@@ -14,4 +14,5 @@ declare function arraysEqual<T extends any[]>(arr1: T, arr2: any[]): arr2 is T;
 declare function includesAny(haystack: any[] | ReadonlyArray<any>, needles: Maybe<any[] | Set<any>>): boolean;
 declare function includesAll(arr: any[], entries: any[]): boolean;
 declare function reverseIncludes<T>(arr: Maybe<T[]>, value: unknown): value is unknown;
-export { arraysEqual, CycleArray, includesAll, includesAny, removeIndexFromArray, reverseIncludes };
+declare function mergeArray<T extends Record<string, any>>(arr: Mergeable<T>[], container?: T): T;
+export { arraysEqual, CycleArray, includesAll, includesAny, mergeArray, removeIndexFromArray, reverseIncludes };

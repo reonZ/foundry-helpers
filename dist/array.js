@@ -75,4 +75,7 @@ function reverseIncludes(arr, value) {
     }
     return false;
 }
-export { arraysEqual, CycleArray, includesAll, includesAny, removeIndexFromArray, reverseIncludes };
+function mergeArray(arr, container = {}) {
+    return arr.reduce((acc, curr) => foundry.utils.mergeObject(acc, curr), container);
+}
+export { arraysEqual, CycleArray, includesAll, includesAny, mergeArray, removeIndexFromArray, reverseIncludes };

@@ -60,4 +60,10 @@ declare global {
     type ExtractValuesOfType<T, V> = {
         [K in keyof T]: T[K] extends V ? K : never;
     };
+
+    type Updatable<T extends Record<string, any>> = {
+        [k in keyof T]?: T[k] | ForcedReplacement | ForcedDeletion;
+    };
+
+    type Mergeable<T extends Record<string, any>> = Updatable<T>;
 }

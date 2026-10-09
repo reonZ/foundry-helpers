@@ -93,4 +93,8 @@ function reverseIncludes<T>(arr: Maybe<T[]>, value: unknown): value is unknown {
     return false;
 }
 
-export { arraysEqual, CycleArray, includesAll, includesAny, removeIndexFromArray, reverseIncludes };
+function mergeArray<T extends Record<string, any>>(arr: Mergeable<T>[], container: T = {} as T): T {
+    return arr.reduce<T>((acc, curr) => foundry.utils.mergeObject(acc, curr), container);
+}
+
+export { arraysEqual, CycleArray, includesAll, includesAny, mergeArray, removeIndexFromArray, reverseIncludes };
