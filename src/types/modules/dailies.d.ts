@@ -87,6 +87,7 @@ declare global {
             ) => Promise<ChatMessagePF2e | undefined>;
             retrainFromElement: (actor: ActorPF2e, target: HTMLElement) => Promise<ChatMessagePF2e | undefined>;
             registerCustomDailies: (dailies: object[]) => void;
+            registerHomebrewEntries: (entries: Record<string, string[]>) => void;
             setStaffChargesValue: (
                 actor: CharacterPF2e,
                 value?: number | undefined,
