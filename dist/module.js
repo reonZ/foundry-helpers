@@ -134,18 +134,23 @@ class CustomModule {
         }
         console.error(message);
     }
-    apiExpose(key, toExpose) {
-        if (foundry.utils.hasProperty(this.#api, key)) {
-            throw this.Error(`the api key was already defined: ${key}`);
+    apiExpose(keyOrObj, toExpose) {
+        const record = R.isString(keyOrObj)
+            ? { [keyOrObj]: toExpose }
+            : keyOrObj;
+        for (const [key, objOrFn] of R.entries(record)) {
+            if (foundry.utils.hasProperty(this.#api, key)) {
+                throw this.Error(`the api key was already defined: ${key}`);
+            }
+            const exposed = R.isObjectType(objOrFn) ? foundry.utils.deepClone(objOrFn) : objOrFn;
+            Object.freeze(exposed);
+            Object.defineProperty(this.#api, key, {
+                value: exposed,
+                configurable: false,
+                enumerable: false,
+                writable: false,
+            });
         }
-        const exposed = R.isObjectType(toExpose) ? foundry.utils.deepClone(toExpose) : toExpose;
-        Object.freeze(exposed);
-        Object.defineProperty(this.#api, key, {
-            value: exposed,
-            configurable: false,
-            enumerable: false,
-            writable: false,
-        });
     }
     debugExpose(key, toExpose) {
         if (foundry.utils.hasProperty(this.#debug, key)) {

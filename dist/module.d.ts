@@ -19,6 +19,7 @@ declare class CustomModule {
     Error(str: string): Error;
     error(str: string, error?: Error): void;
     apiExpose(key: string, toExpose: Record<string, any> | Function): void;
+    apiExpose(obj: Record<string, any>): void;
     debugExpose(key: string, toExpose: any): void;
 }
 declare function getActiveModule(key: string): ActiveModule | undefined;
