@@ -17,6 +17,7 @@ import { ItemUUID } from "../../_types";
 
 declare global {
     namespace dailies {
+        type ActivationType = "staves" | "servers";
         type ActivationItem = WeaponPF2e<CharacterPF2e> | EquipmentPF2e<CharacterPF2e>;
 
         type ActivationFlag = {
@@ -84,11 +85,20 @@ declare global {
                 type: "vessel" | "tactic",
             ) => Promise<ChatMessagePF2e | undefined>;
             retrainFromElement: (actor: ActorPF2e, target: HTMLElement) => Promise<ChatMessagePF2e | undefined>;
+            spellServers: {
+                canCastRank: (actor: CharacterPF2e, rank: ZeroToTen) => boolean | null;
+                getData: (actor: CharacterPF2e) => ActivationFlag | undefined;
+                getItem: (actor: CharacterPF2e) => PhysicalItemPF2e<CharacterPF2e> | null;
+                setChargesValue: (
+                    actor: CharacterPF2e,
+                    value?: number | undefined,
+                ) => Promise<foundry.abstract.Document> | undefined;
+            };
             staves: {
                 canCastRank: (actor: CharacterPF2e, rank: ZeroToTen) => boolean | null;
-                getStaffData: (actor: CharacterPF2e) => ActivationFlag | undefined;
-                getStaffItem: (actor: CharacterPF2e) => PhysicalItemPF2e<CharacterPF2e> | null;
-                setStaffChargesValue: (
+                getData: (actor: CharacterPF2e) => ActivationFlag | undefined;
+                getItem: (actor: CharacterPF2e) => PhysicalItemPF2e<CharacterPF2e> | null;
+                setChargesValue: (
                     actor: CharacterPF2e,
                     value?: number | undefined,
                 ) => Promise<foundry.abstract.Document> | undefined;
