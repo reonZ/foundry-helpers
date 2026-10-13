@@ -17,9 +17,9 @@ import { ItemUUID } from "../../_types";
 
 declare global {
     namespace dailies {
-        type StaffPF2e = WeaponPF2e<CharacterPF2e> | EquipmentPF2e<CharacterPF2e>;
+        type ActivationItem = WeaponPF2e<CharacterPF2e> | EquipmentPF2e<CharacterPF2e>;
 
-        type StaffFlags = {
+        type ActivationFlag = {
             staffId: string;
             charges: {
                 value: number;
@@ -86,7 +86,7 @@ declare global {
             retrainFromElement: (actor: ActorPF2e, target: HTMLElement) => Promise<ChatMessagePF2e | undefined>;
             staves: {
                 canCastRank: (actor: CharacterPF2e, rank: ZeroToTen) => boolean | null;
-                getStaffData: (actor: CharacterPF2e) => StaffFlags | undefined;
+                getStaffData: (actor: CharacterPF2e) => ActivationFlag | undefined;
                 getStaffItem: (actor: CharacterPF2e) => PhysicalItemPF2e<CharacterPF2e> | null;
                 setStaffChargesValue: (
                     actor: CharacterPF2e,
