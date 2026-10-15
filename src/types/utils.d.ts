@@ -6,6 +6,8 @@ declare global {
     type EventType = keyof HTMLElementEventMap;
 
     type TargetDocuments = { actor: ActorPF2e; token?: TokenDocumentPF2e | null };
+    type BaseTargetDocuments = { actor: Actor; token?: TokenDocument | null };
+    type TokenDocumentFromActor<A extends Actor> = A extends ActorPF2e ? TokenDocumentPF2e : TokenDocument;
 
     type MaybeHTML = Maybe<Document | Element | EventTarget>;
 

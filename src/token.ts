@@ -1,4 +1,4 @@
-import { ActorPF2e, ActorType, ScenePF2e, TokenDocumentPF2e, TokenPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
+import { ActorType, ScenePF2e, TokenDocumentPF2e, TokenPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
 import { ActivityData, isInstanceOf, PingOptions, R, TokenDocumentUUID } from ".";
 
 function isTokenObject(token: any): token is TokenPF2e {
@@ -57,45 +57,50 @@ function positionTokenFromCoords({ x, y }: Point, token: TokenPF2e, snapped = tr
     return position;
 }
 
-function getFirstActiveToken(
-    actor: ActorPF2e,
+function getFirstActiveToken<A extends Actor>(
+    actor: A,
     { linked, match = () => true, scene = canvas.scene }: FirstActiveTokenOptions = {},
-): TokenDocumentPF2e | null {
+): TokenDocumentFromActor<A> | null {
     const actorToken = actor.token;
     if (actorToken && match(actorToken)) {
-        return actorToken;
+        return actorToken as TokenDocumentFromActor<A>;
     }
 
     if (!canvas.ready || !scene) return null;
 
     for (const token of actor.getDependentTokens({ linked, scenes: scene })) {
         if (token === scene.tokens.get(token.id) && match(token)) {
-            return token;
+            return token as TokenDocumentFromActor<A>;
         }
     }
 
     return null;
 }
 
-function getTargetToken(
-    target: Maybe<TargetDocuments>,
+function getTargetToken<A extends Actor>(
+    target: Maybe<BaseTargetDocuments>,
     options?: FirstActiveTokenOptions,
-): TokenDocumentPF2e | undefined {
+): TokenDocumentFromActor<A> | undefined {
     if (!target) return undefined;
-    return target.token ?? target.actor.token ?? getFirstActiveToken(target.actor, options) ?? undefined;
+    return (target.token ?? target.actor.token ?? getFirstActiveToken(target.actor, options) ?? undefined) as
+        TokenDocumentFromActor<A> | undefined;
 }
 
 function getTargetsTokens(
-    targets: TargetDocuments[],
+    targets: BaseTargetDocuments[],
     uuid: true,
     options?: FirstActiveTokenOptions,
 ): TokenDocumentUUID[];
-function getTargetsTokens(
-    targets: TargetDocuments[],
+function getTargetsTokens<A extends Actor>(
+    targets: { actor: A; token?: TokenDocument | null }[],
     uuid?: boolean,
     options?: FirstActiveTokenOptions,
-): TokenDocumentPF2e[];
-function getTargetsTokens(targets: TargetDocuments[], uuid?: boolean, options?: FirstActiveTokenOptions) {
+): TokenDocumentFromActor<A>[];
+function getTargetsTokens<A extends Actor>(
+    targets: BaseTargetDocuments[],
+    uuid?: boolean,
+    options?: FirstActiveTokenOptions,
+) {
     return R.pipe(
         targets,
         R.map((target) => {
@@ -163,8 +168,8 @@ function panToToken(token: TokenPF2e | TokenDocumentPF2e, control?: boolean) {
 
 type FirstActiveTokenOptions = {
     linked?: boolean;
-    match?: (token: TokenDocumentPF2e) => boolean;
-    scene?: ScenePF2e | null;
+    match?: (token: TokenDocument) => boolean;
+    scene?: Scene | null;
 };
 
 export {

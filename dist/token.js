@@ -49,7 +49,7 @@ function getFirstActiveToken(actor, { linked, match = () => true, scene = canvas
 function getTargetToken(target, options) {
     if (!target)
         return undefined;
-    return target.token ?? target.actor.token ?? getFirstActiveToken(target.actor, options) ?? undefined;
+    return (target.token ?? target.actor.token ?? getFirstActiveToken(target.actor, options) ?? undefined);
 }
 function getTargetsTokens(targets, uuid, options) {
     return R.pipe(targets, R.map((target) => {
