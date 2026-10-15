@@ -78,7 +78,7 @@ function getFirstActiveToken<A extends Actor>(
 }
 
 function getTargetToken<A extends Actor>(
-    target: Maybe<BaseTargetDocuments>,
+    target: Maybe<{ actor: A; token?: TokenDocument | null }>,
     options?: FirstActiveTokenOptions,
 ): TokenDocumentFromActor<A> | undefined {
     if (!target) return undefined;
@@ -96,11 +96,7 @@ function getTargetsTokens<A extends Actor>(
     uuid?: boolean,
     options?: FirstActiveTokenOptions,
 ): TokenDocumentFromActor<A>[];
-function getTargetsTokens<A extends Actor>(
-    targets: BaseTargetDocuments[],
-    uuid?: boolean,
-    options?: FirstActiveTokenOptions,
-) {
+function getTargetsTokens(targets: BaseTargetDocuments[], uuid?: boolean, options?: FirstActiveTokenOptions) {
     return R.pipe(
         targets,
         R.map((target) => {
