@@ -5,6 +5,7 @@ import {
     EquipmentPF2e,
     ItemPF2e,
     MagicTradition,
+    NPCPF2e,
     OneToFour,
     PhysicalItemPF2e,
     ResistanceType,
@@ -18,7 +19,7 @@ import { ItemUUID } from "../../_types";
 declare global {
     namespace dailies {
         type ActivationType = "staves" | "servers";
-        type ActivationItem = WeaponPF2e<CharacterPF2e> | EquipmentPF2e<CharacterPF2e>;
+        type ActivationItem<T extends CharacterPF2e | NPCPF2e = CharacterPF2e> = WeaponPF2e<T> | EquipmentPF2e<T>;
 
         type ActivationFlag = {
             staffId: string;
@@ -41,16 +42,16 @@ declare global {
 
         interface Api {
             animist: {
-                getAnimistConfigs: (actor: CharacterPF2e) => {
+                getConfigs: (actor: CharacterPF2e) => {
                     lores: boolean;
                     spells: boolean;
                     signatures: boolean;
                 };
-                getAnimistVesselsData: (actor: Maybe<ActorPF2e>) => dailies.AnimistVesselsData | undefined;
+                getVesselsData: (actor: Maybe<ActorPF2e>) => dailies.AnimistVesselsData | undefined;
             };
             canPrepareDailies: (actor: ActorPF2e) => boolean;
             commander: {
-                getCommanderTactics: (actor: ActorPF2e) => string[];
+                getTactics: (actor: ActorPF2e) => string[];
                 isTacticAbility: (item: Maybe<ItemPF2e>) => item is ItemPF2e;
             };
             createRetrainBtn: (actor: ActorPF2e, selectedId: string, type: "vessel" | "tactic") => HTMLElement;
