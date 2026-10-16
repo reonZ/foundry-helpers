@@ -62,7 +62,15 @@ function createDuplicateMap<K extends string, T>(raw: [K[] | K, T][]): Map<K, T>
 function createTargetDocuments(source: {
     actor?: ActorPF2e | null;
     token?: TokenDocumentPF2e | TokenPF2e | null;
-}): TargetDocuments | undefined {
+}): TargetDocuments | undefined;
+function createTargetDocuments(source: {
+    actor?: Actor | null;
+    token?: TokenDocument | foundry.canvas.placeables.Token | null;
+}): BaseTargetDocuments | undefined;
+function createTargetDocuments(source: {
+    actor?: Actor | null;
+    token?: TokenDocument | foundry.canvas.placeables.Token | null;
+}): BaseTargetDocuments | TargetDocuments | undefined {
     const actor = source.actor ?? source.token?.actor;
     if (!actor) return;
 
