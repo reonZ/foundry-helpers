@@ -45,6 +45,7 @@ export type * from "@7h3laughingman/foundry-types/client/data/region-behaviors/b
 export type * from "@7h3laughingman/foundry-types/client/data/region-behaviors/increase-movement-cost.mjs";
 export type * from "@7h3laughingman/foundry-types/client/dice/roll.mjs";
 export type * from "@7h3laughingman/foundry-types/client/dice/terms/_types.mjs";
+export type * from "@7h3laughingman/foundry-types/client/documents/_types.mjs";
 export type * from "@7h3laughingman/foundry-types/client/documents/abstract/_module.mjs";
 export type * from "@7h3laughingman/foundry-types/client/documents/chat-message.mjs";
 export type * from "@7h3laughingman/foundry-types/client/documents/collections/compendium-collection.mjs";
