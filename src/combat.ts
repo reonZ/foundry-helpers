@@ -1,11 +1,8 @@
 import { ActorPF2e, CombatantPF2e, EncounterPF2e, RolledCombatant } from "@7h3laughingman/pf2e-types";
 import { getActorMaster } from ".";
 
-function isCurrentCombatant(actor: ActorPF2e): boolean {
-    const current = game.combat?.combatant;
-    if (!current) return false;
-
-    return actor.combatant === current || getActorMaster(actor)?.combatant === current;
+function isCurrentCombatant(actor: Actor): boolean {
+    return !!game.combat?.combatants.some((combatant) => combatant.actor?.uuid === actor.uuid);
 }
 
 function isInCombat(actor: ActorPF2e): boolean {

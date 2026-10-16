@@ -1,9 +1,6 @@
 import { getActorMaster } from ".";
 function isCurrentCombatant(actor) {
-    const current = game.combat?.combatant;
-    if (!current)
-        return false;
-    return actor.combatant === current || getActorMaster(actor)?.combatant === current;
+    return !!game.combat?.combatants.some((combatant) => combatant.actor?.uuid === actor.uuid);
 }
 function isInCombat(actor) {
     return actor.inCombat || !!getActorMaster(actor)?.inCombat;
