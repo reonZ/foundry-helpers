@@ -24,7 +24,7 @@ function isPrimaryUpdater(actor: ActorPF2e): boolean {
     return actor.primaryUpdater === game.user;
 }
 
-function primaryPlayerOwner(actor: ActorPF2e): UserPF2e | null {
+function primaryPlayerOwner<T extends Actor>(actor: T): (T extends ActorPF2e ? UserPF2e : User) | null {
     return (
         // even though we want a player, assigned users take priority
         game.users.getDesignatedUser((user) => user.active && user.character === (actor as Actor)) ??
@@ -32,7 +32,7 @@ function primaryPlayerOwner(actor: ActorPF2e): UserPF2e | null {
     );
 }
 
-function isPrimaryOwner(actor: ActorPF2e, user = game.user): boolean {
+function isPrimaryOwner(actor: Actor, user = game.user): boolean {
     return user.isGM || primaryPlayerOwner(actor) === user;
 }
 
