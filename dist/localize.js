@@ -12,6 +12,9 @@ class Localize extends Function {
         Object.setPrototypeOf(localize, Object.getPrototypeOf(this));
         return localize;
     }
+    get subkey() {
+        return this.subkeys.join(".");
+    }
     path(...path) {
         return MODULE.path(...this.subkeys, ...path);
     }

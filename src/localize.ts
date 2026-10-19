@@ -22,6 +22,10 @@ class Localize extends Function {
         return localize as Localize;
     }
 
+    get subkey(): string {
+        return this.subkeys.join(".");
+    }
+
     path(...path: string[]): string {
         return MODULE.path(...this.subkeys, ...path);
     }

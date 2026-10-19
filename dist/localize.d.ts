@@ -2,6 +2,7 @@ import { HelperDelegate } from "handlebars";
 declare class Localize extends Function {
     subkeys: string[];
     constructor(...subkeys: string[]);
+    get subkey(): string;
     path(...path: string[]): string;
     getLocalizeData(...args: LocalizeArgs): {
         path: string;
