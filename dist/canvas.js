@@ -27,4 +27,13 @@ async function ping(origin, options) {
     // Display the ping locally
     return canvas.controls.handlePing(game.user, origin, ping);
 }
-export { ping };
+function canPing(user = game.user) {
+    return game.user.hasPermission("PING_CANVAS");
+}
+async function pan(point, options) {
+    await canvas.animatePan(point);
+    if (options?.ping && canPing()) {
+        ping(point, { local: true });
+    }
+}
+export { canPing, pan, ping };

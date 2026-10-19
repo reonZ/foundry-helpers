@@ -29,4 +29,15 @@ async function ping(origin: Point, options?: PingOptions & { local?: boolean }):
     return canvas.controls.handlePing(game.user, origin, ping);
 }
 
-export { ping };
+function canPing(user: User = game.user) {
+    return game.user.hasPermission("PING_CANVAS");
+}
+
+async function pan(point: Point, options?: { ping?: boolean }): Promise<void> {
+    await canvas.animatePan(point);
+    if (options?.ping && canPing()) {
+        ping(point, { local: true });
+    }
+}
+
+export { canPing, pan, ping };

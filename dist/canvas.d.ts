@@ -5,4 +5,8 @@ import { PingOptions } from ".";
 declare function ping(origin: Point, options?: PingOptions & {
     local?: boolean;
 }): Promise<boolean>;
-export { ping };
+declare function canPing(user?: User): boolean;
+declare function pan(point: Point, options?: {
+    ping?: boolean;
+}): Promise<void>;
+export { canPing, pan, ping };
