@@ -89,7 +89,8 @@ async function ping(origin, options) {
 async function pingToken(token, local) {
     if (!canvas.ready)
         return false;
-    return ping(token.center, { local });
+    const center = tokenCenter(token);
+    return ping(center, { local });
 }
 function emitTokenHover(event, token, hover) {
     if (!canvas.ready)
@@ -104,9 +105,19 @@ function emitTokenHover(event, token, hover) {
 }
 function panToToken(token, control) {
     if (control) {
-        const tokenObj = isInstanceOf(token, "TokenPF2e") ? token : token.object;
+        const tokenObj = isTokenObject(token) ? token : token.object;
         tokenObj?.control({ releaseOthers: true });
     }
-    canvas.animatePan(token.center);
+    const center = tokenCenter(token);
+    canvas.animatePan(center);
 }
-export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, isTokenObject, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, };
+function tokenCenter(token) {
+    if (isTokenObject(token)) {
+        return token.center;
+    }
+    else {
+        const { x, y } = token.getCenterPoint();
+        return new PIXI.Point(x, y);
+    }
+}
+export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, isTokenObject, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, tokenCenter, };

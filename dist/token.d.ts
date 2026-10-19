@@ -1,7 +1,7 @@
 import { ActorType, ScenePF2e, TokenDocumentPF2e, TokenPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
-import { PingOptions, TokenDocumentUUID } from ".";
-declare function isTokenObject(token: any): token is TokenPF2e;
-declare function getTokenDocument(token: unknown): TokenDocumentPF2e | undefined;
+import { PingOptions, Token, TokenDocumentUUID } from ".";
+declare function isTokenObject<T extends Token = TokenPF2e>(token: any): token is T;
+declare function getTokenDocument<T extends TokenDocument = TokenDocumentPF2e>(token: Maybe<Token | TokenDocument>): T | undefined;
 declare function getCurrentTargets(options: {
     types?: ("creature" | ActorType)[];
     user?: UserPF2e;
@@ -30,13 +30,14 @@ declare function getTargetsTokens<A extends Actor>(targets: {
 declare function ping(origin: Point, options?: PingOptions & {
     local?: boolean;
 }): Promise<boolean>;
-declare function pingToken(token: TokenPF2e | TokenDocumentPF2e, local?: boolean): Promise<boolean>;
+declare function pingToken(token: Token | TokenDocument, local?: boolean): Promise<boolean>;
 declare function emitTokenHover(event: MouseEvent, token: TokenPF2e | TokenDocumentPF2e, hover: boolean): void;
-declare function panToToken(token: TokenPF2e | TokenDocumentPF2e, control?: boolean): void;
+declare function panToToken(token: Token | TokenDocument, control?: boolean): void;
+declare function tokenCenter(token: Token | TokenDocument): PIXI.Point;
 type FirstActiveTokenOptions = {
     linked?: boolean;
     match?: (token: TokenDocument) => boolean;
     scene?: Scene | null;
 };
-export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, isTokenObject, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, };
+export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, isTokenObject, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, tokenCenter, };
 export type { FirstActiveTokenOptions };

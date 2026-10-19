@@ -1,15 +1,17 @@
 import { ActorType, ScenePF2e, TokenDocumentPF2e, TokenPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
-import { ActivityData, isInstanceOf, PingOptions, R, TokenDocumentUUID } from ".";
+import { ActivityData, isInstanceOf, PingOptions, R, Token, TokenDocumentUUID } from ".";
 
-function isTokenObject(token: any): token is TokenPF2e {
+function isTokenObject<T extends Token = TokenPF2e>(token: any): token is T {
     return token instanceof foundry.canvas.placeables.Token;
 }
 
-function getTokenDocument(token: unknown): TokenDocumentPF2e | undefined {
+function getTokenDocument<T extends TokenDocument = TokenDocumentPF2e>(
+    token: Maybe<Token | TokenDocument>,
+): T | undefined {
     return isTokenObject(token)
-        ? token.document
+        ? (token.document as unknown as T)
         : token instanceof TokenDocument
-          ? (token as TokenDocumentPF2e)
+          ? (token as T)
           : undefined;
 }
 
@@ -136,9 +138,11 @@ async function ping(origin: Point, options?: PingOptions & { local?: boolean }):
     return canvas.controls.handlePing(game.user, origin, ping);
 }
 
-async function pingToken(token: TokenPF2e | TokenDocumentPF2e, local?: boolean): Promise<boolean> {
+async function pingToken(token: Token | TokenDocument, local?: boolean): Promise<boolean> {
     if (!canvas.ready) return false;
-    return ping(token.center, { local });
+
+    const center = tokenCenter(token);
+    return ping(center, { local });
 }
 
 function emitTokenHover(event: MouseEvent, token: TokenPF2e | TokenDocumentPF2e, hover: boolean) {
@@ -153,13 +157,23 @@ function emitTokenHover(event: MouseEvent, token: TokenPF2e | TokenDocumentPF2e,
     }
 }
 
-function panToToken(token: TokenPF2e | TokenDocumentPF2e, control?: boolean) {
+function panToToken(token: Token | TokenDocument, control?: boolean) {
     if (control) {
-        const tokenObj = isInstanceOf(token, "TokenPF2e") ? token : token.object;
+        const tokenObj = isTokenObject<Token>(token) ? token : token.object;
         tokenObj?.control({ releaseOthers: true });
     }
 
-    canvas.animatePan(token.center);
+    const center = tokenCenter(token);
+    canvas.animatePan(center);
+}
+
+function tokenCenter(token: Token | TokenDocument) {
+    if (isTokenObject(token)) {
+        return token.center;
+    } else {
+        const { x, y } = token.getCenterPoint();
+        return new PIXI.Point(x, y);
+    }
 }
 
 type FirstActiveTokenOptions = {
@@ -181,5 +195,6 @@ export {
     pingToken,
     positionTokenFromCoords,
     selectTokens,
+    tokenCenter,
 };
 export type { FirstActiveTokenOptions };
