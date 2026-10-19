@@ -26,7 +26,10 @@ declare function getTargetsTokens<A extends Actor>(targets: {
 }[], uuid?: boolean, options?: FirstActiveTokenOptions): TokenDocumentFromActor<A>[];
 declare function pingToken(token: Token | TokenDocument, local?: boolean): Promise<boolean>;
 declare function emitTokenHover(event: MouseEvent, token: TokenPF2e | TokenDocumentPF2e, hover: boolean): void;
-declare function panToToken(token: Token | TokenDocument, control?: boolean): void;
+declare function panToToken(token: Token | TokenDocument, optionsOrControl?: boolean | {
+    ping?: boolean;
+    control?: boolean;
+}): Promise<void>;
 declare function tokenCenter(token: Token | TokenDocument): PIXI.Point;
 type FirstActiveTokenOptions = {
     linked?: boolean;

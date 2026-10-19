@@ -1,4 +1,4 @@
-import { isInstanceOf, ping, R } from ".";
+import { isInstanceOf, pan, ping, R } from ".";
 function isTokenObject(token) {
     return token instanceof foundry.canvas.placeables.Token;
 }
@@ -74,13 +74,16 @@ function emitTokenHover(event, token, hover) {
         tokenObj?.emitHoverOut(event);
     }
 }
-function panToToken(token, control) {
+function panToToken(token, optionsOrControl = {}) {
+    const { control, ping } = R.isBoolean(optionsOrControl)
+        ? { control: optionsOrControl, ping: false }
+        : optionsOrControl;
     if (control) {
         const tokenObj = isTokenObject(token) ? token : token.object;
         tokenObj?.control({ releaseOthers: true });
     }
     const center = tokenCenter(token);
-    canvas.animatePan(center);
+    return pan(center, { ping });
 }
 function tokenCenter(token) {
     if (isTokenObject(token)) {

@@ -1,5 +1,5 @@
 import { ActorType, ScenePF2e, TokenDocumentPF2e, TokenPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
-import { ActivityData, isInstanceOf, ping, PingOptions, R, Token, TokenDocumentUUID } from ".";
+import { isInstanceOf, pan, ping, R, Token, TokenDocumentUUID } from ".";
 
 function isTokenObject<T extends Token = TokenPF2e>(token: any): token is T {
     return token instanceof foundry.canvas.placeables.Token;
@@ -128,14 +128,21 @@ function emitTokenHover(event: MouseEvent, token: TokenPF2e | TokenDocumentPF2e,
     }
 }
 
-function panToToken(token: Token | TokenDocument, control?: boolean) {
+function panToToken(
+    token: Token | TokenDocument,
+    optionsOrControl: boolean | { ping?: boolean; control?: boolean } = {},
+): Promise<void> {
+    const { control, ping } = R.isBoolean(optionsOrControl)
+        ? { control: optionsOrControl, ping: false }
+        : optionsOrControl;
+
     if (control) {
         const tokenObj = isTokenObject<Token>(token) ? token : token.object;
         tokenObj?.control({ releaseOthers: true });
     }
 
     const center = tokenCenter(token);
-    canvas.animatePan(center);
+    return pan(center, { ping });
 }
 
 function tokenCenter(token: Token | TokenDocument) {
