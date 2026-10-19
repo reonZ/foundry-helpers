@@ -1,8 +1,7 @@
 import { htmlQuery, localize, MODULE, R, SYSTEM, TemplateLocalize } from ".";
 
-function render(...args: HandlebarsRenderArgs): Promise<string> {
-    const data = args.at(-1) as unknown as RenderData;
-    const template = args.slice(0, -1).join();
+function render(template: string, args: HandlebarsRenderData): Promise<string> {
+    const data = args as unknown as RenderData;
     const path = MODULE.templatePath(template);
 
     data.i18n = localize.i18n(R.isString(data.i18n) ? data.i18n : template.replace(/\//, "."));

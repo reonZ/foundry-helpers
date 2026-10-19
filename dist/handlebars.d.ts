@@ -1,4 +1,4 @@
-declare function render(...args: HandlebarsRenderArgs): Promise<string>;
+declare function render(template: string, args: HandlebarsRenderData): Promise<string>;
 declare function preSyncElement(newElement: HTMLElement, priorElement: Maybe<HTMLElement>, ...scrollable: string[]): SyncElementState;
 declare function postSyncElement(newElement: HTMLElement, state: SyncElementState): void;
 type SyncElementState = {
