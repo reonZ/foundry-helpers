@@ -43,7 +43,7 @@ function createDuplicateMap(raw) {
 }
 function createTargetDocuments(source) {
     const actor = source.actor ?? source.token?.actor;
-    return actor ? { actor, token: getTokenDocument(source) } : undefined;
+    return actor ? { actor, token: getTokenDocument(source.token) ?? actor.token } : undefined;
 }
 function joinListString(arr, delimiter = ",") {
     return R.pipe(arr, R.filter(R.isTruthy), R.join(delimiter));

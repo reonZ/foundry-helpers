@@ -72,7 +72,7 @@ function createTargetDocuments(source: {
     token?: TokenDocument | foundry.canvas.placeables.Token | null;
 }): BaseTargetDocuments | TargetDocuments | undefined {
     const actor = source.actor ?? source.token?.actor;
-    return actor ? { actor, token: getTokenDocument(source) } : undefined;
+    return actor ? { actor, token: getTokenDocument(source.token) ?? actor.token } : undefined;
 }
 
 function joinListString(arr: (string | undefined | null | false)[], delimiter: string = ","): string {
