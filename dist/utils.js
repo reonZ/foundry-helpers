@@ -1,4 +1,4 @@
-import { R } from ".";
+import { getTokenDocument, R } from ".";
 function activateHooksAndWrappers(entries) {
     for (const entry of entries) {
         entry.activate();
@@ -43,10 +43,7 @@ function createDuplicateMap(raw) {
 }
 function createTargetDocuments(source) {
     const actor = source.actor ?? source.token?.actor;
-    if (!actor)
-        return;
-    const token = source.token instanceof TokenDocument ? source.token : source.token?.document;
-    return { actor, token };
+    return actor ? { actor, token: getTokenDocument(source) } : undefined;
 }
 function joinListString(arr, delimiter = ",") {
     return R.pipe(arr, R.filter(R.isTruthy), R.join(delimiter));

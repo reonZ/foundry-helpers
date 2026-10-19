@@ -1,5 +1,5 @@
 import { ActorPF2e, TokenDocumentPF2e, TokenPF2e } from "@7h3laughingman/pf2e-types";
-import { R } from ".";
+import { getTokenDocument, R } from ".";
 
 function activateHooksAndWrappers(entries: { activate: () => void }[]) {
     for (const entry of entries) {
@@ -72,10 +72,7 @@ function createTargetDocuments(source: {
     token?: TokenDocument | foundry.canvas.placeables.Token | null;
 }): BaseTargetDocuments | TargetDocuments | undefined {
     const actor = source.actor ?? source.token?.actor;
-    if (!actor) return;
-
-    const token = source.token instanceof TokenDocument ? source.token : source.token?.document;
-    return { actor, token };
+    return actor ? { actor, token: getTokenDocument(source) } : undefined;
 }
 
 function joinListString(arr: (string | undefined | null | false)[], delimiter: string = ","): string {
