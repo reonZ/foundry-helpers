@@ -1,4 +1,4 @@
-import { isInstanceOf, R } from ".";
+import { isInstanceOf, ping, R } from ".";
 function isTokenObject(token) {
     return token instanceof foundry.canvas.placeables.Token;
 }
@@ -57,35 +57,6 @@ function getTargetsTokens(targets, uuid, options) {
         return uuid ? token?.uuid : token;
     }), R.filter(R.isTruthy));
 }
-/**
- * slightly modified core foundry version
- */
-async function ping(origin, options) {
-    const scene = canvas.scene;
-    if (!scene)
-        return false;
-    // Don't allow pinging outside of the canvas bounds
-    if (!canvas.dimensions.rect.contains(origin.x, origin.y))
-        return false;
-    // Configure the ping to be dispatched
-    const types = CONFIG.Canvas.pings.types;
-    const isPull = game.keyboard.isModifierActive("Shift");
-    const isAlert = game.keyboard.isModifierActive("Alt");
-    let style = types.PULSE;
-    if (isPull)
-        style = types.PULL;
-    else if (isAlert)
-        style = types.ALERT;
-    let ping = { scene: scene.id, pull: isPull, style, zoom: canvas.stage.scale.x };
-    ping = foundry.utils.mergeObject(ping, options);
-    if (!options?.local) {
-        // Broadcast the ping to other connected clients
-        const activity = { cursor: origin, ping };
-        game.user.broadcastActivity(activity);
-    }
-    // Display the ping locally
-    return canvas.controls.handlePing(game.user, origin, ping);
-}
 async function pingToken(token, local) {
     if (!canvas.ready)
         return false;
@@ -120,4 +91,4 @@ function tokenCenter(token) {
         return new PIXI.Point(x, y);
     }
 }
-export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, isTokenObject, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, tokenCenter, };
+export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, isTokenObject, panToToken, pingToken, positionTokenFromCoords, selectTokens, tokenCenter, };

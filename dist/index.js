@@ -8,6 +8,7 @@ export * from "./action";
 export * from "./actor";
 export * from "./application";
 export * from "./array";
+export * from "./canvas";
 export * from "./chat";
 export * from "./combat";
 export * from "./compendium";

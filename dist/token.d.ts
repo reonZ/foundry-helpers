@@ -1,5 +1,5 @@
 import { ActorType, ScenePF2e, TokenDocumentPF2e, TokenPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
-import { PingOptions, Token, TokenDocumentUUID } from ".";
+import { Token, TokenDocumentUUID } from ".";
 declare function isTokenObject<T extends Token = TokenPF2e>(token: any): token is T;
 declare function getTokenDocument<T extends TokenDocument = TokenDocumentPF2e>(token: Maybe<Token | TokenDocument>): T | undefined;
 declare function getCurrentTargets(options: {
@@ -24,12 +24,6 @@ declare function getTargetsTokens<A extends Actor>(targets: {
     actor: A;
     token?: TokenDocument | null;
 }[], uuid?: boolean, options?: FirstActiveTokenOptions): TokenDocumentFromActor<A>[];
-/**
- * slightly modified core foundry version
- */
-declare function ping(origin: Point, options?: PingOptions & {
-    local?: boolean;
-}): Promise<boolean>;
 declare function pingToken(token: Token | TokenDocument, local?: boolean): Promise<boolean>;
 declare function emitTokenHover(event: MouseEvent, token: TokenPF2e | TokenDocumentPF2e, hover: boolean): void;
 declare function panToToken(token: Token | TokenDocument, control?: boolean): void;
@@ -39,5 +33,5 @@ type FirstActiveTokenOptions = {
     match?: (token: TokenDocument) => boolean;
     scene?: Scene | null;
 };
-export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, isTokenObject, panToToken, ping, pingToken, positionTokenFromCoords, selectTokens, tokenCenter, };
+export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, isTokenObject, panToToken, pingToken, positionTokenFromCoords, selectTokens, tokenCenter, };
 export type { FirstActiveTokenOptions };

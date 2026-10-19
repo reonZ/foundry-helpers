@@ -1,5 +1,5 @@
 import { ActorType, ScenePF2e, TokenDocumentPF2e, TokenPF2e, UserPF2e } from "@7h3laughingman/pf2e-types";
-import { ActivityData, isInstanceOf, PingOptions, R, Token, TokenDocumentUUID } from ".";
+import { ActivityData, isInstanceOf, ping, PingOptions, R, Token, TokenDocumentUUID } from ".";
 
 function isTokenObject<T extends Token = TokenPF2e>(token: any): token is T {
     return token instanceof foundry.canvas.placeables.Token;
@@ -109,35 +109,6 @@ function getTargetsTokens(targets: BaseTargetDocuments[], uuid?: boolean, option
     );
 }
 
-/**
- * slightly modified core foundry version
- */
-async function ping(origin: Point, options?: PingOptions & { local?: boolean }): Promise<boolean> {
-    const scene = canvas.scene;
-    if (!scene) return false;
-
-    // Don't allow pinging outside of the canvas bounds
-    if (!canvas.dimensions.rect.contains(origin.x, origin.y)) return false;
-    // Configure the ping to be dispatched
-    const types = CONFIG.Canvas.pings.types;
-    const isPull = game.keyboard.isModifierActive("Shift");
-    const isAlert = game.keyboard.isModifierActive("Alt");
-    let style: string = types.PULSE;
-    if (isPull) style = types.PULL;
-    else if (isAlert) style = types.ALERT;
-    let ping = { scene: scene.id, pull: isPull, style, zoom: canvas.stage.scale.x };
-    ping = foundry.utils.mergeObject(ping, options);
-
-    if (!options?.local) {
-        // Broadcast the ping to other connected clients
-        const activity: ActivityData = { cursor: origin, ping };
-        game.user.broadcastActivity(activity);
-    }
-
-    // Display the ping locally
-    return canvas.controls.handlePing(game.user, origin, ping);
-}
-
 async function pingToken(token: Token | TokenDocument, local?: boolean): Promise<boolean> {
     if (!canvas.ready) return false;
 
@@ -191,7 +162,6 @@ export {
     getTokenDocument,
     isTokenObject,
     panToToken,
-    ping,
     pingToken,
     positionTokenFromCoords,
     selectTokens,
