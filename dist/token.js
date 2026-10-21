@@ -86,12 +86,7 @@ function panToToken(token, optionsOrControl = {}) {
     return pan(center, { ping });
 }
 function tokenCenter(token) {
-    if (isTokenObject(token)) {
-        return token.center;
-    }
-    else {
-        const { x, y } = token.getCenterPoint();
-        return new PIXI.Point(x, y);
-    }
+    const { x, y } = isTokenObject(token) ? token.center : token.getCenterPoint();
+    return { x, y };
 }
 export { emitTokenHover, getCurrentTargets, getFirstActiveToken, getTargetsTokens, getTargetToken, getTokenDocument, isTokenObject, panToToken, pingToken, positionTokenFromCoords, selectTokens, tokenCenter, };

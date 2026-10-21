@@ -30,7 +30,7 @@ declare function panToToken(token: Token | TokenDocument, optionsOrControl?: boo
     ping?: boolean;
     control?: boolean;
 }): Promise<void>;
-declare function tokenCenter(token: Token | TokenDocument): PIXI.Point;
+declare function tokenCenter(token: Token | TokenDocument): Point;
 type FirstActiveTokenOptions = {
     linked?: boolean;
     match?: (token: TokenDocument) => boolean;
