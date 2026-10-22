@@ -109,11 +109,16 @@ function getTargetsTokens(targets: BaseTargetDocuments[], uuid?: boolean, option
     );
 }
 
-async function pingToken(token: Token | TokenDocument, local?: boolean): Promise<boolean> {
+async function pingToken(
+    token: Token | TokenDocument,
+    optionsOrLocal: boolean | { local?: boolean; user?: User } = {},
+): Promise<boolean> {
     if (!canvas.ready) return false;
 
+    const options = R.isBoolean(optionsOrLocal) ? { local: optionsOrLocal } : optionsOrLocal;
     const center = tokenCenter(token);
-    return ping(center, { local });
+
+    return ping(center, options);
 }
 
 function emitTokenHover(event: MouseEvent, token: TokenPF2e | TokenDocumentPF2e, hover: boolean) {
@@ -130,9 +135,9 @@ function emitTokenHover(event: MouseEvent, token: TokenPF2e | TokenDocumentPF2e,
 
 function panToToken(
     token: Token | TokenDocument,
-    optionsOrControl: boolean | { ping?: boolean; control?: boolean } = {},
+    optionsOrControl: boolean | { ping?: boolean; control?: boolean; user?: User } = {},
 ): Promise<void> {
-    const { control, ping } = R.isBoolean(optionsOrControl)
+    const { control, ping, user } = R.isBoolean(optionsOrControl)
         ? { control: optionsOrControl, ping: false }
         : optionsOrControl;
 
@@ -142,7 +147,7 @@ function panToToken(
     }
 
     const center = tokenCenter(token);
-    return pan(center, { ping });
+    return pan(center, { ping, user });
 }
 
 function tokenCenter(token: Token | TokenDocument): Point {

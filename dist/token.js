@@ -57,11 +57,12 @@ function getTargetsTokens(targets, uuid, options) {
         return uuid ? token?.uuid : token;
     }), R.filter(R.isTruthy));
 }
-async function pingToken(token, local) {
+async function pingToken(token, optionsOrLocal = {}) {
     if (!canvas.ready)
         return false;
+    const options = R.isBoolean(optionsOrLocal) ? { local: optionsOrLocal } : optionsOrLocal;
     const center = tokenCenter(token);
-    return ping(center, { local });
+    return ping(center, options);
 }
 function emitTokenHover(event, token, hover) {
     if (!canvas.ready)
@@ -75,7 +76,7 @@ function emitTokenHover(event, token, hover) {
     }
 }
 function panToToken(token, optionsOrControl = {}) {
-    const { control, ping } = R.isBoolean(optionsOrControl)
+    const { control, ping, user } = R.isBoolean(optionsOrControl)
         ? { control: optionsOrControl, ping: false }
         : optionsOrControl;
     if (control) {
@@ -83,7 +84,7 @@ function panToToken(token, optionsOrControl = {}) {
         tokenObj?.control({ releaseOthers: true });
     }
     const center = tokenCenter(token);
-    return pan(center, { ping });
+    return pan(center, { ping, user });
 }
 function tokenCenter(token) {
     const { x, y } = isTokenObject(token) ? token.center : token.getCenterPoint();

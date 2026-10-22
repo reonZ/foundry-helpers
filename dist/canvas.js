@@ -1,10 +1,12 @@
 /**
  * slightly modified core foundry version
  */
-async function ping(origin, options) {
+async function ping(origin, options = {}) {
     const scene = canvas.scene;
     if (!scene)
         return false;
+    const user = options.user ?? game.user;
+    delete options.user;
     // Don't allow pinging outside of the canvas bounds
     if (!canvas.dimensions.rect.contains(origin.x, origin.y))
         return false;
@@ -19,21 +21,21 @@ async function ping(origin, options) {
         style = types.ALERT;
     let ping = { scene: scene.id, pull: isPull, style, zoom: canvas.stage.scale.x };
     ping = foundry.utils.mergeObject(ping, options);
-    if (!options?.local) {
+    if (!options.local) {
         // Broadcast the ping to other connected clients
         const activity = { cursor: origin, ping };
-        game.user.broadcastActivity(activity);
+        user.broadcastActivity(activity);
     }
     // Display the ping locally
-    return canvas.controls.handlePing(game.user, origin, ping);
+    return canvas.controls.handlePing(user, origin, ping);
 }
 function canPing(user = game.user) {
     return user.hasPermission("PING_CANVAS");
 }
 async function pan(point, options) {
     await canvas.animatePan(point);
-    if (options?.ping && canPing()) {
-        ping(point, { local: true });
+    if (options?.ping) {
+        ping(point, { local: true, user: options.user });
     }
 }
 export { canPing, pan, ping };

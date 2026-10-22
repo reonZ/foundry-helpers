@@ -3,9 +3,20 @@ import { ActivityData, PingOptions } from ".";
 /**
  * slightly modified core foundry version
  */
-async function ping(origin: Point, options?: PingOptions & { local?: boolean }): Promise<boolean> {
+async function ping(
+    origin: Point,
+    options: PingOptions & {
+        local?: boolean;
+        pull?: boolean;
+        style?: ValueOf<typeof CONFIG.Canvas.pings.types>;
+        user?: User;
+    } = {},
+): Promise<boolean> {
     const scene = canvas.scene;
     if (!scene) return false;
+
+    const user = options.user ?? game.user;
+    delete options.user;
 
     // Don't allow pinging outside of the canvas bounds
     if (!canvas.dimensions.rect.contains(origin.x, origin.y)) return false;
@@ -19,24 +30,24 @@ async function ping(origin: Point, options?: PingOptions & { local?: boolean }):
     let ping = { scene: scene.id, pull: isPull, style, zoom: canvas.stage.scale.x };
     ping = foundry.utils.mergeObject(ping, options);
 
-    if (!options?.local) {
+    if (!options.local) {
         // Broadcast the ping to other connected clients
         const activity: ActivityData = { cursor: origin, ping };
-        game.user.broadcastActivity(activity);
+        user.broadcastActivity(activity);
     }
 
     // Display the ping locally
-    return canvas.controls.handlePing(game.user, origin, ping);
+    return canvas.controls.handlePing(user, origin, ping);
 }
 
 function canPing(user: User = game.user) {
     return user.hasPermission("PING_CANVAS");
 }
 
-async function pan(point: Point, options?: { ping?: boolean }): Promise<void> {
+async function pan(point: Point, options?: { ping?: boolean; user?: User }): Promise<void> {
     await canvas.animatePan(point);
-    if (options?.ping && canPing()) {
-        ping(point, { local: true });
+    if (options?.ping) {
+        ping(point, { local: true, user: options.user });
     }
 }
 

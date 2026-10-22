@@ -24,11 +24,15 @@ declare function getTargetsTokens<A extends Actor>(targets: {
     actor: A;
     token?: TokenDocument | null;
 }[], uuid?: boolean, options?: FirstActiveTokenOptions): TokenDocumentFromActor<A>[];
-declare function pingToken(token: Token | TokenDocument, local?: boolean): Promise<boolean>;
+declare function pingToken(token: Token | TokenDocument, optionsOrLocal?: boolean | {
+    local?: boolean;
+    user?: User;
+}): Promise<boolean>;
 declare function emitTokenHover(event: MouseEvent, token: TokenPF2e | TokenDocumentPF2e, hover: boolean): void;
 declare function panToToken(token: Token | TokenDocument, optionsOrControl?: boolean | {
     ping?: boolean;
     control?: boolean;
+    user?: User;
 }): Promise<void>;
 declare function tokenCenter(token: Token | TokenDocument): Point;
 type FirstActiveTokenOptions = {
