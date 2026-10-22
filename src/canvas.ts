@@ -30,7 +30,7 @@ async function ping(origin: Point, options?: PingOptions & { local?: boolean }):
 }
 
 function canPing(user: User = game.user) {
-    return game.user.hasPermission("PING_CANVAS");
+    return user.hasPermission("PING_CANVAS");
 }
 
 async function pan(point: Point, options?: { ping?: boolean }): Promise<void> {
