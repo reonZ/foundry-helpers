@@ -7,7 +7,7 @@ import NumericTerm from "@7h3laughingman/foundry-types/client/dice/terms/numeric
 import CompendiumCollection from "@7h3laughingman/foundry-types/client/documents/collections/compendium-collection.mjs";
 import Localization from "@7h3laughingman/foundry-types/client/helpers/localization.mjs";
 import { DocumentUUID } from "@7h3laughingman/foundry-types/client/utils/_module.mjs";
-import { DocumentOwnershipLevel, DocumentType, FileCategory, FilePath, ImageFilePath, RollMode, VideoFilePath } from "@7h3laughingman/foundry-types/common/constants.mjs";
+import { DocumentOwnershipLevel, DocumentType, FileCategory, FilePath, GridSnappingMode, ImageFilePath, RollMode, VideoFilePath } from "@7h3laughingman/foundry-types/common/constants.mjs";
 import { ModelPropsFromSchema, SourceFromSchema } from "@7h3laughingman/foundry-types/common/data/fields.mjs";
 import { FamiliarPF2e, FamiliarSheetPF2e, FeatLike, FeatPF2e, FeatSlot, HeritagePF2e, LootPF2e, LootSheetPF2e, SpellcastingEntrySlots, VehicleSheetPF2e } from "@7h3laughingman/pf2e-types";
 export type * from "@7h3laughingman/foundry-types/client/_module.mjs";
@@ -49,4 +49,4 @@ interface FeatNotSlot<T extends FeatLike = FeatPF2e> {
     level?: never;
     children: FeatSlot<FeatLike | HeritagePF2e>[];
 }
-export type { CompendiumCollection, DetectionMode, Die, DocumentOwnership, DocumentOwnershipLevel, DocumentType, DocumentUUID, FamiliarSheetData, FeatNotSlot, FileCategory, FilePath, ImageFilePath, Localization, LootSheetDataPF2e, ModelPropsFromSchema, MouseInteractionManager, NumericTerm, PointVisionSource, PrimaryCanvasGroup, RollMode, SourceFromSchema, SpellSlotData, TokenDetectionMode, VehicleSheetData, VideoFilePath, };
+export type { CompendiumCollection, DetectionMode, Die, DocumentOwnership, DocumentOwnershipLevel, DocumentType, DocumentUUID, FamiliarSheetData, FeatNotSlot, FileCategory, FilePath, GridSnappingMode, ImageFilePath, Localization, LootSheetDataPF2e, ModelPropsFromSchema, MouseInteractionManager, NumericTerm, PointVisionSource, PrimaryCanvasGroup, RollMode, SourceFromSchema, SpellSlotData, TokenDetectionMode, VehicleSheetData, VideoFilePath, };
