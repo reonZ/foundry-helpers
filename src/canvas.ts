@@ -1,4 +1,4 @@
-import { ActivityData, PingOptions } from ".";
+import { ActivityData, PingOptions, waitTimeout } from ".";
 
 /**
  * slightly modified core foundry version
@@ -6,6 +6,8 @@ import { ActivityData, PingOptions } from ".";
 async function ping(
     origin: Point,
     options: PingOptions & {
+        delay?: number;
+        instances?: number;
         local?: boolean;
         pull?: boolean;
         style?: ValueOf<typeof CONFIG.Canvas.pings.types>;
@@ -30,14 +32,24 @@ async function ping(
     let ping = { scene: scene.id, pull: isPull, style, zoom: canvas.stage.scale.x };
     ping = foundry.utils.mergeObject(ping, options);
 
-    if (!options.local) {
-        // Broadcast the ping to other connected clients
-        const activity: ActivityData = { cursor: origin, ping };
-        user.broadcastActivity(activity);
+    const delay = Math.clamp(options.delay ?? 250, 100, 2000);
+    const instances = Math.clamp(options.instances ?? 1, 1, 10);
+    for (let i = instances - 1; i >= 0; i--) {
+        if (!options.local) {
+            // Broadcast the ping to other connected clients
+            const activity: ActivityData = { cursor: origin, ping };
+            user.broadcastActivity(activity);
+        }
+
+        // Display the ping locally
+        canvas.controls.handlePing(user, origin, ping);
+
+        if (i > 0) {
+            await waitTimeout(delay);
+        }
     }
 
-    // Display the ping locally
-    return canvas.controls.handlePing(user, origin, ping);
+    return true;
 }
 
 function canPing(user: User = game.user) {
