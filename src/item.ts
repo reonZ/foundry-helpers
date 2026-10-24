@@ -426,6 +426,15 @@ function isAreaOrAutoFireType(type: string): type is "area-fire" | "auto-fire" {
     return R.isIncludedIn(type, ["area-fire", "auto-fire"]);
 }
 
+function itemIsCredits(item: ItemPF2e): boolean {
+    return item.isOfType("treasure") && item.system.category === "credstick";
+}
+
+/** @return credits value or item quantity */
+function itemCheckedValue(item: PhysicalItemPF2e): number {
+    return itemIsCredits(item) ? item.price.value.credits : item.quantity;
+}
+
 type AttachableType = keyof typeof ATTACHABLE_TYPES;
 type AttachToType<T extends AttachableType> = (typeof ATTACHABLE_TYPES)[T][number];
 
@@ -466,6 +475,8 @@ export {
     isSF2eItem,
     isSupressedFeat,
     ITEM_CARRY_TYPES,
+    itemCheckedValue,
+    itemIsCredits,
     itemIsEquipped,
     itemIsOfType,
     itemWithActor,

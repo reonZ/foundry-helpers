@@ -53,6 +53,9 @@ declare function isSupressedFeat<TActor extends ActorPF2e | null>(item: ItemPF2e
 declare function isCastConsumable(item: ConsumablePF2e): boolean;
 declare function isSF2eItem<T extends PhysicalItemPF2e>(item: T): boolean;
 declare function isAreaOrAutoFireType(type: string): type is "area-fire" | "auto-fire";
+declare function itemIsCredits(item: ItemPF2e): boolean;
+/** @return credits value or item quantity */
+declare function itemCheckedValue(item: PhysicalItemPF2e): number;
 type AttachableType = keyof typeof ATTACHABLE_TYPES;
 type AttachToType<T extends AttachableType> = (typeof ATTACHABLE_TYPES)[T][number];
 type ActorItemInstances<TType extends ItemType, TActor extends ActorPF2e = ActorPF2e> = ItemInstances<TActor>[TType extends "weapon" | "shield" ? TType | "weapon" | "equipment" : TType];
@@ -66,5 +69,5 @@ type EquipAnnotationData = {
     carryType: "held" | "worn";
 };
 type AuxiliaryAnnotation = "draw" | "pick-up" | "retrieve" | "sheathe";
-export { actorItems, consumeItem, equipItemToUse, findItemWithSlug, findItemWithSourceId, getActorWeapons, getEquipAnnotation, getItemFromUuid, getItemSlug, getItemSource, getItemSourceFromUuid, getItemSourceId, hasAnyItemWithSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, ITEM_CARRY_TYPES, itemIsEquipped, itemIsOfType, itemWithActor, PHYSICAL_ITEM_TYPES, simulateDropItem, usePhysicalItem, };
+export { actorItems, consumeItem, equipItemToUse, findItemWithSlug, findItemWithSourceId, getActorWeapons, getEquipAnnotation, getItemFromUuid, getItemSlug, getItemSource, getItemSourceFromUuid, getItemSourceId, hasAnyItemWithSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, ITEM_CARRY_TYPES, itemCheckedValue, itemIsCredits, itemIsEquipped, itemIsOfType, itemWithActor, PHYSICAL_ITEM_TYPES, simulateDropItem, usePhysicalItem, };
 export type { ActorItemInstances, EquipAnnotationData, ItemOrSource };
