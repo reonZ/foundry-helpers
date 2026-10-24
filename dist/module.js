@@ -105,7 +105,8 @@ class CustomModule {
         return joined ? `${this.#globalName}.${joined}` : `${this.#globalName}`;
     }
     path(...path) {
-        const joined = R.join(path, ".");
+        const keys = path.map((x) => x.trim()).filter(R.isTruthy);
+        const joined = R.join(keys, ".");
         return joined ? `${this.id}.${joined}` : `${this.id}`;
     }
     relativePath(...path) {
