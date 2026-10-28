@@ -40,6 +40,7 @@ export type * from "@7h3laughingman/foundry-types/client/applications/ux/context
 export type * from "@7h3laughingman/foundry-types/client/applications/ux/text-editor.mjs";
 export type * from "@7h3laughingman/foundry-types/client/appv1/api/_module.mjs";
 export type * from "@7h3laughingman/foundry-types/client/appv1/sheets/actor-sheet.mjs";
+export type * from "@7h3laughingman/foundry-types/client/canvas/geometry/_module.mjs";
 export type * from "@7h3laughingman/foundry-types/client/canvas/interaction/_types.mjs";
 export type * from "@7h3laughingman/foundry-types/client/canvas/placeables/_module.mjs";
 export type * from "@7h3laughingman/foundry-types/client/data/region-behaviors/base.mjs";

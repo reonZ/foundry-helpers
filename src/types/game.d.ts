@@ -24,5 +24,11 @@ declare global {
 
     type ModifyBatchOperation = DatabaseWriteOperation;
 
-    class Level {}
+    class Level {
+        elevation: {
+            base: number;
+            bottom: number;
+            top: number;
+        };
+    }
 }
