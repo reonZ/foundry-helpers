@@ -15,4 +15,9 @@ declare function pan(point: Point, options?: {
     ping?: boolean;
     user?: User;
 }): Promise<void>;
-export { canPing, pan, ping };
+declare function createPickPositionHandler(notify: string, callback: (point: Point) => void): PickPositionHandler;
+type PickPositionHandler = {
+    clear: () => void;
+    activate: (notify?: string) => void;
+};
+export { canPing, createPickPositionHandler, pan, ping };
