@@ -25,16 +25,16 @@ function getDocumentFromUUIDSync<T extends DocumentType, D = InstanceType<Docume
     return doc instanceof DocumentCls ? (doc as any) : null;
 }
 
-function getInMemory<T>(obj: ClientDocument | Token, ...path: string[]): T | undefined {
+function getInMemory<T>(obj: InMemoryObject, ...path: string[]): T | undefined {
     return foundry.utils.getProperty(obj, `modules.${MODULE.id}.${path.join(".")}`) as T | undefined;
 }
 
-function setInMemory<T>(obj: ClientDocument | Token, ...args: [...string[], T]): boolean {
+function setInMemory<T>(obj: InMemoryObject, ...args: [...string[], T]): boolean {
     const value = args.pop();
     return foundry.utils.setProperty(obj, `modules.${MODULE.id}.${args.join(".")}`, value);
 }
 
-function deleteInMemory(obj: ClientDocument | Token, ...path: string[]) {
+function deleteInMemory(obj: InMemoryObject, ...path: string[]) {
     return foundry.utils.deleteProperty(obj, `modules.${MODULE.id}.${path.join(".")}`);
 }
 
@@ -63,6 +63,8 @@ function isDocumentUUID<T extends DocumentUUID>(type: DocumentType, uuid: string
     }
 }
 
+type InMemoryObject = ClientDocument | Token | fav1.api.Application | fa.api.ApplicationV2;
+
 export {
     deleteInMemory,
     getDocumentFromUUID,
@@ -73,3 +75,4 @@ export {
     isValidTargetDocuments,
     setInMemory,
 };
+export type { InMemoryObject };
