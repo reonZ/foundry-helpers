@@ -255,13 +255,18 @@ declare global {
             type RerollType = "hero" | "mythic" | "new" | "lower" | "higher";
             type TargetMessageType = "area" | "damage" | "spell" | "action" | "check";
 
+            type TargetSaveInstanceReroll = {
+                type: RerollType;
+                other: { die: number; discarded: boolean };
+            };
+
             type TargetSaveInstance = {
                 die: number;
                 dosAdjustments?: DegreeAdjustmentsRecord | undefined;
                 modifiers: { label: string; modifier: number; slug: string }[];
                 notes: RollNoteSource[];
                 private: boolean;
-                rerolled?: RerollType;
+                rerolled?: TargetSaveInstanceReroll;
                 roll: string;
                 significantModifiers?: modifiersMatter.SignificantModifier[] | undefined;
                 statistic: SaveType;
