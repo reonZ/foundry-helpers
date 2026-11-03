@@ -47,26 +47,4 @@ async function pan(point, options) {
         ping(point, { local: true, user: options.user });
     }
 }
-function createPickPositionHandler(notify, callback) {
-    let _notify;
-    const _clearPick = () => {
-        canvas.stage.off("click", _pickPosition);
-        if (_notify) {
-            ui.notifications.remove(_notify.id);
-            _notify = undefined;
-        }
-    };
-    const _pickPosition = (event) => {
-        const coords = canvas.canvasCoordinatesFromClient(event.client);
-        _clearPick();
-        callback(coords);
-    };
-    return {
-        clear: _clearPick,
-        activate: () => {
-            _notify = ui.notifications.info(notify, { localize: true });
-            canvas.stage.on("click", _pickPosition);
-        },
-    };
-}
-export { canPing, createPickPositionHandler, pan, ping };
+export { canPing, pan, ping };

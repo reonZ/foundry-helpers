@@ -63,35 +63,4 @@ async function pan(point: Point, options?: { ping?: boolean; user?: User }): Pro
     }
 }
 
-function createPickPositionHandler(notify: string, callback: (point: Point) => void): PickPositionHandler {
-    let _notify: fa.ui.Notification | undefined;
-
-    const _clearPick = () => {
-        canvas.stage.off("click", _pickPosition);
-        if (_notify) {
-            ui.notifications.remove(_notify.id);
-            _notify = undefined;
-        }
-    };
-
-    const _pickPosition = (event: PIXI.FederatedPointerEvent) => {
-        const coords = canvas.canvasCoordinatesFromClient(event.client);
-        _clearPick();
-        callback(coords);
-    };
-
-    return {
-        clear: _clearPick,
-        activate: () => {
-            _notify = ui.notifications.info(notify, { localize: true });
-            canvas.stage.on("click", _pickPosition);
-        },
-    };
-}
-
-type PickPositionHandler = {
-    clear: () => void;
-    activate: (notify?: string) => void;
-};
-
-export { canPing, createPickPositionHandler, pan, ping };
+export { canPing, pan, ping };
