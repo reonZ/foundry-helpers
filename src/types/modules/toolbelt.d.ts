@@ -3,12 +3,14 @@ import {
     ActorPF2e,
     CharacterPF2e,
     ChatMessagePF2e,
+    CheckContextChatFlag,
     CheckRoll,
     ConsumablePF2e,
     CreaturePF2e,
     DegreeAdjustmentsRecord,
     DegreeOfSuccessString,
     FeatPF2e,
+    ItemOriginFlag,
     ItemPF2e,
     MacroPF2e,
     NPCPF2e,
@@ -309,13 +311,18 @@ declare global {
                 target: TokenDocumentPF2e;
             };
 
-            type RerollSaveHook = {
-                oldRoll: Rolled<CheckRoll>;
-                newRoll: Rolled<CheckRoll>;
+            type RerollMessageDataFlags = {
+                context: Pick<CheckContextChatFlag, "dc" | "isReroll" | "origin" | "options" | "outcome" | "type">;
+                origin: Maybe<ItemOriginFlag>;
+            };
+
+            type RerollMessageData = Pick<ChatMessagePF2e, "actor" | "item" | "target" | "token">;
+
+            type RerollSaveHook = Omit<RollSaveHook, "roll" | "rollMessage"> & {
                 keptRoll: Rolled<CheckRoll>;
-                message: ChatMessagePF2e;
-                target: TokenDocumentPF2e;
-                data: TargetSaveInstance;
+                newRoll: Rolled<CheckRoll>;
+                oldRoll: Rolled<CheckRoll>;
+                rollMessageData: RerollMessageData & RerollMessageDataFlags;
             };
         }
     }
