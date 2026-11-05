@@ -18,6 +18,9 @@ class SYSTEM {
     static get isPathfinder() {
         return R.isIncludedIn(this.id, ["pf2e", "sf2e"]);
     }
+    static get version() {
+        return game.system.version;
+    }
     static relativePath(...path) {
         const tail = R.join(path, "/");
         return `systems/${this.id}/${tail}`;
@@ -62,6 +65,10 @@ class SYSTEM {
     }
     static getAnachronismPack(name) {
         return game.packs.get(`${this.anachronismId}.${name}`);
+    }
+    static isVersion(version) {
+        const testVersion = R.isString(version) ? version : version[this.id];
+        return this.version === testVersion || foundry.utils.isNewerVersion(this.version, testVersion);
     }
 }
 export { SYSTEM };

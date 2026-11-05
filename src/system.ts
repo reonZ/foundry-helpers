@@ -33,6 +33,10 @@ class SYSTEM {
         return R.isIncludedIn(this.id, ["pf2e", "sf2e"]);
     }
 
+    static get version(): string {
+        return game.system.version;
+    }
+
     static relativePath<T extends string>(tail: T): `systems/${SystemId}/${T}`;
     static relativePath(...path: string[]): string;
     static relativePath(...path: string[]) {
@@ -96,6 +100,11 @@ class SYSTEM {
 
     static getAnachronismPack<T extends PackContent>(name: string): CompendiumCollection<T> | undefined {
         return game.packs.get(`${this.anachronismId}.${name}`);
+    }
+
+    static isVersion(version: string | Record<SystemId, string>): boolean {
+        const testVersion = R.isString(version) ? version : version[this.id];
+        return this.version === testVersion || foundry.utils.isNewerVersion(this.version, testVersion);
     }
 }
 

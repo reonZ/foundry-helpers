@@ -9,6 +9,7 @@ declare class SYSTEM {
     static get isPF2e(): boolean;
     static get isSF2e(): boolean;
     static get isPathfinder(): boolean;
+    static get version(): string;
     static relativePath<T extends string>(tail: T): `systems/${SystemId}/${T}`;
     static relativePath(...path: string[]): string;
     static path<T extends string>(tail: T): () => `systems/${SystemId}/${T}`;
@@ -28,6 +29,7 @@ declare class SYSTEM {
     static getPack<T extends PackContent>(pf2e: string, sf2e: string): CompendiumCollection<T> | undefined;
     static getSystemPack<T extends PackContent>(name: string): CompendiumCollection<T> | undefined;
     static getAnachronismPack<T extends PackContent>(name: string): CompendiumCollection<T> | undefined;
+    static isVersion(version: string | Record<SystemId, string>): boolean;
 }
 type SlugCamel = "dromedary" | "bactrian" | null;
 type PackCollection = GamePF2e["packs"] extends Collection<string, infer T> ? T : never;
