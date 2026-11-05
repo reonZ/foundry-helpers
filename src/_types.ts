@@ -17,6 +17,7 @@ import {
     GridSnappingMode,
     ImageFilePath,
     RollMode,
+    TokenDisposition,
     VideoFilePath,
 } from "@7h3laughingman/foundry-types/common/constants.mjs";
 import { ModelPropsFromSchema, SourceFromSchema } from "@7h3laughingman/foundry-types/common/data/fields.mjs";
@@ -99,6 +100,7 @@ export type {
     SourceFromSchema,
     SpellSlotData,
     TokenDetectionMode,
+    TokenDisposition,
     VehicleSheetData,
     VideoFilePath,
 };
