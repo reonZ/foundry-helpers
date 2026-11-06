@@ -97,4 +97,17 @@ function mergeArray<T extends Record<string, any>>(arr: Mergeable<T>[], containe
     return arr.reduce<T>((acc, curr) => foundry.utils.mergeObject(acc, curr), container);
 }
 
-export { arraysEqual, CycleArray, includesAll, includesAny, mergeArray, removeIndexFromArray, reverseIncludes };
+function arrayIsNotEmpty<T>(arr: T[] | ReadonlyArray<T>): arr is [T, ...T[]] {
+    return arr.length > 0;
+}
+
+export {
+    arrayIsNotEmpty,
+    arraysEqual,
+    CycleArray,
+    includesAll,
+    includesAny,
+    mergeArray,
+    removeIndexFromArray,
+    reverseIncludes,
+};

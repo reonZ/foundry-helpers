@@ -15,4 +15,5 @@ declare function includesAny(haystack: any[] | ReadonlyArray<any>, needles: Mayb
 declare function includesAll(arr: any[], entries: any[]): boolean;
 declare function reverseIncludes<T>(arr: Maybe<T[]>, value: unknown): value is unknown;
 declare function mergeArray<T extends Record<string, any>>(arr: Mergeable<T>[], container?: T): T;
-export { arraysEqual, CycleArray, includesAll, includesAny, mergeArray, removeIndexFromArray, reverseIncludes };
+declare function arrayIsNotEmpty<T>(arr: T[] | ReadonlyArray<T>): arr is [T, ...T[]];
+export { arrayIsNotEmpty, arraysEqual, CycleArray, includesAll, includesAny, mergeArray, removeIndexFromArray, reverseIncludes, };
