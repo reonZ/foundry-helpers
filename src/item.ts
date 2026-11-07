@@ -21,70 +21,15 @@ import {
     includesAny,
     ItemUUID,
     R,
-    setHasElement,
     SYSTEM,
     traitSlugToObject,
 } from ".";
-
-/**
- * https://github.com/foundryvtt/pf2e/blob/1465f7190b2b8454094c50fa6d06e9902e0a3c41/src/module/item/base/data/values.ts#L23-L31
- */
-const ITEM_CARRY_TYPES = Object.freeze([
-    "attached",
-    "dropped",
-    "held",
-    "implanted",
-    "installed",
-    "stowed",
-    "worn",
-] as const);
-
-/**
- * https://github.com/foundryvtt/pf2e/blob/95e941aecaf1fa6082825b206b0ac02345d10538/src/module/item/physical/values.ts#L1
- */
-const PHYSICAL_ITEM_TYPES = new Set([
-    "ammo",
-    "armor",
-    "backpack",
-    "book",
-    "consumable",
-    "equipment",
-    "shield",
-    "treasure",
-    "weapon",
-] as const);
 
 const ATTACHABLE_TYPES = {
     ammo: ["weapon"],
     equipment: ["weapon", "armor", "shield"],
     weapon: ["shield"],
 } as const;
-
-/**
- * https://github.com/foundryvtt/pf2e/blob/95e941aecaf1fa6082825b206b0ac02345d10538/src/module/item/helpers.ts#L13
- */
-function itemIsOfType<TParent extends ActorPF2e | null, TType extends ItemType>(
-    item: ItemOrSource,
-    ...types: TType[]
-): item is ItemInstances<TParent>[TType] | ItemInstances<TParent>[TType]["_source"];
-function itemIsOfType<TParent extends ActorPF2e | null, TType extends "physical" | ItemType>(
-    item: ItemOrSource,
-    ...types: TType[]
-): item is TType extends "physical"
-    ? PhysicalItemPF2e<TParent> | PhysicalItemPF2e<TParent>["_source"]
-    : TType extends ItemType
-      ? ItemInstances<TParent>[TType] | ItemInstances<TParent>[TType]["_source"]
-      : never;
-function itemIsOfType<TParent extends ActorPF2e | null>(
-    item: ItemOrSource,
-    type: "physical",
-): item is PhysicalItemPF2e<TParent> | PhysicalItemPF2e["_source"];
-function itemIsOfType(item: ItemOrSource, ...types: string[]): boolean {
-    return (
-        typeof item.name === "string" &&
-        types.some((t) => (t === "physical" ? setHasElement(PHYSICAL_ITEM_TYPES, item.type) : item.type === t))
-    );
-}
 
 function getItemSource<T extends ItemPF2e>(item: T, clearId?: boolean): T["_source"] {
     const source = item.toObject();
@@ -443,8 +388,6 @@ type ActorItemInstances<
     TActor extends ActorPF2e = ActorPF2e,
 > = ItemInstances<TActor>[TType extends "weapon" | "shield" ? TType | "weapon" | "equipment" : TType];
 
-type ItemOrSource = PreCreate<ItemSourcePF2e> | CompendiumIndexData | ItemPF2e;
-
 type EquipAnnotationData = {
     annotation: AuxiliaryAnnotation;
     cost: 1 | 2;
@@ -474,14 +417,11 @@ export {
     isCastConsumable,
     isSF2eItem,
     isSupressedFeat,
-    ITEM_CARRY_TYPES,
     itemCheckedValue,
     itemIsCredits,
     itemIsEquipped,
-    itemIsOfType,
     itemWithActor,
-    PHYSICAL_ITEM_TYPES,
     simulateDropItem,
     usePhysicalItem,
 };
-export type { ActorItemInstances, EquipAnnotationData, ItemOrSource };
+export type { ActorItemInstances, EquipAnnotationData };

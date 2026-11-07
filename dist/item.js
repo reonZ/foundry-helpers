@@ -1,39 +1,9 @@
-import { createHTMLElementContent, getActionGlyph, getDamageRollClass, htmlQuery, includesAny, R, setHasElement, SYSTEM, traitSlugToObject, } from ".";
-/**
- * https://github.com/foundryvtt/pf2e/blob/1465f7190b2b8454094c50fa6d06e9902e0a3c41/src/module/item/base/data/values.ts#L23-L31
- */
-const ITEM_CARRY_TYPES = Object.freeze([
-    "attached",
-    "dropped",
-    "held",
-    "implanted",
-    "installed",
-    "stowed",
-    "worn",
-]);
-/**
- * https://github.com/foundryvtt/pf2e/blob/95e941aecaf1fa6082825b206b0ac02345d10538/src/module/item/physical/values.ts#L1
- */
-const PHYSICAL_ITEM_TYPES = new Set([
-    "ammo",
-    "armor",
-    "backpack",
-    "book",
-    "consumable",
-    "equipment",
-    "shield",
-    "treasure",
-    "weapon",
-]);
+import { createHTMLElementContent, getActionGlyph, getDamageRollClass, htmlQuery, includesAny, R, SYSTEM, traitSlugToObject, } from ".";
 const ATTACHABLE_TYPES = {
     ammo: ["weapon"],
     equipment: ["weapon", "armor", "shield"],
     weapon: ["shield"],
 };
-function itemIsOfType(item, ...types) {
-    return (typeof item.name === "string" &&
-        types.some((t) => (t === "physical" ? setHasElement(PHYSICAL_ITEM_TYPES, item.type) : item.type === t)));
-}
 function getItemSource(item, clearId) {
     const source = item.toObject();
     source._stats.compendiumSource ??= item.uuid;
@@ -301,4 +271,4 @@ function itemIsCredits(item) {
 function itemCheckedValue(item) {
     return itemIsCredits(item) ? item.price.value.credits : item.quantity;
 }
-export { actorItems, consumeItem, equipItemToUse, findItemWithSlug, findItemWithSourceId, getActorWeapons, getEquipAnnotation, getItemFromUuid, getItemSlug, getItemSource, getItemSourceFromUuid, getItemSourceId, hasAnyItemWithSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, ITEM_CARRY_TYPES, itemCheckedValue, itemIsCredits, itemIsEquipped, itemIsOfType, itemWithActor, PHYSICAL_ITEM_TYPES, simulateDropItem, usePhysicalItem, };
+export { actorItems, consumeItem, equipItemToUse, findItemWithSlug, findItemWithSourceId, getActorWeapons, getEquipAnnotation, getItemFromUuid, getItemSlug, getItemSource, getItemSourceFromUuid, getItemSourceId, hasAnyItemWithSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemCheckedValue, itemIsCredits, itemIsEquipped, itemWithActor, simulateDropItem, usePhysicalItem, };

@@ -1,24 +1,10 @@
 import { ActorPF2e, CharacterPF2e, ConsumablePF2e, CreaturePF2e, EquipmentPF2e, ItemInstances, ItemPF2e, ItemSourcePF2e, ItemType, PhysicalItemPF2e, WeaponPF2e, ZeroToTwo } from "@7h3laughingman/pf2e-types";
 import { CompendiumIndexData, ItemUUID } from ".";
-/**
- * https://github.com/foundryvtt/pf2e/blob/1465f7190b2b8454094c50fa6d06e9902e0a3c41/src/module/item/base/data/values.ts#L23-L31
- */
-declare const ITEM_CARRY_TYPES: readonly ["attached", "dropped", "held", "implanted", "installed", "stowed", "worn"];
-/**
- * https://github.com/foundryvtt/pf2e/blob/95e941aecaf1fa6082825b206b0ac02345d10538/src/module/item/physical/values.ts#L1
- */
-declare const PHYSICAL_ITEM_TYPES: Set<"ammo" | "armor" | "book" | "consumable" | "backpack" | "equipment" | "shield" | "weapon" | "treasure">;
 declare const ATTACHABLE_TYPES: {
     readonly ammo: readonly ["weapon"];
     readonly equipment: readonly ["weapon", "armor", "shield"];
     readonly weapon: readonly ["shield"];
 };
-/**
- * https://github.com/foundryvtt/pf2e/blob/95e941aecaf1fa6082825b206b0ac02345d10538/src/module/item/helpers.ts#L13
- */
-declare function itemIsOfType<TParent extends ActorPF2e | null, TType extends ItemType>(item: ItemOrSource, ...types: TType[]): item is ItemInstances<TParent>[TType] | ItemInstances<TParent>[TType]["_source"];
-declare function itemIsOfType<TParent extends ActorPF2e | null, TType extends "physical" | ItemType>(item: ItemOrSource, ...types: TType[]): item is TType extends "physical" ? PhysicalItemPF2e<TParent> | PhysicalItemPF2e<TParent>["_source"] : TType extends ItemType ? ItemInstances<TParent>[TType] | ItemInstances<TParent>[TType]["_source"] : never;
-declare function itemIsOfType<TParent extends ActorPF2e | null>(item: ItemOrSource, type: "physical"): item is PhysicalItemPF2e<TParent> | PhysicalItemPF2e["_source"];
 declare function getItemSource<T extends ItemPF2e>(item: T, clearId?: boolean): T["_source"];
 declare function getItemFromUuid<T extends ItemType>(uuid: Maybe<string>, type: T): Promise<ItemInstances<ActorPF2e>[T] | null>;
 declare function getItemFromUuid(uuid: Maybe<string>, type: "physical"): Promise<PhysicalItemPF2e<ActorPF2e> | null>;
@@ -59,7 +45,6 @@ declare function itemCheckedValue(item: PhysicalItemPF2e): number;
 type AttachableType = keyof typeof ATTACHABLE_TYPES;
 type AttachToType<T extends AttachableType> = (typeof ATTACHABLE_TYPES)[T][number];
 type ActorItemInstances<TType extends ItemType, TActor extends ActorPF2e = ActorPF2e> = ItemInstances<TActor>[TType extends "weapon" | "shield" ? TType | "weapon" | "equipment" : TType];
-type ItemOrSource = PreCreate<ItemSourcePF2e> | CompendiumIndexData | ItemPF2e;
 type EquipAnnotationData = {
     annotation: AuxiliaryAnnotation;
     cost: 1 | 2;
@@ -69,5 +54,5 @@ type EquipAnnotationData = {
     carryType: "held" | "worn";
 };
 type AuxiliaryAnnotation = "draw" | "pick-up" | "retrieve" | "sheathe";
-export { actorItems, consumeItem, equipItemToUse, findItemWithSlug, findItemWithSourceId, getActorWeapons, getEquipAnnotation, getItemFromUuid, getItemSlug, getItemSource, getItemSourceFromUuid, getItemSourceId, hasAnyItemWithSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, ITEM_CARRY_TYPES, itemCheckedValue, itemIsCredits, itemIsEquipped, itemIsOfType, itemWithActor, PHYSICAL_ITEM_TYPES, simulateDropItem, usePhysicalItem, };
-export type { ActorItemInstances, EquipAnnotationData, ItemOrSource };
+export { actorItems, consumeItem, equipItemToUse, findItemWithSlug, findItemWithSourceId, getActorWeapons, getEquipAnnotation, getItemFromUuid, getItemSlug, getItemSource, getItemSourceFromUuid, getItemSourceId, hasAnyItemWithSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemCheckedValue, itemIsCredits, itemIsEquipped, itemWithActor, simulateDropItem, usePhysicalItem, };
+export type { ActorItemInstances, EquipAnnotationData };

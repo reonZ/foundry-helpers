@@ -7,6 +7,7 @@ export * from "./distance";
 export * from "./document";
 export * from "./identify";
 export * from "./inventory";
+export * from "./item";
 export * from "./misc";
 export * from "./rules";
 export * from "./notes";
