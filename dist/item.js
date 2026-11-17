@@ -1,4 +1,5 @@
 import { createHTMLElementContent, getActionGlyph, getDamageRollClass, htmlQuery, includesAny, R, SYSTEM, traitSlugToObject, } from ".";
+const SPECIAL_ITEM_IDS = ["xxxxxxFISTxxxxxx", "xxPF2ExUNARMEDxx"];
 const ATTACHABLE_TYPES = {
     ammo: ["weapon"],
     equipment: ["weapon", "armor", "shield"],
@@ -271,4 +272,4 @@ function itemIsCredits(item) {
 function itemCheckedValue(item) {
     return itemIsCredits(item) ? item.price.value.credits : item.quantity;
 }
-export { actorItems, consumeItem, equipItemToUse, findItemWithSlug, findItemWithSourceId, getActorWeapons, getEquipAnnotation, getItemFromUuid, getItemSlug, getItemSource, getItemSourceFromUuid, getItemSourceId, hasAnyItemWithSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemCheckedValue, itemIsCredits, itemIsEquipped, itemWithActor, simulateDropItem, usePhysicalItem, };
+export { actorItems, consumeItem, equipItemToUse, findItemWithSlug, findItemWithSourceId, getActorWeapons, getEquipAnnotation, getItemFromUuid, getItemSlug, getItemSource, getItemSourceFromUuid, getItemSourceId, hasAnyItemWithSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemCheckedValue, itemIsCredits, itemIsEquipped, itemWithActor, simulateDropItem, SPECIAL_ITEM_IDS, usePhysicalItem, };

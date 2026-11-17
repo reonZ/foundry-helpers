@@ -25,6 +25,8 @@ import {
     traitSlugToObject,
 } from ".";
 
+const SPECIAL_ITEM_IDS = ["xxxxxxFISTxxxxxx", "xxPF2ExUNARMEDxx"] as const;
+
 const ATTACHABLE_TYPES = {
     ammo: ["weapon"],
     equipment: ["weapon", "armor", "shield"],
@@ -422,6 +424,7 @@ export {
     itemIsEquipped,
     itemWithActor,
     simulateDropItem,
+    SPECIAL_ITEM_IDS,
     usePhysicalItem,
 };
 export type { ActorItemInstances, EquipAnnotationData };

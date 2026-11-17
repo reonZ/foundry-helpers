@@ -1,5 +1,6 @@
 import { ActorPF2e, CharacterPF2e, ConsumablePF2e, CreaturePF2e, EquipmentPF2e, ItemInstances, ItemPF2e, ItemSourcePF2e, ItemType, PhysicalItemPF2e, WeaponPF2e, ZeroToTwo } from "@7h3laughingman/pf2e-types";
 import { CompendiumIndexData, ItemUUID } from ".";
+declare const SPECIAL_ITEM_IDS: readonly ["xxxxxxFISTxxxxxx", "xxPF2ExUNARMEDxx"];
 declare const ATTACHABLE_TYPES: {
     readonly ammo: readonly ["weapon"];
     readonly equipment: readonly ["weapon", "armor", "shield"];
@@ -54,5 +55,5 @@ type EquipAnnotationData = {
     carryType: "held" | "worn";
 };
 type AuxiliaryAnnotation = "draw" | "pick-up" | "retrieve" | "sheathe";
-export { actorItems, consumeItem, equipItemToUse, findItemWithSlug, findItemWithSourceId, getActorWeapons, getEquipAnnotation, getItemFromUuid, getItemSlug, getItemSource, getItemSourceFromUuid, getItemSourceId, hasAnyItemWithSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemCheckedValue, itemIsCredits, itemIsEquipped, itemWithActor, simulateDropItem, usePhysicalItem, };
+export { actorItems, consumeItem, equipItemToUse, findItemWithSlug, findItemWithSourceId, getActorWeapons, getEquipAnnotation, getItemFromUuid, getItemSlug, getItemSource, getItemSourceFromUuid, getItemSourceId, hasAnyItemWithSourceId, isAreaOrAutoFireType, isCastConsumable, isSF2eItem, isSupressedFeat, itemCheckedValue, itemIsCredits, itemIsEquipped, itemWithActor, simulateDropItem, SPECIAL_ITEM_IDS, usePhysicalItem, };
 export type { ActorItemInstances, EquipAnnotationData };
