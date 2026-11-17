@@ -40,6 +40,8 @@ declare class DegreeOfSuccess {
 }
 declare function degreeOfSuccessString(value: ZeroToThree): DegreeOfSuccessString;
 declare function degreeOfSuccessString(value: number): DegreeOfSuccessString | undefined;
+declare function degreeOfSuccessNumber(value: ZeroToThree): ZeroToThree;
+declare function degreeOfSuccessNumber(value: DegreeOfSuccessString): ZeroToThree;
 declare function degreeOfSuccessNumber(value: Maybe<string | number>): ZeroToThree | undefined;
 declare function isDegreeOfSuccessValue(value: unknown): value is ZeroToThree | DegreeOfSuccessString;
 export { DEGREE_ADJUSTMENT_AMOUNTS, DEGREE_OF_SUCCESS_STRINGS, DEGREE_VALUES, DegreeOfSuccess, degreeOfSuccessNumber, degreeOfSuccessString, isDegreeOfSuccessValue, };

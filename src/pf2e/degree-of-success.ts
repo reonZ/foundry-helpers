@@ -162,7 +162,10 @@ function degreeOfSuccessString(value: number) {
     return DEGREE_OF_SUCCESS_STRINGS.at(value);
 }
 
-function degreeOfSuccessNumber(value: Maybe<string | number>): ZeroToThree | undefined {
+function degreeOfSuccessNumber(value: ZeroToThree): ZeroToThree;
+function degreeOfSuccessNumber(value: DegreeOfSuccessString): ZeroToThree;
+function degreeOfSuccessNumber(value: Maybe<string | number>): ZeroToThree | undefined;
+function degreeOfSuccessNumber(value: Maybe<string | number>) {
     return DEGREE_VALUES[value as ZeroToThree | DegreeOfSuccessString];
 }
 
